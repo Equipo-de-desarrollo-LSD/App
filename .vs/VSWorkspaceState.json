@@ -1,6 +1,17 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\WayFinder",
+    "\\WayFinder\\src\\WayFinder.Application.Contracts",
+    "\\WayFinder\\src\\WayFinder.Application.Contracts\\DestinosTuristicosDTOs",
+    "\\WayFinder\\src\\WayFinder.Domain",
+    "\\WayFinder\\src\\WayFinder.Domain\\DestinosTuristicos",
+    "\\WayFinder\\test\\WayFinder.Application.Tests",
+    "\\WayFinder\\test\\WayFinder.Application.Tests\\DestinosTuristicos",
+    "\\WayFinder\\test\\WayFinder.Domain.Tests",
+    "\\WayFinder\\test\\WayFinder.EntityFrameworkCore.Tests",
+    "\\WayFinder\\test\\WayFinder.EntityFrameworkCore.Tests\\DestinosTuristicos"
   ],
+  "SelectedNode": "\\WayFinder\\WayFinder.sln",
   "PreviewInSolutionExplorer": false
 }
