@@ -16,8 +16,8 @@ public class GuardarDestinos
       [StringLength(128)] 
       public string nombre { get; set; } = string.Empty;
 
-      [Range(1, int.MaxValue, ErrorMessage = "El id debe ser mayor que cero.")]
-      public int Id { get; set; } = 0;
+    //      [Range(1, int.MaxValue, ErrorMessage = "El id debe ser mayor que cero.")]
+      public Guid Id { get; set; } 
 
       [Required]
       [StringLength(256)]
@@ -27,8 +27,8 @@ public class GuardarDestinos
       [Required]
       public PaisDto pais { get; set; } = new PaisDto();
 
-    [Required]
-    public CoordenadasDto coordenadas { get; set; } = new CoordenadasDto();
+      [Required]
+      public CoordenadasDto coordenadas { get; set; } = new CoordenadasDto();
  
 }
 
