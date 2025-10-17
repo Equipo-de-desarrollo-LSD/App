@@ -88,12 +88,12 @@ public class WayFinderDbContext :
             b.Property(x => x.nombre).IsRequired().HasMaxLength(128);
             b.Property(x => x.foto).IsRequired().HasMaxLength(512);
             b.Property(x => x.UltimaActualizacion).IsRequired();
-            b.OwnsOne(x => x.pais, pais =>
+            b.OwnsOne(x => x.Pais, pais =>
             {
                 pais.Property(p => p.nombre).IsRequired().HasMaxLength(64).HasColumnName("pais_nombre");
                 pais.Property(p => p.poblacion).IsRequired().HasColumnName("pais_poblacion");
             });
-            b.OwnsOne(x => x.coordenadas, c =>
+            b.OwnsOne(x => x.Coordenadas, c =>
             {
                 c.Property(cp => cp.latitud).IsRequired().HasColumnName("coordenadas_latitud");
                 c.Property(cp => cp.longitud).IsRequired().HasColumnName("coordenadas_longitud");

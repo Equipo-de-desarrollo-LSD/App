@@ -18,13 +18,13 @@ namespace WayFinder.DestinosTuristicos
          public Pais pais { get; set; }
          public Coordenadas coordenadas { get; set; }
         */
-        public DestinoTuristico(Guid id) { Id = id; }
-        [Key] public Guid Id { get; set; }
+        //public DestinoTuristico(Guid id) { Id = id; }
+      //  [Key] public Guid Id { get; set; }
         public required string nombre { get; set; }
         public required string foto { get; set; }
         public DateTime UltimaActualizacion { get; set; }
-        public Pais pais { get; set; }
-        public Coordenadas coordenadas {get; set;}
+        public Pais Pais { get; set; }
+        public Coordenadas Coordenadas {get; set;}
     
 
     }

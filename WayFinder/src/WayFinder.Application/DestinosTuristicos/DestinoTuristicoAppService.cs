@@ -34,7 +34,7 @@ public class DestinoTuristicoAppService :
     public async Task<DestinoTuristicoDto> Crear(GuardarDestinos input)
  
     {
-        if (string.IsNullOrWhiteSpace(input.nombre))
+        if (string.IsNullOrWhiteSpace(input.Nombre))
         {
             throw new ArgumentException("El nombre no puede estar vacío.");
         }

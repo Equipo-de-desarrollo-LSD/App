@@ -23,11 +23,13 @@ namespace WayFinder.DestinosTuristicos
         {// arrange, que necesito para ejecutar el metodo
             var input = new GuardarDestinos
             { 
-                nombre = "Playa Paraíso",
-                foto = "playa_paraiso.jpg", // ← necesario
-                pais = new PaisDto { nombre = "España", poblacion = 49000000 },
-                coordenadas = new CoordenadasDto { latitud = 36.7213, longitud = -4.4214 },
-                ultimaActualizacion = DateTime.Now
+                Nombre = "Playa Paraíso",
+                Foto = "playa_paraiso.jpg", // ← necesario
+                PaisNombre = "España", 
+                PaisPoblacion = 49000000 ,
+                CoordenadasLatitud = 36.7213, 
+                CoordenadasLongitud = -4.4214 ,
+                UltimaActualizacion = DateTime.Now
 
             };
 
@@ -36,21 +38,14 @@ namespace WayFinder.DestinosTuristicos
             var result = await _services.CreateAsync(input);
 
             //assert, verificar que el resultado es el esperado
-            /*result.ShouldNotBeNull();
-            result.nombre.ShouldBe("Playa Paraíso");
-            result.pais.nombre.ShouldBe("España");
-            result.foto.ShouldBe(input.foto);
-            result.coordenadas.latitud.ShouldBe(input.coordenadas.latitud);
-            result.coordenadas.longitud.ShouldBe(input.coordenadas.longitud);
-            result.Id.ShouldNotBe(Guid.Empty);*/
             result.ShouldNotBeNull();
             result.Id.ShouldNotBe(Guid.Empty);
-            result.nombre.ShouldBe(input.nombre);
-            result.foto.ShouldBe(input.foto);
-            result.pais.nombre.ShouldBe(input.pais.nombre);
-            result.coordenadas.latitud.ShouldBe(input.coordenadas.latitud);
-            result.coordenadas.longitud.ShouldBe(input.coordenadas.longitud);
-            result.ultimaActualizacion.ShouldBe(input.ultimaActualizacion);
+            result.nombre.ShouldBe(input.Nombre);
+            result.foto.ShouldBe(input.Foto);
+            result.pais.nombre.ShouldBe(input.PaisNombre);
+            result.coordenadas.latitud.ShouldBe(input.CoordenadasLatitud);
+            result.coordenadas.longitud.ShouldBe(input.CoordenadasLongitud);
+            result.ultimaActualizacion.ShouldBe(input.UltimaActualizacion);
         }
 
     }

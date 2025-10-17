@@ -14,22 +14,30 @@ public class GuardarDestinos
 {
       [Required]
       [StringLength(128)] 
-      public string nombre { get; set; } = string.Empty;
+      public string Nombre { get; set; } = string.Empty;
 
     //      [Range(1, int.MaxValue, ErrorMessage = "El id debe ser mayor que cero.")]
-      public Guid Id { get; set; } 
+      // public Guid Id { get; set; } 
 
       [Required]
       [StringLength(256)]
-      public string foto { get; set; } = string.Empty;
-      public DateTime ultimaActualizacion { get; set; } = DateTime.Now;
+      public string Foto { get; set; } = string.Empty;
+      public DateTime UltimaActualizacion { get; set; } = DateTime.Now;
 
-      [Required]
-      public PaisDto pais { get; set; } = new PaisDto();
+    // gemini
+    [Required]
+    public string PaisNombre { get; set; }
+    public double PaisPoblacion { get; set; }
 
-      [Required]
-      public CoordenadasDto coordenadas { get; set; } = new CoordenadasDto();
- 
+    public double CoordenadasLatitud { get; set; }
+    public double CoordenadasLongitud { get; set; }
+
+    /* [Required]
+   public PaisDto pais { get; set; } = new PaisDto();
+
+   [Required]
+   public CoordenadasDto coordenadas { get; set; } = new CoordenadasDto();
+ */
 }
 
 
