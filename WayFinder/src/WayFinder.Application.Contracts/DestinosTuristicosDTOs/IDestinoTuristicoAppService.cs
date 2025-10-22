@@ -16,6 +16,7 @@ namespace WayFinder.DestinosTuristicosDTOs
         GuardarDestinos> //Used to create/update a book
     {
        Task<List<DestinoTuristicoDto>> GetAllDestinosTuristicosAsync();
-        Task<DestinoTuristicoDto> Crear(GuardarDestinos input);
+       Task<DestinoTuristicoDto> Crear(GuardarDestinos input);
+        
     }
 }
