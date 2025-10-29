@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\WayFinder.Application\WayFinder.Application.csproj" />
+    <ProjectReference Include="..\..\src\WayFinder.EntityFrameworkCore\WayFinder.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\WayFinder.Domain.Tests\WayFinder.Domain.Tests.csproj" />
   </ItemGroup>
 
