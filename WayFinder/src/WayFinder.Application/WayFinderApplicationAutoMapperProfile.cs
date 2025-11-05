@@ -14,7 +14,7 @@ public class WayFinderApplicationAutoMapperProfile : Profile
                        opt => opt.MapFrom(src => new Pais(src.PaisNombre, src.PaisPoblacion))) // ...crea un nuevo objeto Pais.
             .ForMember(dest => dest.Coordenadas, // Para la propiedad 'Coordenadas' de la entidad...
                        opt => opt.MapFrom(src => new Coordenadas(src.CoordenadasLatitud, src.CoordenadasLongitud))); // ...crea un nuevo objeto Coordenadas.
-        
+
         CreateMap<PaisDto, Pais>();
         CreateMap<CoordenadasDto, Coordenadas>();
         
