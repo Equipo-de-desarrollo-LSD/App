@@ -27,6 +27,7 @@ public class WayFinderDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Calificacion> Calificaciones { get; set; }
 
     #region Entities from the modules
 
@@ -101,7 +102,32 @@ public class WayFinderDbContext :
             //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
             //...
         });
-        
+
+        builder.Entity<Calificacion>(b =>
+        {
+            // 1. Configura el nombre de la tabla (igual que DestinoTuristico)
+            b.ToTable(WayFinderConsts.DbTablePrefix + "Calificaciones", WayFinderConsts.DbSchema);
+
+            // 2. Configura las propiedades base (Id, CreationTime, etc.)
+            b.ConfigureByConvention();
+
+            // 3. Configura tus propiedades
+            b.Property(x => x.Puntaje).IsRequired();
+            b.Property(x => x.Comentario).HasMaxLength(512); // Siempre es bueno poner un límite
+
+            // 4. Configura la relación con el Destino
+            b.HasOne<DestinoTuristico>().WithMany()
+                .HasForeignKey(x => x.DestinoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade); // Opcional: si borras un destino, se borran sus calificaciones
+
+            // 5. Configura la relación con el Usuario (de IUserOwned)
+            b.HasOne<IdentityUser>().WithMany()
+                .HasForeignKey(x => x.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // No borrar usuarios si se borra una calificación
+        });
+
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(WayFinderConsts.DbTablePrefix + "YourEntities", WayFinderConsts.DbSchema);

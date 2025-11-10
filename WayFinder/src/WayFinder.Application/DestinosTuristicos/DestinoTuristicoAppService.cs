@@ -1,17 +1,18 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WayFinder.DestinosTuristicosDTOs;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Account;
+using WayFinder.DestinosTuristicosDTOs;
 
 
 namespace WayFinder.DestinosTuristicos;
-
+[Authorize] // asegura que nadie que no esté logueado pueda llamar a ningún método de este servicio
 public class DestinoTuristicoAppService :
     CrudAppService<
         DestinoTuristico, //The Book entity
