@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Values;
 
 
-namespace WayFinder.DestinosTuristicos
+namespace WayFinder.Calificaciones
 {
     public class Coordenadas : ValueObject
     {

@@ -1,4 +1,4 @@
-﻿namespace WayFinder.DestinosTuristicos
+﻿namespace WayFinder.Calificaciones
 {
     internal class CreateDestinosTuristicosDto
     {

@@ -14,7 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
-using WayFinder.DestinosTuristicos;
+using WayFinder.Calificaciones;
 
 namespace WayFinder.EntityFrameworkCore;
 

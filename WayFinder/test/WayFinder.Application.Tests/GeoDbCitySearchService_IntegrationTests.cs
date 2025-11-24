@@ -5,7 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WayFinder.DestinosTuristicos;
+using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicosDTOs;
 using Xunit;
 
