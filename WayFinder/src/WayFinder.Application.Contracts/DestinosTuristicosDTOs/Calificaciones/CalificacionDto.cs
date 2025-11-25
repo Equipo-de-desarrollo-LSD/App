@@ -15,13 +15,15 @@ namespace WayFinder.DestinosTuristicosDTOs
 
         public Guid DestinoId { get; set; }
         public Guid UserId { get; set; }
+
+        public CalificacionDto() { }
     }
     public class CrearCalificacionDto
     {
         //[Required]
         public Guid DestinoId { get; set; }
 
-        //[Range(1, 5)] // Para la prueba de puntuación válida
+        [Range(1, 5)] // Para la prueba de puntuación válida
         public int Puntaje { get; set; }
 
         public string? Comentario { get; set; }

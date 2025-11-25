@@ -9,6 +9,7 @@ using Volo.Abp;
 using System.Threading.Tasks;
 using Volo.Abp.Authorization;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 namespace WayFinder.Calificacion
 {
@@ -19,7 +20,7 @@ namespace WayFinder.Calificacion
         DestinosTuristicosDTOs.CalificacionDto,
         Guid,
         PagedAndSortedResultRequestDto,
-        CrearCalificacionDto>, CalificacionAppService.ICalificacionAppService
+        CrearCalificacionDto>, ICalificacionAppService
 
 
         {
@@ -51,6 +52,7 @@ namespace WayFinder.Calificacion
             return CalificarDestinoAsync(input);
         }
 
+        /*
         public interface ICalificacionAppService : ICrudAppService<
          CalificacionDto,
          Guid,
@@ -59,6 +61,7 @@ namespace WayFinder.Calificacion
         {
             Task CalificarDestinoAsync(CrearCalificacionDto input);
         }
+        */
     }
 
         
