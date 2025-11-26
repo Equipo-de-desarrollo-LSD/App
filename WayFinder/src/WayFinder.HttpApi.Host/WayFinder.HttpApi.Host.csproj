@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WayFinder.Application\WayFinder.Application.csproj" />
+    <ProjectReference Include="..\WayFinder.HttpApi.Client\WayFinder.HttpApi.Client.csproj" />
     <ProjectReference Include="..\WayFinder.HttpApi\WayFinder.HttpApi.csproj" />
     <ProjectReference Include="..\WayFinder.EntityFrameworkCore\WayFinder.EntityFrameworkCore.csproj" />
   </ItemGroup>

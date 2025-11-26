@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using WayFinder.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-    partial class WayFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250916225756_Created_Destinos")]
+    partial class Created_Destinos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1883,11 +1886,11 @@ namespace WayFinder.Migrations
 
             modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<DateTime>("UltimaActualizacion")
-                        .HasColumnType("datetime2");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
 
                     b.Property<string>("foto")
                         .IsRequired()
@@ -1899,7 +1902,10 @@ namespace WayFinder.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.HasKey("Id");
+                    b.Property<DateTime>("ultimaActualizacion")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("id");
 
                     b.ToTable("AppDestinosTuristicos", (string)null);
                 });
@@ -2057,10 +2063,10 @@ namespace WayFinder.Migrations
 
             modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
                 {
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "Coordenadas", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "coordenadas", b1 =>
                         {
-                            b1.Property<Guid>("DestinoTuristicoId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("DestinoTuristicoid")
+                                .HasColumnType("int");
 
                             b1.Property<double>("latitud")
                                 .HasColumnType("float")
@@ -2070,18 +2076,18 @@ namespace WayFinder.Migrations
                                 .HasColumnType("float")
                                 .HasColumnName("coordenadas_longitud");
 
-                            b1.HasKey("DestinoTuristicoId");
+                            b1.HasKey("DestinoTuristicoid");
 
                             b1.ToTable("AppDestinosTuristicos");
 
                             b1.WithOwner()
-                                .HasForeignKey("DestinoTuristicoId");
+                                .HasForeignKey("DestinoTuristicoid");
                         });
 
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "Pais", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "pais", b1 =>
                         {
-                            b1.Property<Guid>("DestinoTuristicoId")
-                                .HasColumnType("uniqueidentifier");
+                            b1.Property<int>("DestinoTuristicoid")
+                                .HasColumnType("int");
 
                             b1.Property<string>("nombre")
                                 .IsRequired()
@@ -2093,18 +2099,18 @@ namespace WayFinder.Migrations
                                 .HasColumnType("float")
                                 .HasColumnName("pais_poblacion");
 
-                            b1.HasKey("DestinoTuristicoId");
+                            b1.HasKey("DestinoTuristicoid");
 
                             b1.ToTable("AppDestinosTuristicos");
 
                             b1.WithOwner()
-                                .HasForeignKey("DestinoTuristicoId");
+                                .HasForeignKey("DestinoTuristicoid");
                         });
 
-                    b.Navigation("Coordenadas")
+                    b.Navigation("coordenadas")
                         .IsRequired();
 
-                    b.Navigation("Pais")
+                    b.Navigation("pais")
                         .IsRequired();
                 });
 

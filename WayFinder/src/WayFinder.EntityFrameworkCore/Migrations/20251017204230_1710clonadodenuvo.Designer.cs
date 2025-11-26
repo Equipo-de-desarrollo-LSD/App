@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using WayFinder.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-    partial class WayFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251017204230_1710clonadodenuvo")]
+    partial class _1710clonadodenuvo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2057,7 +2060,7 @@ namespace WayFinder.Migrations
 
             modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
                 {
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "Coordenadas", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "coordenadas", b1 =>
                         {
                             b1.Property<Guid>("DestinoTuristicoId")
                                 .HasColumnType("uniqueidentifier");
@@ -2078,7 +2081,7 @@ namespace WayFinder.Migrations
                                 .HasForeignKey("DestinoTuristicoId");
                         });
 
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "Pais", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "pais", b1 =>
                         {
                             b1.Property<Guid>("DestinoTuristicoId")
                                 .HasColumnType("uniqueidentifier");
@@ -2101,10 +2104,10 @@ namespace WayFinder.Migrations
                                 .HasForeignKey("DestinoTuristicoId");
                         });
 
-                    b.Navigation("Coordenadas")
+                    b.Navigation("coordenadas")
                         .IsRequired();
 
-                    b.Navigation("Pais")
+                    b.Navigation("pais")
                         .IsRequired();
                 });
 

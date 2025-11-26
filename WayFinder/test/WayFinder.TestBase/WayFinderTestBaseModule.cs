@@ -14,6 +14,7 @@ namespace WayFinder;
     typeof(AbpTestBaseModule),
     typeof(AbpAuthorizationModule),
     typeof(AbpBackgroundJobsAbstractionsModule)
+
 )]
 public class WayFinderTestBaseModule : AbpModule
 {
@@ -25,6 +26,15 @@ public class WayFinderTestBaseModule : AbpModule
         });
 
         context.Services.AddAlwaysAllowAuthorization();
+
+        //
+      /*  context.Services.AddAbpDbContext<WayFinderDbContext>(options =>
+        {
+            options.AddDefaultRepositories(includeAllEntities: true);
+        });
+      */
+
+
     }
 
     public override void OnApplicationInitialization(ApplicationInitializationContext context)

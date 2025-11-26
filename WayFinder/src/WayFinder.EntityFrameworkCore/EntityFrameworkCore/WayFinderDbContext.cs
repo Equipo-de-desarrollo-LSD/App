@@ -14,6 +14,7 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder.EntityFrameworkCore;
 
@@ -27,7 +28,6 @@ public class WayFinderDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
 
-
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -40,6 +40,7 @@ public class WayFinderDbContext :
      * More info: Replacing a DbContext of a module ensures that the related module
      * uses this DbContext on runtime. Otherwise, it will use its own DbContext class.
      */
+    public DbSet<DestinoTuristico> DestinosTuristicos { get; set; } //agregue por chat
 
     // Identity
     public DbSet<IdentityUser> Users { get; set; }
@@ -80,7 +81,27 @@ public class WayFinderDbContext :
         builder.ConfigureBlobStoring();
         
         /* Configure your own tables/entities inside here */
-
+        builder.Entity<DestinoTuristico>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "DestinosTuristicos", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention(); //auto configure for the base class props
+            b.Property(x => x.nombre).IsRequired().HasMaxLength(128);
+            b.Property(x => x.foto).IsRequired().HasMaxLength(512);
+            b.Property(x => x.UltimaActualizacion).IsRequired();
+            b.OwnsOne(x => x.Pais, pais =>
+            {
+                pais.Property(p => p.nombre).IsRequired().HasMaxLength(64).HasColumnName("pais_nombre");
+                pais.Property(p => p.poblacion).IsRequired().HasColumnName("pais_poblacion");
+            });
+            b.OwnsOne(x => x.Coordenadas, c =>
+            {
+                c.Property(cp => cp.latitud).IsRequired().HasColumnName("coordenadas_latitud");
+                c.Property(cp => cp.longitud).IsRequired().HasColumnName("coordenadas_longitud");
+            });
+            //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
+            //...
+        });
+        
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(WayFinderConsts.DbTablePrefix + "YourEntities", WayFinderConsts.DbSchema);
