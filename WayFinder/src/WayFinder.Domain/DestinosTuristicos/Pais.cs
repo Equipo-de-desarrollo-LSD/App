@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Volo.Abp.Domain.Values;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace WayFinder.Calificaciones
+namespace WayFinder.DestinosTuristicos
 {
     public class Pais :ValueObject
     {

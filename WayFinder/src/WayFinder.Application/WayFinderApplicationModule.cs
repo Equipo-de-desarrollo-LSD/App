@@ -8,6 +8,7 @@ using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
 using WayFinder.Calificaciones;
+using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
 
 namespace WayFinder;

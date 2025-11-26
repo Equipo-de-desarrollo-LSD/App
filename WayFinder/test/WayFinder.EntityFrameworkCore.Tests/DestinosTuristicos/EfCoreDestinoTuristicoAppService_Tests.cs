@@ -9,7 +9,7 @@ using WayFinder.DestinosTuristicosDTOs;
 using WayFinder.EntityFrameworkCore;
 using Xunit;
 
-namespace WayFinder.Calificaciones
+namespace WayFinder.DestinosTuristicos
 {
     [Collection(WayFinderTestConsts.CollectionDefinitionName)]
     public class EfCoreDestinoTuristicoAppService_Tests : DestinoTurisiticoAppService_Tests<WayFinderEntityFrameworkCoreTestModule>

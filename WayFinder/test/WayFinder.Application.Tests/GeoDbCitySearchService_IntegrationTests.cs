@@ -5,9 +5,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WayFinder.Calificaciones;
+using WayFinder.DestinoTuristico;
 using WayFinder.DestinosTuristicosDTOs;
 using Xunit;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder
 {

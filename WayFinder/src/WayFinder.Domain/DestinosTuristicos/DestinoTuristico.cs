@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
 
-namespace WayFinder.Calificaciones
+namespace WayFinder.DestinosTuristicos
 {
     public class DestinoTuristico : Entity<Guid>
     {

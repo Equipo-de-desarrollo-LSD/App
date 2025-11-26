@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using WayFinder.DestinosTuristicosDTOs;
 using System.Text.Json.Serialization;
 
-namespace WayFinder.Calificaciones
+namespace WayFinder.DestinosTuristicos
 {
     public class GeoDbBuscarCiudadService : IBuscarCiudadService
     {

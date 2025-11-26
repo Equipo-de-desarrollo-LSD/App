@@ -16,9 +16,9 @@ using WayFinder.EntityFrameworkCore;
 using Xunit;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 using NSubstitute.Extensions;
-using WayFinder.Calificaciones;
+using WayFinder.DestinoTuristicos;
 
-namespace WayFinder.Calificaciones
+namespace WayFinder.DestinosTuristicos
 {
     public abstract class DestinoTurisiticoAppService_Tests<TStartupModule> : WayFinder.WayFinderTestBase<TStartupModule>
     where TStartupModule : IAbpModule
@@ -130,7 +130,7 @@ namespace WayFinder.Calificaciones
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
-            var calificacionRepoMock = Substitute.For<IRepository<Calificacion, Guid>>();
+            var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
 
@@ -152,7 +152,7 @@ namespace WayFinder.Calificaciones
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
-            var calificacionRepoMock = Substitute.For<IRepository<Calificacion, Guid>>();
+            var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act
@@ -172,7 +172,7 @@ namespace WayFinder.Calificaciones
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
-            var calificacionRepoMock = Substitute.For<IRepository<Calificacion, Guid>>();
+            var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act
@@ -193,7 +193,7 @@ namespace WayFinder.Calificaciones
             citySearchMock
                 .When(x => x.SearchCitiesAsync(request))
                 .Do(x => { throw new Exception("API error"); });
-            var calificacionRepoMock = Substitute.For<IRepository<Calificacion, Guid>>();
+            var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act & Assert

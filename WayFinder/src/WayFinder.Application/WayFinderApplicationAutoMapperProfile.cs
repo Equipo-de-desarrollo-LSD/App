@@ -1,6 +1,7 @@
 using WayFinder.Calificaciones;
 using AutoMapper;
 using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder;
 

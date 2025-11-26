@@ -11,10 +11,11 @@ using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Domain.Repositories;
 using WayFinder.Calificaciones;
+using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
 
 
-namespace WayFinder.Calificaciones;
+namespace WayFinder.DestinoTuristicos;
 [Authorize] // asegura que nadie que no esté logueado pueda llamar a ningún método de este servicio
 public class DestinoTuristicoAppService :
     CrudAppService<
@@ -23,13 +24,13 @@ public class DestinoTuristicoAppService :
         Guid, //Primary key of the book entity
         PagedAndSortedResultRequestDto, //Used for paging/sorting
         GuardarDestinos>, //Used to create/update a book
-        DestinosTuristicosDTOs.IDestinoTuristicoAppService //implement the IBookAppService
+        DestinosTuristicosDTOs.IDestinoTuristicoAppService//implement the IBookAppService
 {
     private readonly IRepository<DestinoTuristico, Guid> _repository;
     private readonly IBuscarCiudadService _buscarCiudadService;
-    private readonly IRepository<Calificacion, Guid> _calificacionRepository;
+    private readonly IRepository<Calificaciones.Calificacion, Guid> _calificacionRepository;
 
-    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificacion, Guid> calificacionRepository)
+    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository)
         : base(repository)
 
     {
@@ -69,34 +70,8 @@ public class DestinoTuristicoAppService :
         return await _buscarCiudadService.SearchCitiesAsync(request);
     }
 
-    public async Task  CalificarDestinoAsync(CalificacionDto input)
-    {
-        var userId = CurrentUser.Id.Value;
+    
 
-        // 
-        var calificacionExistente = await _calificacionRepository.FirstOrDefaultAsync(
-        c => c.DestinoId == input.DestinoId && c.UserId == userId
-        );
-        if (calificacionExistente != null)
-        {
-            throw new UserFriendlyException("¡Ya has calificado este destino!");
-        }
-        var calificacion = new Calificacion(
-        GuidGenerator.Create(),
-        input.DestinoId,
-        userId, // <-- Aquí asociamos la calificación al usuario
-        input.Puntaje,
-        input.Comentario
-        );
-
-        // 3. Guardamos en la base de datos
-        await _calificacionRepository.InsertAsync(calificacion);
-    }
-
-    public Task CalificarDestinoAsync(CrearCalificacionDto input)
-    {
-        throw new NotImplementedException();
-    }
 
    
 }
