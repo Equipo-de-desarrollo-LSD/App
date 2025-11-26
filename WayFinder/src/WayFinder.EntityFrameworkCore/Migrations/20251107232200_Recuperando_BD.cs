@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WayFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Recuperando_BD : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -446,6 +446,24 @@ namespace WayFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppDestinosTuristicos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    nombre = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    foto = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    UltimaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    pais_nombre = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    pais_poblacion = table.Column<double>(type: "float", nullable: false),
+                    coordenadas_latitud = table.Column<double>(type: "float", nullable: false),
+                    coordenadas_longitud = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppDestinosTuristicos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictApplications",
                 columns: table => new
                 {
@@ -759,6 +777,38 @@ namespace WayFinder.Migrations
                         name: "FK_AbpUserTokens_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppCalificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Comentario = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    Puntaje = table.Column<int>(type: "int", nullable: false),
+                    DestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppCalificaciones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AppDestinosTuristicos_DestinoId",
+                        column: x => x.DestinoId,
+                        principalTable: "AppDestinosTuristicos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1079,6 +1129,16 @@ namespace WayFinder.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppCalificaciones_DestinoId",
+                table: "AppCalificaciones",
+                column: "DestinoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppCalificaciones_UserId",
+                table: "AppCalificaciones",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -1191,6 +1251,9 @@ namespace WayFinder.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+                name: "AppCalificaciones");
+
+            migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
@@ -1213,6 +1276,9 @@ namespace WayFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppDestinosTuristicos");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictAuthorizations");

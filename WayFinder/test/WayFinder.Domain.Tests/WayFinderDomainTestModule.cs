@@ -4,7 +4,7 @@ namespace WayFinder;
 
 [DependsOn(
     typeof(WayFinderDomainModule),
-    typeof(WayFinderTestBaseModule)
+    typeof(WayfinderTestBaseModule)
 )]
 public class WayFinderDomainTestModule : AbpModule
 {

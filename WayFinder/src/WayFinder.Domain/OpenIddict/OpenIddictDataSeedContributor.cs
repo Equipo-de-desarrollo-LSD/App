@@ -134,7 +134,26 @@ public class OpenIddictDataSeedContributor : IDataSeedContributor, ITransientDep
                 logoUri: "/images/clients/swagger.svg"
             );
         }
+        /*
+         *        var swaggerClientId = configurationSection["TravelBuddy_Swagger:ClientId"];
+        if (!swaggerClientId.IsNullOrWhiteSpace())
+        {
+            var swaggerRootUrl = configurationSection["TravelBuddy_Swagger:RootUrl"]?.TrimEnd('/');
 
+            await CreateApplicationAsync(
+                applicationType: OpenIddictConstants.ApplicationTypes.Web,
+                name: swaggerClientId!,
+                type: OpenIddictConstants.ClientTypes.Public,
+                consentType: OpenIddictConstants.ConsentTypes.Implicit,
+                displayName: "Swagger Application",
+                secret: null,
+                grantTypes: new List<string> { OpenIddictConstants.GrantTypes.AuthorizationCode, },
+                scopes: commonScopes,
+                redirectUris: new List<string> { $"{swaggerRootUrl}/swagger/oauth2-redirect.html" },
+                clientUri: swaggerRootUrl.EnsureEndsWith('/') + "swagger",
+                logoUri: "/images/clients/swagger.svg"
+            );
+         */
 
     }
 
