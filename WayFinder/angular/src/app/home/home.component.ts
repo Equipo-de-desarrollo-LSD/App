@@ -18,3 +18,4 @@ export class HomeComponent {
     this.authService.navigateToLogin();
   }
 }
+

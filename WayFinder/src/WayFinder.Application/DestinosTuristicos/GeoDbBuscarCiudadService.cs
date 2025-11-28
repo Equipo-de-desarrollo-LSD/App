@@ -50,6 +50,8 @@ namespace WayFinder.DestinosTuristicos
                         {
                             Nombre = city.Name,
                             Pais = city.Country,
+                            Latitud = city.Latitude ?? 0,
+                            Longitud = city.Longitude ?? 0,
                         });
                     }
                 }
@@ -78,73 +80,17 @@ namespace WayFinder.DestinosTuristicos
             [JsonPropertyName("country")]
             public string Country { get; set; }
 
+            [JsonPropertyName("latitude")]
+            public double? Latitude { get; set; }
+
+            [JsonPropertyName("longitude")]
+            public double? Longitude { get; set; }
+
+
             //[JsonPropertyName("region")]
             //public string Region { get; set; }
         }
     }
 }
     
-    /*
-            // ⚠️ Advertencia: Revisa la nota al final sobre esta forma de usar HttpClient
-            using (HttpClient client = new HttpClient())
-            {
-                // Configuración de Headers
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Key", apiKey);
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com");
-
-                // Endpoint con query params
-               // string url = $"{baseUrl}/cities?namePrefix={Uri.EscapeDataString(request.NombreCiudad)}&limit=5";
-
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                if (response.IsSuccessStatusCode)
-                { 
-
-                    // 1. Leemos el resultado como un string de texto (JSON)
-                    string jsonResult = await response.Content.ReadAsStringAsync();
-
-                    var cityDtos = new List<CiudadDto>();
-
-                    // 2. Parseamos el string JSON
-                    using (JsonDocument doc = JsonDocument.Parse(jsonResult))
-                    {
-                        JsonElement root = doc.RootElement;
-
-                        // 3. Buscamos la propiedad "data" que contiene el array de ciudades
-                        if (root.TryGetProperty("data", out JsonElement dataArray))
-                        {
-                            // 4. Iteramos sobre cada elemento (ciudad) en el array "data"
-                            foreach (JsonElement cityData in dataArray.EnumerateArray())
-                            {
-                                // 5. Extraemos las propiedades de cada ciudad y creamos el DTO
-                                var dto = new CiudadDto
-                                {
-                                    // Usamos TryGetProperty para evitar errores si un campo no viene
-                                    Nombre = cityData.TryGetProperty("city", out var city) ? city.GetString() : null,
-                                    Pais = cityData.TryGetProperty("country", out var country) ? country.GetString() : null,
-                                    // ... puedes añadir más propiedades aquí ...
-                                    // Id = cityData.TryGetProperty("id", out var id) ? id.GetInt32() : 0,
-                                    // Region = cityData.TryGetProperty("region", out var region) ? region.GetString() : null,
-                                };
-                                cityDtos.Add(dto);
-                            }
-                        }
-                    }
-
-                    // 6. Retornamos la lista de DTOs
-                    return new BuscarCiudadResultDto { Ciudades = cityDtos };
-
-                    // --- FIN DE CAMBIOS ---
-                }
-                else
-                {
-                    Console.WriteLine($"Error: {response.StatusCode}");
-                }
-            }
-
-            // Si hubo un error o no se pudo completar, devolvemos una lista vacía
-            return new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
-        }
-    }
-}
-   */
+    
