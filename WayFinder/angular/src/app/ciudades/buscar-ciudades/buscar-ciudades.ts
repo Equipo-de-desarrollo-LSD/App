@@ -62,20 +62,36 @@ switchMap(term => {
         const request: BuscarCiudadRequestDto = { nombreCiudad: text };
 
           return this.ciudadService
-            .buscarCiudad(request) // Se envía el objeto, no el string
+            //.buscarCiudad(request) 
+            .buscarCiudadesByRequest(request)
             .pipe(finalize(() => (this.loading = false)));
         }),
       )
-      .subscribe({
-        next: (res: BuscarCiudadResultDto) => {
-          // SOLUCIÓN ERROR 2: Acceder a la propiedad 'ciudades' del resultado
-          this.allCities = res.ciudades || [] as any;
-          this.applyFiltersAndPagination();
-        },
-        error: _ =>
-          (this.errorMsg =
-            'No se pudo buscar. ¿Backend levantado y proxy correcto?'),
-      });
+      // ... dentro del ngOnInit / .subscribe ...
+.subscribe({
+  next: (res: BuscarCiudadResultDto) => {
+    
+    // 🕵️‍♂️ LOG 1: ¿Qué llegó exactamente del servidor?
+    console.log('1. Objeto de Respuesta del Servidor (RES):', res);
+
+    // 🕵️‍♂️ LOG 2: ¿La propiedad 'ciudades' tiene datos?
+    if (res.ciudades && res.ciudades.length > 0) {
+       console.log('2. ✅ Éxito: Array con datos de ciudades recibido.');
+    } else {
+       // Esto puede ocurrir si res.ciudades es null o undefined
+       console.warn('2. ⚠️ La propiedad "ciudades" está vacía o no existe en la respuesta.');
+    }
+
+    // El código que asigna y pagina:
+    this.allCities = res.ciudades || []; 
+    //this.applyFiltersAndPagination();
+    this.ciudades = this.allCities 
+    this.loading = false;
+    // 🕵️‍♂️ LOG 3: ¿Se llenó la variable final que usa el HTML?
+    console.log('3. Variable final (this.ciudades) para el HTML:', this.ciudades);
+  },
+  // ...
+});
   }
 
   onInput(value: string) {
@@ -145,11 +161,10 @@ switchMap(term => {
     }
   }
 
-
+/*
   getCityImage(city: CiudadDto): string {
-    // Aquí puedes implementar la lógica para obtener imágenes desde un servicio
-    // Por ahora, usamos Unsplash con el nombre de la ciudad
     const cityName = encodeURIComponent(city.nombre || 'city');
     return `https://source.unsplash.com/400x250/?${cityName},city`;
   }
+    */
 }
