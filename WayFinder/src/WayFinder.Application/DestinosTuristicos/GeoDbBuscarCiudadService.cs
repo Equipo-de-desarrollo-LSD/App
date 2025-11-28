@@ -50,6 +50,8 @@ namespace WayFinder.DestinosTuristicos
                         {
                             Nombre = city.Name,
                             Pais = city.Country,
+                            Latitud = city.Latitude ?? 0,
+                            Longitud = city.Longitude ?? 0,
                         });
                     }
                 }
@@ -77,6 +79,13 @@ namespace WayFinder.DestinosTuristicos
 
             [JsonPropertyName("country")]
             public string Country { get; set; }
+
+            [JsonPropertyName("latitude")]
+            public double? Latitude { get; set; }
+
+            [JsonPropertyName("longitude")]
+            public double? Longitude { get; set; }
+
 
             //[JsonPropertyName("region")]
             //public string Region { get; set; }

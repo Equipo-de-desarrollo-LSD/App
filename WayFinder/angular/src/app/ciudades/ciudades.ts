@@ -2,12 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// 👉 Exportamos el tipo que usará el componente
 export interface CiudadDto {
   id: string;
-  nombre: string;
-  pais?: string; // opcional, por si tu API lo devuelve
+  nombre: string;   // usa el nombre real que devuelve tu API
+  pais?: string;
 }
 
+// 👉 Exportamos una clase inyectable (el servicio)
 @Injectable({ providedIn: 'root' })
 export class CiudadService {
   constructor(private http: HttpClient) {}

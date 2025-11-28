@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface CiudadDto {
-  id: string;
   nombre: string;
-  pais?: string; // opcional, por si tu API lo devuelve
+  pais: string;
+  latitud: number;
+  longitud: number;
 }
 
 @Injectable({ providedIn: 'root' })
