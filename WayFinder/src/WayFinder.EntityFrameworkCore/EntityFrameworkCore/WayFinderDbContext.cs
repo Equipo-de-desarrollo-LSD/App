@@ -1,4 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using System;
+using System.Linq.Expressions;
+using System.Reflection;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
@@ -9,12 +14,17 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using Volo.Abp.Users;
+using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
+using static System.Net.WebRequestMethods;
+
+
 
 namespace WayFinder.EntityFrameworkCore;
 
@@ -27,6 +37,7 @@ public class WayFinderDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+    public DbSet<Calificacion> Calificaciones { get; set; }
 
     #region Entities from the modules
 
@@ -55,13 +66,18 @@ public class WayFinderDbContext :
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
-
     #endregion
 
-    public WayFinderDbContext(DbContextOptions<WayFinderDbContext> options)
+    // Inyección de ICurrentUser (null en design-time)
+    //private readonly ICurrentUser? _currentUser;
+    private readonly ICurrentUser _currentUser;
+    public WayFinderDbContext(  
+        DbContextOptions<WayFinderDbContext> options,
+       ICurrentUser currentUser = null) // permite migraciones sin usuario
         : base(options)
     {
-
+        //_currentUser = currentUser;
+        _currentUser = currentUser;
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -101,12 +117,66 @@ public class WayFinderDbContext :
             //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
             //...
         });
-        
+
+        builder.Entity<Calificacion>(b =>
+        {
+            // 1. Configura el nombre de la tabla (igual que DestinoTuristico)
+            b.ToTable(WayFinderConsts.DbTablePrefix + "Calificaciones", WayFinderConsts.DbSchema);
+
+            // 2. Configura las propiedades base (Id, CreationTime, etc.)
+            b.ConfigureByConvention();
+
+            // 3. Configura tus propiedades
+            b.Property(x => x.Puntaje).IsRequired();
+            b.Property(x => x.Comentario).HasMaxLength(512); // Siempre es bueno poner un límite
+
+            // 4. Configura la relación con el Destino
+            b.HasOne<DestinoTuristico>().WithMany()
+                .HasForeignKey(x => x.DestinoId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.Cascade); // Opcional: si borras un destino, se borran sus calificaciones
+
+            // 5. Configura la relación con el Usuario (de IUserOwned)
+            b.HasOne<IdentityUser>().WithMany()
+                .HasForeignKey(x => x.UserId)
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // No borrar usuarios si se borra una calificación
+        });
+
+        // --- FILTRO GLOBAL PARA ENTIDADES DE USUARIO (IUserOwned) ---
+        // Obtener el ID del usuario actual.Si es nulo(ej.fuera de una petición http), usa Guid.Empty.
+        //var currentUserId = _currentUser.Id ?? Guid.Empty;
+
+        // Iterar sobre todas las entidades definidas en el modelo
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            if (typeof(IUserOwned).IsAssignableFrom(entityType.ClrType))
+            {
+
+                var method = typeof(WayFinderDbContext)
+                    .GetMethod(nameof(ApplyUserOwnedFilter),
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                    .MakeGenericMethod(entityType.ClrType); // Hacer el método genérico para el tipo actual
+
+                method.Invoke(this, new object[] { builder }); // Ejecutar el método con la configuración de EF Core
+            }
+        }
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(WayFinderConsts.DbTablePrefix + "YourEntities", WayFinderConsts.DbSchema);
         //    b.ConfigureByConvention(); //auto configure for the base class props
         //    //...
         //});
+    }
+
+    // NUEVO: HasQueryFilter(UserId == usuario actual). Si no hay usuario => 0 filas.
+    private void ApplyUserOwnedFilter<TEntity>(ModelBuilder builder) where TEntity : class, IUserOwned
+    {
+        builder.Entity<TEntity>().HasQueryFilter(e =>
+            _currentUser != null && _currentUser.IsAuthenticated // 1. Chequeo de seguridad
+                ? e.UserId == _currentUser.GetId() // 2.Filtro si está autenticado
+                : false // 3. Si no está, no devuelve filas (seguridad estricta)
+        );
+
     }
 }

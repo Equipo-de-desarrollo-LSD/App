@@ -1,6 +1,7 @@
-using WayFinder.DestinosTuristicos;
+using WayFinder.Calificaciones;
 using AutoMapper;
 using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder;
 
@@ -17,14 +18,19 @@ public class WayFinderApplicationAutoMapperProfile : Profile
 
         CreateMap<PaisDto, Pais>();
         CreateMap<CoordenadasDto, Coordenadas>();
-        
+        CreateMap<CalificacionDto, CalificacionDestino>();
+        CreateMap<CrearCalificacionDto, WayFinder.Calificaciones.Calificacion>();
+        CreateMap<CalificacionDto, WayFinder.Calificaciones.Calificacion>();
+
         // and vice versa
 
         CreateMap<Pais, PaisDto>();
         CreateMap<Coordenadas, CoordenadasDto>();
         CreateMap<DestinoTuristicoDto, DestinoTuristico>();
         CreateMap<DestinoTuristico, GuardarDestinos>();
-
+        CreateMap<CalificacionDestino, CalificacionDto>();
+        CreateMap<WayFinder.Calificaciones.Calificacion, CrearCalificacionDto>();
+        CreateMap<WayFinder.Calificaciones.Calificacion, CalificacionDto>();
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations
          * into multiple profile classes for a better organization. */
