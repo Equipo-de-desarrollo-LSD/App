@@ -1,8 +1,12 @@
 ﻿using Autofac.Core;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NSubstitute;
 using Shouldly;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.Modularity;
 using Volo.Abp.Uow;
@@ -10,6 +14,9 @@ using Volo.Abp.Validation;
 using WayFinder.DestinosTuristicosDTOs;
 using WayFinder.EntityFrameworkCore;
 using Xunit;
+using static OpenIddict.Abstractions.OpenIddictConstants;
+using NSubstitute.Extensions;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder.DestinosTuristicos
 {
@@ -108,32 +115,118 @@ namespace WayFinder.DestinosTuristicos
                 await _services.CreateAsync(input);
             });
         }
-      /*  [Fact]
-        public async Task CreateAsync_ShouldPersistDestinationInDatabase()
+
+        // Mocks and Tests for BuscarCiudadAsync
+
+        [Fact]
+        public async Task SearchCiudadesAsync_ReturnsResults()
         {
-            using (var uow = _unitOfWorkManager.Begin())
+            // Arrange
+            var request = new BuscarCiudadRequestDto { NombreCiudad = "Test" };
+            var expected = new BuscarCiudadResultDto
             {
-                // Arrange
-                var input = new GuardarDestinos
-                {
-                    Nombre = "Tokyo",
-                    PaisNombre = "Japan"
-                };
+                Ciudades = new List<CiudadDto> { new CiudadDto { Nombre = "TestCity", Pais = "TestCountry"} }
+            };
+            var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
+            var citySearchMock = Substitute.For<IBuscarCiudadService>();
+            citySearchMock.SearchCitiesAsync(request).Returns(expected);
+            var service = new DestinoTuristicoAppService(repoMock, citySearchMock);
 
-                // Act
-                var result = await _services.CreateAsync(input);
-                await uow.CompleteAsync();
+            // Act
+            var result = await service.BuscarCiudadAsync(request);
 
-                // Assert
-                var dbContext = await _dbContextProvider.GetDbContextAsync();
-                var savedDestination = await dbContext.DestinosTuristicos.FindAsync(result.Id);
-
-                savedDestination.ShouldNotBeNull();
-                savedDestination.nombre.ShouldBe(input.Nombre);
-                savedDestination.Pais.nombre.ShouldBe(input.PaisNombre);
-
-            }
+            // Assert
+            result.ShouldNotBeNull();
+            result.Ciudades.Count.ShouldBe(1);
+            result.Ciudades[0].Nombre.ShouldBe("TestCity");
         }
-      */
+
+        [Fact]
+        public async Task SearchCiudadesAsync_ReturnsEmpty()
+        {
+            // Arrange
+            var request = new BuscarCiudadRequestDto { NombreCiudad = "NoMatch" };
+            var expected = new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
+            var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
+            var citySearchMock = Substitute.For<IBuscarCiudadService>();
+            citySearchMock.SearchCitiesAsync(request).Returns(expected);
+            var service = new DestinoTuristicoAppService(repoMock, citySearchMock);
+
+            // Act
+            var result = await service.BuscarCiudadAsync(request);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Ciudades.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public async Task SearchCiudadesAsync_InvalidInput_ReturnsEmpty()
+        {
+            // Arrange
+            var request = new BuscarCiudadRequestDto { NombreCiudad = "" };
+            var expected = new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
+            var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
+            var citySearchMock = Substitute.For<IBuscarCiudadService>();
+            citySearchMock.SearchCitiesAsync(request).Returns(expected);
+            var service = new DestinoTuristicoAppService(repoMock, citySearchMock);
+
+            // Act
+            var result = await service.BuscarCiudadAsync(request);
+
+            // Assert
+            result.ShouldNotBeNull();
+            result.Ciudades.ShouldBeEmpty();
+        }
+
+        [Fact]
+        public async Task SearchCiudadesAsync_ApiError_ThrowsException()
+        {
+            // Arrange
+            var request = new BuscarCiudadRequestDto { NombreCiudad = "Test" };
+            var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
+            var citySearchMock = Substitute.For<IBuscarCiudadService>();
+            citySearchMock
+                .When(x => x.SearchCitiesAsync(request))
+                .Do(x => { throw new Exception("API error"); });
+            var service = new DestinoTuristicoAppService(repoMock, citySearchMock);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => service.BuscarCiudadAsync(request));
+        }
+        //
+
+
     }
-}
+
+
+
+        /*  [Fact]
+          public async Task CreateAsync_ShouldPersistDestinationInDatabase()
+          {
+              using (var uow = _unitOfWorkManager.Begin())
+              {
+                  // Arrange
+                  var input = new GuardarDestinos
+                  {
+                      Nombre = "Tokyo",
+                      PaisNombre = "Japan"
+                  };
+
+                  // Act
+                  var result = await _services.CreateAsync(input);
+                  await uow.CompleteAsync();
+
+                  // Assert
+                  var dbContext = await _dbContextProvider.GetDbContextAsync();
+                  var savedDestination = await dbContext.DestinosTuristicos.FindAsync(result.Id);
+
+                  savedDestination.ShouldNotBeNull();
+                  savedDestination.nombre.ShouldBe(input.Nombre);
+                  savedDestination.Pais.nombre.ShouldBe(input.PaisNombre);
+
+              }
+          }
+        */
+ }
+

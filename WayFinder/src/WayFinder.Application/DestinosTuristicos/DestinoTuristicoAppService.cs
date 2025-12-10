@@ -22,14 +22,21 @@ public class DestinoTuristicoAppService :
         DestinosTuristicosDTOs.IDestinoTuristicoAppService //implement the IBookAppService
 {
     private readonly IRepository<DestinoTuristico, Guid> _repository;
+    private readonly IBuscarCiudadService _buscarCiudadService;
+    
 
-    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository)
+    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService)
         : base(repository)
 
     {
         _repository = repository;
+        _buscarCiudadService = buscarCiudadService;
     }
 
+    public async Task<BuscarCiudadResultDto> BuscarCiudadAsync(BuscarCiudadRequestDto request)
+    {
+        return await _buscarCiudadService.SearchCitiesAsync(request);
+    }
     //alta
     public async Task<DestinoTuristicoDto> Crear(GuardarDestinos input)
  
@@ -39,10 +46,7 @@ public class DestinoTuristicoAppService :
             throw new ArgumentException("El nombre no puede estar vacío.");
         }
         var DestinoTuristico = await _repository.InsertAsync(ObjectMapper.Map<GuardarDestinos, DestinoTuristico>(input));
-        return ObjectMapper.Map<DestinoTuristico, DestinoTuristicoDto>(DestinoTuristico)
-        ;
-
-
+        return ObjectMapper.Map<DestinoTuristico, DestinoTuristicoDto>(DestinoTuristico);
     }
 
     //listar
@@ -50,5 +54,13 @@ public class DestinoTuristicoAppService :
     {
         var destinos = await _repository.GetListAsync();
         return ObjectMapper.Map<List<DestinoTuristico>, List<DestinoTuristicoDto>>(destinos);
+    }
+
+    public async Task<BuscarCiudadResultDto> BuscarCiudades(BuscarCiudadRequestDto request)
+    {
+        // El AppService no sabe CÓMO se buscan.
+        // Simplemente delega el trabajo al servicio que inyectó.
+        // Esto cumple con el Punto 4: "utilice la interfaz para buscar ciudades".
+        return await _buscarCiudadService.SearchCitiesAsync(request);
     }
 }

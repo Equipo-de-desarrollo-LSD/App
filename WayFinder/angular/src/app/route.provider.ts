@@ -17,5 +17,13 @@ function configureRoutes() {
         order: 1,
         layout: eLayoutType.application,
       },
+   // 2. NUEVO ELEMENTO DE MENÚ: CIUDADES
+        {
+          path: '/ciudades', // <--- La ruta que definiste en app.routes.ts
+          name: '::Menu:Ciudades', // El texto que se verá en el menú
+          iconClass: 'fas fa-map-marker-alt', // Ícono de un pin de mapa
+          order: 2, // Aparecerá después de 'Home'
+          layout: eLayoutType.application,
+        },
   ]);
 }
