@@ -17,6 +17,9 @@ namespace WayFinder.DestinosTuristicosDTOs
     {
        Task<List<DestinoTuristicoDto>> GetAllDestinosTuristicosAsync();
        Task<DestinoTuristicoDto> Crear(GuardarDestinos input);
-        
+
+        // Metodo necesario para buscar ciudades
+        Task<BuscarCiudadResultDto> BuscarCiudades(BuscarCiudadRequestDto request);
+
     }
 }

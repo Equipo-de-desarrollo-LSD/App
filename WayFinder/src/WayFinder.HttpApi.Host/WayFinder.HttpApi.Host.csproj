@@ -17,14 +17,8 @@
     <PackageReference Include="AspNetCore.HealthChecks.UI.Client" Version="9.0.0" />
     <PackageReference Include="AspNetCore.HealthChecks.UI.InMemory.Storage" Version="9.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="9.0.5" />
-    <PackageReference Include="NSubstitute" Version="5.3.0" />
-    <PackageReference Include="NSubstitute.Analyzers.CSharp" Version="1.0.17">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Async" Version="2.1.0" />
-    <PackageReference Include="Shouldly" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\WayFinder.Application\WayFinder.Application.csproj" />
+    <ProjectReference Include="..\WayFinder.HttpApi.Client\WayFinder.HttpApi.Client.csproj" />
     <ProjectReference Include="..\WayFinder.HttpApi\WayFinder.HttpApi.csproj" />
     <ProjectReference Include="..\WayFinder.EntityFrameworkCore\WayFinder.EntityFrameworkCore.csproj" />
   </ItemGroup>
