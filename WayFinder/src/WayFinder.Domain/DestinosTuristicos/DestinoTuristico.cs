@@ -19,13 +19,19 @@ namespace WayFinder.DestinosTuristicos
          public Coordenadas coordenadas { get; set; }
         */
         //public DestinoTuristico(Guid id) { Id = id; }
-      //  [Key] public Guid Id { get; set; }
+        //  [Key] public Guid Id { get; set; }
         public required string nombre { get; set; }
         public required string foto { get; set; }
         public DateTime UltimaActualizacion { get; set; }
         public Pais Pais { get; set; }
-        public Coordenadas Coordenadas {get; set;}
+        public Coordenadas Coordenadas { get; set; }
+
+
     
 
+    public DestinoTuristico(Guid id) : base(id)
+        {
+            // Constructor vacío necesario para que ABP pueda asignar el ID
+        }
     }
 }
