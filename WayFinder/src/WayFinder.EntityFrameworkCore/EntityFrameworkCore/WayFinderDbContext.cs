@@ -38,7 +38,7 @@ public class WayFinderDbContext :
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
     public DbSet<Calificacion> Calificaciones { get; set; }
-
+    public DbSet<ExperienciaViaje> ExperienciasViajes { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
