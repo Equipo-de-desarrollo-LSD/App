@@ -1,13 +1,14 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using WayFinder.DestinosTuristicosDTOs;
-using System.Text.Json.Serialization;
 
 namespace WayFinder.DestinosTuristicos
 {
@@ -17,10 +18,12 @@ namespace WayFinder.DestinosTuristicos
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
         private const string Host = "wft-geo-db.p.rapidapi.com";
         private readonly HttpClient _httpClient;
+        private readonly IHttpClientFactory _httpClientFactory;
 
-        public GeoDbBuscarCiudadService(HttpClient httpClient)
+        public GeoDbBuscarCiudadService(HttpClient httpClient, IHttpClientFactory httpClientFactory)
         {
             _httpClient = httpClient;
+            _httpClientFactory = httpClientFactory;
         }
 
         public async Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request)
@@ -80,6 +83,49 @@ namespace WayFinder.DestinosTuristicos
 
             //[JsonPropertyName("region")]
             //public string Region { get; set; }
+        }
+        // Asegúrate de tener los usings necesarios (Newtonsoft, System.Net.Http, etc)
+        public async Task<FiltrarCiudadesResultDto> FiltrarCiudadesExternasAsync(FiltrarCiudadesRequestDto input)
+        {
+            var resultado = new FiltrarCiudadesResultDto();
+
+            // Aquí movemos toda la lógica de conexión que antes pusimos en el AppService
+            var client = _httpClientFactory.CreateClient(); // O como lo estés instanciando ahí
+            var url = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?";
+
+            var parameters = new List<string>();
+            if (!string.IsNullOrEmpty(input.PaisCodigo)) parameters.Add($"countryIds={input.PaisCodigo}");
+            if (input.MinPoblacion.HasValue) parameters.Add($"minPopulation={input.MinPoblacion}");
+            parameters.Add($"limit={input.Limit}");
+            parameters.Add("sort=-population");
+            parameters.Add("offset=0");
+            parameters.Add("hateoasMode=false");
+
+            var response = await client.GetAsync(url + string.Join("&", parameters));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var json = JObject.Parse(jsonString);
+                var data = json["data"];
+
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        // Mapeamos a CiudadDto y lo metemos en el resultado
+                        resultado.Ciudades.Add(new CiudadDto
+                        {
+                            Nombre = item["name"]?.ToString(),
+                            Pais = item["country"]?.ToString(),
+                            Latitud = (double?)item["latitude"] ?? 0,
+                            Longitud = (double?)item["longitude"] ?? 0,
+                            PaisPoblacion = (double?)item["population"] ?? 0
+                        });
+                    }
+                }
+            }
+            return resultado;
         }
     }
 }

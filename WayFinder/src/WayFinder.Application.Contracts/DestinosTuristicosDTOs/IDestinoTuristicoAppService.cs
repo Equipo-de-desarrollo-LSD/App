@@ -22,5 +22,6 @@ namespace WayFinder.DestinosTuristicosDTOs
         Task<BuscarCiudadResultDto> BuscarCiudades(BuscarCiudadRequestDto request);
         //Task CalificarDestinoAsync(CalificacionDto input); // Nuevo método para calificar un destino turístico
         //Task CalificarDestinoAsync(CrearCalificacionDto input);
+        Task<FiltrarCiudadesResultDto> FiltrarCiudadesAsync(FiltrarCiudadesRequestDto input);
     }
 }
