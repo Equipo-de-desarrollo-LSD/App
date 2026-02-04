@@ -13,8 +13,8 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-    [Migration("20250916225756_Created_Destinos")]
-    partial class Created_Destinos
+    [Migration("20251107232200_Recuperando_BD")]
+    partial class Recuperando_BD
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1884,13 +1884,69 @@ namespace WayFinder.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
+            modelBuilder.Entity("WayFinder.DestinosTuristicos.Calificacion", b =>
                 {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Comentario")
+                        .IsRequired()
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid>("DestinoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ExtraProperties")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<DateTime?>("LastModificationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastModificationTime");
+
+                    b.Property<Guid?>("LastModifierId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("LastModifierId");
+
+                    b.Property<int>("Puntaje")
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DestinoId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AppCalificaciones", (string)null);
+                });
+
+            modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UltimaActualizacion")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("foto")
                         .IsRequired()
@@ -1902,10 +1958,7 @@ namespace WayFinder.Migrations
                         .HasMaxLength(128)
                         .HasColumnType("nvarchar(128)");
 
-                    b.Property<DateTime>("ultimaActualizacion")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("id");
+                    b.HasKey("Id");
 
                     b.ToTable("AppDestinosTuristicos", (string)null);
                 });
@@ -2061,12 +2114,27 @@ namespace WayFinder.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("WayFinder.DestinosTuristicos.Calificacion", b =>
+                {
+                    b.HasOne("WayFinder.DestinosTuristicos.DestinoTuristico", null)
+                        .WithMany()
+                        .HasForeignKey("DestinoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Volo.Abp.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("WayFinder.DestinosTuristicos.DestinoTuristico", b =>
                 {
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "coordenadas", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Coordenadas", "Coordenadas", b1 =>
                         {
-                            b1.Property<int>("DestinoTuristicoid")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("DestinoTuristicoId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<double>("latitud")
                                 .HasColumnType("float")
@@ -2076,18 +2144,18 @@ namespace WayFinder.Migrations
                                 .HasColumnType("float")
                                 .HasColumnName("coordenadas_longitud");
 
-                            b1.HasKey("DestinoTuristicoid");
+                            b1.HasKey("DestinoTuristicoId");
 
                             b1.ToTable("AppDestinosTuristicos");
 
                             b1.WithOwner()
-                                .HasForeignKey("DestinoTuristicoid");
+                                .HasForeignKey("DestinoTuristicoId");
                         });
 
-                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "pais", b1 =>
+                    b.OwnsOne("WayFinder.DestinosTuristicos.Pais", "Pais", b1 =>
                         {
-                            b1.Property<int>("DestinoTuristicoid")
-                                .HasColumnType("int");
+                            b1.Property<Guid>("DestinoTuristicoId")
+                                .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("nombre")
                                 .IsRequired()
@@ -2099,18 +2167,18 @@ namespace WayFinder.Migrations
                                 .HasColumnType("float")
                                 .HasColumnName("pais_poblacion");
 
-                            b1.HasKey("DestinoTuristicoid");
+                            b1.HasKey("DestinoTuristicoId");
 
                             b1.ToTable("AppDestinosTuristicos");
 
                             b1.WithOwner()
-                                .HasForeignKey("DestinoTuristicoid");
+                                .HasForeignKey("DestinoTuristicoId");
                         });
 
-                    b.Navigation("coordenadas")
+                    b.Navigation("Coordenadas")
                         .IsRequired();
 
-                    b.Navigation("pais")
+                    b.Navigation("Pais")
                         .IsRequired();
                 });
 

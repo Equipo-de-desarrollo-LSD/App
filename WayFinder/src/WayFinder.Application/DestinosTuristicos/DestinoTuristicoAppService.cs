@@ -1,17 +1,22 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using WayFinder.DestinosTuristicosDTOs;
+using Volo.Abp;
+using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Account;
+using Volo.Abp.Domain.Repositories;
+using WayFinder.Calificaciones;
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
 
 
-namespace WayFinder.DestinosTuristicos;
-
+namespace WayFinder.DestinoTuristicos;
+[Authorize] // asegura que nadie que no esté logueado pueda llamar a ningún método de este servicio
 public class DestinoTuristicoAppService :
     CrudAppService<
         DestinoTuristico, //The Book entity
@@ -19,18 +24,19 @@ public class DestinoTuristicoAppService :
         Guid, //Primary key of the book entity
         PagedAndSortedResultRequestDto, //Used for paging/sorting
         GuardarDestinos>, //Used to create/update a book
-        DestinosTuristicosDTOs.IDestinoTuristicoAppService //implement the IBookAppService
+        DestinosTuristicosDTOs.IDestinoTuristicoAppService//implement the IBookAppService
 {
     private readonly IRepository<DestinoTuristico, Guid> _repository;
     private readonly IBuscarCiudadService _buscarCiudadService;
-    
+    private readonly IRepository<Calificaciones.Calificacion, Guid> _calificacionRepository;
 
-    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService)
+    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository)
         : base(repository)
 
     {
         _repository = repository;
         _buscarCiudadService = buscarCiudadService;
+        _calificacionRepository = calificacionRepository;
     }
 
     public async Task<BuscarCiudadResultDto> BuscarCiudadAsync(BuscarCiudadRequestDto request)
@@ -63,4 +69,9 @@ public class DestinoTuristicoAppService :
         // Esto cumple con el Punto 4: "utilice la interfaz para buscar ciudades".
         return await _buscarCiudadService.SearchCitiesAsync(request);
     }
+
+    
+
+
+   
 }
