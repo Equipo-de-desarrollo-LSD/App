@@ -14,7 +14,6 @@ using Volo.Abp.Uow;
 namespace WayFinder.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(WayFinderApplicationTestModule),
     typeof(WayFinderEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule)
 )]

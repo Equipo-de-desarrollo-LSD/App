@@ -1,6 +1,7 @@
-using WayFinder.DestinosTuristicos;
 using AutoMapper;
+using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.Favoritos;
 
 namespace WayFinder;
 
@@ -24,6 +25,7 @@ public class WayFinderApplicationAutoMapperProfile : Profile
         CreateMap<Coordenadas, CoordenadasDto>();
         CreateMap<DestinoTuristicoDto, DestinoTuristico>();
         CreateMap<DestinoTuristico, GuardarDestinos>();
+        CreateMap<DestinoFavorito, DestinoFavoritoDto>();
 
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations

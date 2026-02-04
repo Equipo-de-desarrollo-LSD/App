@@ -1904,6 +1904,31 @@ namespace WayFinder.Migrations
                     b.ToTable("AppDestinosTuristicos", (string)null);
                 });
 
+            modelBuilder.Entity("WayFinder.Favoritos.DestinoFavorito", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid>("DestinoTuristicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId", "DestinoTuristicoId")
+                        .IsUnique()
+                        .HasFilter("[CreatorId] IS NOT NULL");
+
+                    b.ToTable("AppDestinosFavoritos", (string)null);
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog", null)

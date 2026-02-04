@@ -9,12 +9,13 @@ using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
+using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.PermissionManagement.EntityFrameworkCore;
 using Volo.Abp.SettingManagement.EntityFrameworkCore;
-using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using WayFinder.DestinosTuristicos;
+using WayFinder.Favoritos;
 
 namespace WayFinder.EntityFrameworkCore;
 
@@ -57,6 +58,7 @@ public class WayFinderDbContext :
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
     #endregion
+    public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
 
     public WayFinderDbContext(DbContextOptions<WayFinderDbContext> options)
         : base(options)
@@ -101,7 +103,15 @@ public class WayFinderDbContext :
             //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
             //...
         });
-        
+        builder.Entity<DestinoFavorito>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "DestinosFavoritos", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            // Regla de Oro: Un usuario NO puede guardar el mismo destino 2 veces.
+            b.HasIndex(x => new { x.CreatorId, x.DestinoTuristicoId }).IsUnique();
+        });
+
         //builder.Entity<YourEntity>(b =>
         //{
         //    b.ToTable(WayFinderConsts.DbTablePrefix + "YourEntities", WayFinderConsts.DbSchema);

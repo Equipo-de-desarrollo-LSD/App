@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WayFinder.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Initial_Complete : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -443,6 +443,38 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppDestinosFavoritos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DestinoTuristicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppDestinosFavoritos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppDestinosTuristicos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    nombre = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    foto = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    UltimaActualizacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    pais_nombre = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    pais_poblacion = table.Column<double>(type: "float", nullable: false),
+                    coordenadas_latitud = table.Column<double>(type: "float", nullable: false),
+                    coordenadas_longitud = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppDestinosTuristicos", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -1079,6 +1111,13 @@ namespace WayFinder.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppDestinosFavoritos_CreatorId_DestinoTuristicoId",
+                table: "AppDestinosFavoritos",
+                columns: new[] { "CreatorId", "DestinoTuristicoId" },
+                unique: true,
+                filter: "[CreatorId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -1189,6 +1228,12 @@ namespace WayFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "AppDestinosFavoritos");
+
+            migrationBuilder.DropTable(
+                name: "AppDestinosTuristicos");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
