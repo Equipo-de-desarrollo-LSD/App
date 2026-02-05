@@ -25,7 +25,7 @@ namespace WayFinder.DestinosTuristicos
     {
         private readonly IDestinoTuristicoAppService _services;
         private readonly IDbContextProvider<WayFinderDbContext> _dbContextProvider;
-        private readonly IUnitOfWorkManager _unitOfWorkManager ;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
         protected DestinoTurisiticoAppService_Tests()
         {
             _services = GetRequiredService<IDestinoTuristicoAppService>();
@@ -37,18 +37,18 @@ namespace WayFinder.DestinosTuristicos
         public async Task CrearAsyncShould_CreateDestinosTuristicosDto()
         {// arrange, que necesito para ejecutar el metodo
             var input = new GuardarDestinos
-            { 
+            {
                 Nombre = "Playa Paraíso",
                 Foto = "playa_paraiso.jpg", // ← necesario
-                PaisNombre = "España", 
-                PaisPoblacion = 49000000 ,
-                CoordenadasLatitud = 36.7213, 
-                CoordenadasLongitud = -4.4214 ,
+                PaisNombre = "España",
+                PaisPoblacion = 49000000,
+                CoordenadasLatitud = 36.7213,
+                CoordenadasLongitud = -4.4214,
                 UltimaActualizacion = DateTime.Now
 
             };
             //act, cuando se ejectuta la accion que queremos probar
-           // _services.ShouldNotBeNull();
+            // _services.ShouldNotBeNull();
             var result = await _services.CreateAsync(input);
 
             //assert, verificar que el resultado es el esperado
@@ -82,7 +82,7 @@ namespace WayFinder.DestinosTuristicos
                 var dbContext = await _dbContextProvider.GetDbContextAsync();
                 var savedDestination = await dbContext.DestinosTuristicos.FindAsync(result.Id);
 
-              
+
                 // Assert
                 savedDestination.ShouldNotBeNull();
                 savedDestination.Id.ShouldNotBe(Guid.Empty);
@@ -116,7 +116,11 @@ namespace WayFinder.DestinosTuristicos
             });
         }
 
-        // Mocks and Tests for BuscarCiudadAsync
+        // Mocks and Tests for BuscarCiudadAsync, capaz no funcionan por cambios hechos por el test de FiltrarCiudades
+        //El código cambió (agregamos cosas al constructor), pero los tests viejos siguen intentando usar la versión anterior.
+        // Los errores CS7036 dicen básicamente: "Oye, el constructor pide 3 cosas, pero tú solo me estás dando 2".
+        //Para solucionar esto de raíz y que desaparezcan todos los rojos, vas a copiar y reemplazar el contenido completo de estos 2 archivos(DestinoAppService_Test y GeoDbCitySearchService_IntegrationTests.cs).
+
 
         [Fact]
         public async Task SearchCiudadesAsync_ReturnsResults()
@@ -203,7 +207,7 @@ namespace WayFinder.DestinosTuristicos
 
 
     }
-
+        
 
 
         /*  [Fact]

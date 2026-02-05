@@ -26,6 +26,11 @@ namespace WayFinder.DestinosTuristicos
             _httpClientFactory = httpClientFactory;
         }
 
+        public GeoDbBuscarCiudadService(HttpClient httpClient)
+        {
+            _httpClient = httpClient;
+        }
+
         public async Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request)
         {
             var result = new BuscarCiudadResultDto();
