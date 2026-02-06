@@ -13,13 +13,10 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-<<<<<<<< HEAD:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20260130201629_Initial_Complete.Designer.cs
-    [Migration("20260130201629_Initial_Complete")]
-    partial class Initial_Complete
-========
+
     [Migration("20251107232200_Recuperando_BD")]
     partial class Recuperando_BD
->>>>>>>> 9e4db36867b3f36cd3d847c33363b477ebf2a9dd:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20251107232200_Recuperando_BD.Designer.cs
+
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

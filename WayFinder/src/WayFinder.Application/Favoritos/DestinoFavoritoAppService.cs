@@ -6,12 +6,12 @@ using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
-using Volo.Abp.Users;
 using WayFinder.DestinosTuristicos;
+using Volo.Abp.Users;
 
 namespace WayFinder.Favoritos
 {
-    [Authorize] // ¡IMPORTANTE! Solo usuarios logueados pueden tener favoritos
+    [Authorize] 
     public class DestinoFavoritoAppService : ApplicationService, IDestinoFavoritoAppService
     {
         private readonly IRepository<DestinoFavorito, Guid> _favoritoRepository;

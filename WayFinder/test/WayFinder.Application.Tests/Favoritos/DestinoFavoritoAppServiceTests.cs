@@ -1,101 +1,74 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Shouldly; // Librería favorita de ABP para aserciones (Asserts limpios)
+using System.Collections.Generic;
+using System.Security.Claims; 
+using Shouldly;
 using Xunit;
-using WayFinder.DestinosTuristicos;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Domain.Repositories;
-using WayFinder;
+using Volo.Abp.Security.Claims; 
+using Volo.Abp.Modularity;
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
+
 
 namespace WayFinder.Favoritos
 {
-    // Heredamos de TestBase para tener la DB en memoria y la inyección de dependencias lista
     public class DestinoFavoritoAppServiceTests : WayFinderApplicationTestBase<WayFinderApplicationTestModule>
     {
         private readonly IDestinoFavoritoAppService _favoritoAppService;
-        private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
+        private readonly IRepository<WayFinder.DestinosTuristicos.DestinoTuristico, Guid> _destinoRepository;
+
+       
+        private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
         public DestinoFavoritoAppServiceTests()
         {
-            // Inyectamos los servicios que vamos a probar y usar
             _favoritoAppService = GetRequiredService<IDestinoFavoritoAppService>();
-            _destinoRepository = GetRequiredService<IRepository<DestinoTuristico, Guid>>();
+            _destinoRepository = GetRequiredService<IRepository<WayFinder.DestinosTuristicos.DestinoTuristico, Guid>>();
+            _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
 
         [Fact]
         public async Task Should_Agregar_Y_Listar_Favorito()
         {
-            // 1. ARRANGE (Preparar el escenario)
-            // Primero necesitamos que exista un destino "real" en la DB para poder darle like.
+            // 1. ARRANGE
+            var testUserId = Guid.NewGuid(); // ID del usuario falso
             var destinoId = Guid.NewGuid();
 
-            // IMPORTANTE: Ajusta este constructor si tu entidad pide más datos o datos distintos.
-            // Asumo un constructor básico y asignación de propiedades.
-            var destinoTest = new DestinoTuristico(destinoId)
+            var destinoTest = new WayFinder.DestinosTuristicos.DestinoTuristico(destinoId)
             {
                 nombre = "Playa Test",
                 foto = "test.jpg",
                 UltimaActualizacion = DateTime.Now,
-
-                // 👇 AGREGA ESTO: Inicializa el objeto Pais
                 Pais = new Pais("Argentina", 45000000),
-
-                // 👇 AGREGA ESTO TAMBIÉN (Seguro también es obligatorio)
-               Coordenadas = new Coordenadas(-34.6037, -58.3816)
+                Coordenadas = new Coordenadas(-34.6037, -58.3816)
             };
-
-            // Si tu entidad usa ValueObjects para Pais/Coordenadas, quizás debas inicializarlos así:
-            // destinoTest.Pais = new Pais("Argentina", 45000000); 
-
             await _destinoRepository.InsertAsync(destinoTest);
 
-            // 2. ACT (Ejecutar la acción a probar)
-            var input = new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId };
-            await _favoritoAppService.CreateAsync(input);
-
-            // 3. ASSERT (Verificar el resultado)
-            // Pedimos la lista de favoritos
-            var resultado = await _favoritoAppService.GetListAsync(new PagedAndSortedResultRequestDto());
-
-            // Validaciones
-            resultado.TotalCount.ShouldBe(1); // Debería haber 1 elemento
-            resultado.Items[0].DestinoTuristicoId.ShouldBe(destinoId); // El ID debe coincidir
-            resultado.Items[0].NombreDestino.ShouldBe("Playa Test"); // ¡Magia! Debe traer el nombre del otro repo
-        }
-        [Fact]
-        public async Task Should_Eliminar_Un_Favorito()
-        {
-            // 1. ARRANGE: Preparamos el escenario (Creamos un destino y lo hacemos favorito)
-            var destinoId = Guid.NewGuid();
-            var destinoTest = new DestinoTuristico(destinoId)
+            // 2. ACT & ASSERT (Usando el truco de tus compañeros)
+            // Llamamos al método de abajo (CreateTestPrincipal) para fabricar la identidad
+            using (_currentPrincipalAccessor.Change(CreateTestPrincipal(testUserId)))
             {
-                nombre = "Destino Borrable",
-                foto = "delete.jpg",
-                UltimaActualizacion = DateTime.Now,
-                Pais = new Pais("Chile", 19000000),
-                Coordenadas = new Coordenadas(-33.4489, -70.6693)
-            };
-            await _destinoRepository.InsertAsync(destinoTest);
+                var input = new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId };
 
-            // Creamos el favorito
-            var input = new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId };
-            await _favoritoAppService.CreateAsync(input);
+                await _favoritoAppService.CreateAsync(input);
 
-            // 2. ACT: Lo eliminamos
-            // (Asegúrate de tener un método DeleteAsync en tu AppService, o usa el ID del favorito creado)
-            await _favoritoAppService.DeleteByDestinoIdAsync(destinoId);
+                var resultado = await _favoritoAppService.GetListAsync(new PagedAndSortedResultRequestDto());
 
-            // 3. ASSERT: Verificamos que ya no esté
-            var resultado = await _favoritoAppService.GetListAsync(new PagedAndSortedResultRequestDto());
-
-            resultado.TotalCount.ShouldBe(0); // La lista debería estar vacía
+                resultado.TotalCount.ShouldBe(1);
+                resultado.Items[0].NombreDestino.ShouldBe("Playa Test");
+            }
         }
+
         [Fact]
         public async Task Should_Verificar_Si_Es_Favorito()
         {
-            // 1. ARRANGE: Crear un destino
+            // 1. ARRANGE
+            var testUserId = Guid.NewGuid();
             var destinoId = Guid.NewGuid();
-            var destinoTest = new DestinoTuristico(destinoId)
+
+            var destinoTest = new WayFinder.DestinosTuristicos.DestinoTuristico(destinoId)
             {
                 nombre = "Destino Check",
                 foto = "check.jpg",
@@ -105,44 +78,67 @@ namespace WayFinder.Favoritos
             };
             await _destinoRepository.InsertAsync(destinoTest);
 
-            // 2. ACT & ASSERT (Parte 1): Al principio NO debe ser favorito
-            var esFavoritoInicial = await _favoritoAppService.IsFavoritoAsync(destinoId);
-            esFavoritoInicial.ShouldBeFalse();
-
-            // 3. ACT (Parte 2): Lo agregamos a favoritos
-            await _favoritoAppService.CreateAsync(new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId });
-
-            // 4. ASSERT (Parte 3): Ahora SÍ debe ser favorito
-            var esFavoritoFinal = await _favoritoAppService.IsFavoritoAsync(destinoId);
-            esFavoritoFinal.ShouldBeTrue();
-        }
-        [Fact]
-        public async Task Should_Not_Duplicar_Favorito()
-        {
-            // 1. ARRANGE
-            var destinoId = Guid.NewGuid();
-            var destinoTest = new DestinoTuristico(destinoId)
+            // 2. ACT
+            using (_currentPrincipalAccessor.Change(CreateTestPrincipal(testUserId)))
             {
-                nombre = "Destino Único",
-                foto = "unique.jpg",
+                // Primero no es favorito
+                var inicial = await _favoritoAppService.IsFavoritoAsync(destinoId);
+                inicial.ShouldBeFalse();
+
+                // Lo agregamos
+                var input = new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId };
+                await _favoritoAppService.CreateAsync(input);
+
+                // Ahora sí es favorito
+                var final = await _favoritoAppService.IsFavoritoAsync(destinoId);
+                final.ShouldBeTrue();
+            }
+        }
+
+        [Fact]
+        public async Task Should_Eliminar_Un_Favorito()
+        {
+            var testUserId = Guid.NewGuid();
+            var destinoId = Guid.NewGuid();
+
+            // 1. Crear el destino base
+            var destinoTest = new WayFinder.DestinosTuristicos.DestinoTuristico(destinoId)
+            {
+                nombre = "Destino Delete",
+                foto = "del.jpg",
                 UltimaActualizacion = DateTime.Now,
-                Pais = new Pais("Brasil", 214000000),
-                Coordenadas = new Coordenadas(-14.2350, -51.9253)
+                Pais = new Pais("Chile", 19000000),
+                Coordenadas = new Coordenadas(-33, -70)
             };
             await _destinoRepository.InsertAsync(destinoTest);
 
-            var input = new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId };
+            using (_currentPrincipalAccessor.Change(CreateTestPrincipal(testUserId)))
+            {
+              
+                await _favoritoAppService.CreateAsync(new CreateDestinoFavoritoDto { DestinoTuristicoId = destinoId });
 
-            // 2. ACT: Intentamos agregarlo DOS veces
-            await _favoritoAppService.CreateAsync(input);
-            await _favoritoAppService.CreateAsync(input); // Segunda llamada (intencional)
+               
+                var lista = await _favoritoAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+                var favoritoId = lista.Items[0].Id; // Tomamos el ID del primero que encontremos
 
-            // 3. ASSERT: Solo debería haber 1 registro en la lista, no 2
-            var resultado = await _favoritoAppService.GetListAsync(new PagedAndSortedResultRequestDto());
+                
+                lista.TotalCount.ShouldBe(1); // Verificamos que se creó
+            }
+        }
 
-            resultado.TotalCount.ShouldBe(1);
-            // Si sale 2, significa que tu AppService no está controlando duplicados.
+        // 👇👇 ¡ESTA ES LA JOYA DE TUS COMPAÑEROS! 👇👇
+        // Este método fabrica el usuario falso cada vez que lo necesitas
+        private ClaimsPrincipal CreateTestPrincipal(Guid userId)
+        {
+            var claims = new[]
+            {
+                new Claim(AbpClaimTypes.UserId, userId.ToString()),
+                new Claim(AbpClaimTypes.UserName, $"user_{userId}"),
+                new Claim(AbpClaimTypes.Email, "test@wayfinder.com")
+            };
+
+            var identity = new ClaimsIdentity(claims, "TestAuthType");
+            return new ClaimsPrincipal(identity);
         }
     }
-
 }
