@@ -15,7 +15,7 @@ namespace WayFinder.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
+            /* migrationBuilder.CreateTable(
                 name: "AbpAuditLogExcelFiles",
                 columns: table => new
                 {
@@ -28,9 +28,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogExcelFiles", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+           /* migrationBuilder.CreateTable(
                 name: "AbpAuditLogs",
                 columns: table => new
                 {
@@ -62,9 +62,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpAuditLogs", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+          /*  migrationBuilder.CreateTable(
                 name: "AbpBackgroundJobs",
                 columns: table => new
                 {
@@ -84,9 +84,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpBackgroundJobs", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+          /*  migrationBuilder.CreateTable(
                 name: "AbpBlobContainers",
                 columns: table => new
                 {
@@ -120,9 +120,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpClaimTypes", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+          /*  migrationBuilder.CreateTable(
                 name: "AbpFeatureGroups",
                 columns: table => new
                 {
@@ -156,9 +156,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpFeatures", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+            /*migrationBuilder.CreateTable(
                 name: "AbpFeatureValues",
                 columns: table => new
                 {
@@ -171,9 +171,9 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AbpFeatureValues", x => x.Id);
-                });
+                });*/
 
-            migrationBuilder.CreateTable(
+           /* migrationBuilder.CreateTable(
                 name: "AbpLinkUsers",
                 columns: table => new
                 {
@@ -1174,10 +1174,10 @@ namespace WayFinder.Migrations
                 name: "IX_OpenIddictTokens_ReferenceId",
                 table: "OpenIddictTokens",
                 column: "ReferenceId");
-        }
+        }*/
 
         /// <inheritdoc />
-        protected override void Down(MigrationBuilder migrationBuilder)
+       /* protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AbpAuditLogActions");
@@ -1295,7 +1295,7 @@ namespace WayFinder.Migrations
                 name: "AbpAuditLogs");
 
             migrationBuilder.DropTable(
-                name: "OpenIddictApplications");
+                name: "OpenIddictApplications");*/
         }
     }
 }

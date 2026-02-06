@@ -34,6 +34,23 @@ namespace WayFinder.DestinosTuristicos
             return await base.UpdateAsync(id, input);
         }
 
+        public override async Task<ExperienciaViajeDto> CreateAsync(CreateUpdateExperienciaViajeDto input)
+        {
+            var nuevaExperiencia = new ExperienciaViaje()
+            {
+                DestinoTuristicoId = input.DestinoTuristicoId,
+                Titulo = input.Titulo,
+                Contenido = input.Contenido,
+                Sentimiento = input.Sentimiento
+            };
+
+            // 2. Insertar en Base de Datos
+            await Repository.InsertAsync(nuevaExperiencia);
+
+            // 3. Devolver DTO (El mapeo de salida SÍ funciona bien)
+            return ObjectMapper.Map<ExperienciaViaje, ExperienciaViajeDto>(nuevaExperiencia);
+        }
+
         public override async Task DeleteAsync(Guid id)
         {
             var entity = await Repository.GetAsync(id);
@@ -49,7 +66,7 @@ namespace WayFinder.DestinosTuristicos
             var query = await base.CreateFilteredQueryAsync(input);
 
             return query
-                .Where(x => x.CreatorId == CurrentUser.Id) // 🔒 ¡CANDADO MAESTRO!
+                .Where(x => x.CreatorId == CurrentUser.Id) 
                 .WhereIf(input.DestinoTuristicoId.HasValue, x => x.DestinoTuristicoId == input.DestinoTuristicoId)
                 .WhereIf(input.Sentimiento.HasValue, x => x.Sentimiento == input.Sentimiento)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Filter),
