@@ -25,12 +25,14 @@ namespace WayFinder.DestinosTuristicos
         public required string foto { get; set; }
         public DateTime UltimaActualizacion { get; set; }
         public Pais Pais { get; set; }
-        public Coordenadas Coordenadas { get; set; }
-        public DestinoTuristico(Guid id) : base(id)
+        public Coordenadas Coordenadas {get; set;}
+    
+
+    
+
+    public DestinoTuristico(Guid id) : base(id)
         {
+            // Constructor vacío necesario para que ABP pueda asignar el ID
         }
     }
 }
-
-
-

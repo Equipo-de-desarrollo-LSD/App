@@ -1,7 +1,10 @@
+using WayFinder.Calificaciones;
 using AutoMapper;
 using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
 using WayFinder.Favoritos;
+using WayFinder.DestinosTuristicos;
+
 
 namespace WayFinder;
 
@@ -15,16 +18,24 @@ public class WayFinderApplicationAutoMapperProfile : Profile
                        opt => opt.MapFrom(src => new Pais(src.PaisNombre, src.PaisPoblacion))) // ...crea un nuevo objeto Pais.
             .ForMember(dest => dest.Coordenadas, // Para la propiedad 'Coordenadas' de la entidad...
                        opt => opt.MapFrom(src => new Coordenadas(src.CoordenadasLatitud, src.CoordenadasLongitud))); // ...crea un nuevo objeto Coordenadas.
-        
+
         CreateMap<PaisDto, Pais>();
         CreateMap<CoordenadasDto, Coordenadas>();
-        
+        CreateMap<CalificacionDto, CalificacionDestino>();
+        CreateMap<CrearCalificacionDto, WayFinder.Calificaciones.Calificacion>();
+        CreateMap<CalificacionDto, WayFinder.Calificaciones.Calificacion>();
+        CreateMap<ExperienciaViaje, ExperienciaViajeDto>();
+
         // and vice versa
 
         CreateMap<Pais, PaisDto>();
         CreateMap<Coordenadas, CoordenadasDto>();
         CreateMap<DestinoTuristicoDto, DestinoTuristico>();
         CreateMap<DestinoTuristico, GuardarDestinos>();
+        CreateMap<CalificacionDestino, CalificacionDto>();
+        CreateMap<WayFinder.Calificaciones.Calificacion, CrearCalificacionDto>();
+        CreateMap<WayFinder.Calificaciones.Calificacion, CalificacionDto>();
+        CreateMap<CreateUpdateExperienciaViajeDto, ExperienciaViaje>(); 
         CreateMap<DestinoFavorito, DestinoFavoritoDto>();
 
         /* You can configure your AutoMapper mapping configuration here.

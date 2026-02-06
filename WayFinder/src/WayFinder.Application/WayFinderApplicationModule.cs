@@ -7,6 +7,9 @@ using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.SettingManagement;
 using Volo.Abp.TenantManagement;
+using WayFinder.Calificaciones;
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
 
 namespace WayFinder;
 
@@ -17,19 +20,21 @@ namespace WayFinder;
     typeof(AbpFeatureManagementApplicationModule),
     typeof(AbpIdentityApplicationModule),
     typeof(AbpAccountApplicationModule),
-    typeof(AbpTenantManagementApplicationModule),
     typeof(AbpSettingManagementApplicationModule),
-     typeof(AbpAutoMapperModule)
+    typeof(AbpTenantManagementApplicationModule)
     )]
 public class WayFinderApplicationModule : AbpModule
 {
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //context.Services.AddAutoMapperObjectMapper<WayFinderApplicationModule>();
+        
 
         Configure<AbpAutoMapperOptions>(options =>
         {
             options.AddMaps<WayFinderApplicationModule>();
         });
+
+        context.Services.AddTransient<IBuscarCiudadService, GeoDbBuscarCiudadService>();
     }
 }

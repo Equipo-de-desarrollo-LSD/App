@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WayFinder.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20260130201629_Initial_Complete.cs
     public partial class Initial_Complete : Migration
+========
+    public partial class Recuperando_BD : Migration
+>>>>>>>> 9e4db36867b3f36cd3d847c33363b477ebf2a9dd:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20251107232200_Recuperando_BD.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -446,6 +450,7 @@ namespace WayFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+<<<<<<<< HEAD:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20260130201629_Initial_Complete.cs
                 name: "AppDestinosFavoritos",
                 columns: table => new
                 {
@@ -460,6 +465,8 @@ namespace WayFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+========
+>>>>>>>> 9e4db36867b3f36cd3d847c33363b477ebf2a9dd:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20251107232200_Recuperando_BD.cs
                 name: "AppDestinosTuristicos",
                 columns: table => new
                 {
@@ -796,6 +803,38 @@ namespace WayFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppCalificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Comentario = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: false),
+                    Puntaje = table.Column<int>(type: "int", nullable: false),
+                    DestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppCalificaciones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AppDestinosTuristicos_DestinoId",
+                        column: x => x.DestinoId,
+                        principalTable: "AppDestinosTuristicos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "OpenIddictAuthorizations",
                 columns: table => new
                 {
@@ -1111,11 +1150,22 @@ namespace WayFinder.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+<<<<<<<< HEAD:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20260130201629_Initial_Complete.cs
                 name: "IX_AppDestinosFavoritos_CreatorId_DestinoTuristicoId",
                 table: "AppDestinosFavoritos",
                 columns: new[] { "CreatorId", "DestinoTuristicoId" },
                 unique: true,
                 filter: "[CreatorId] IS NOT NULL");
+========
+                name: "IX_AppCalificaciones_DestinoId",
+                table: "AppCalificaciones",
+                column: "DestinoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppCalificaciones_UserId",
+                table: "AppCalificaciones",
+                column: "UserId");
+>>>>>>>> 9e4db36867b3f36cd3d847c33363b477ebf2a9dd:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20251107232200_Recuperando_BD.cs
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
@@ -1230,10 +1280,14 @@ namespace WayFinder.Migrations
                 name: "AbpUserTokens");
 
             migrationBuilder.DropTable(
+<<<<<<<< HEAD:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20260130201629_Initial_Complete.cs
                 name: "AppDestinosFavoritos");
 
             migrationBuilder.DropTable(
                 name: "AppDestinosTuristicos");
+========
+                name: "AppCalificaciones");
+>>>>>>>> 9e4db36867b3f36cd3d847c33363b477ebf2a9dd:WayFinder/src/WayFinder.EntityFrameworkCore/Migrations/20251107232200_Recuperando_BD.cs
 
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
@@ -1258,6 +1312,9 @@ namespace WayFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "AbpUsers");
+
+            migrationBuilder.DropTable(
+                name: "AppDestinosTuristicos");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictAuthorizations");

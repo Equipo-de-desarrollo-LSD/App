@@ -10,12 +10,17 @@ using Volo.Abp.FeatureManagement;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
 using Volo.Abp.Uow;
+using Volo.Abp.Security;
+using Volo.Abp.Validation;
+using Volo.Abp.Identity;
 
 namespace WayFinder.EntityFrameworkCore;
 
 [DependsOn(
     typeof(WayFinderEntityFrameworkCoreModule),
-    typeof(AbpEntityFrameworkCoreSqliteModule)
+    typeof(AbpEntityFrameworkCoreSqliteModule),
+    typeof(AbpSecurityModule),
+    typeof(WayFinderApplicationModule)
 )]
 public class WayFinderEntityFrameworkCoreTestModule : AbpModule
 {
