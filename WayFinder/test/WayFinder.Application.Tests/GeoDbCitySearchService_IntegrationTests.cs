@@ -1,14 +1,14 @@
-﻿using System;
+﻿using NSubstitute;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WayFinder.DestinoTuristico;
+using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
 using Xunit;
-using WayFinder.DestinosTuristicos;
 
 namespace WayFinder
 {
@@ -25,9 +25,11 @@ namespace WayFinder
         private GeoDbBuscarCiudadService CreateService()
         {
             var httpClient = new HttpClient();
-            return new GeoDbBuscarCiudadService(httpClient);
+            var mockFactory = Substitute.For<IHttpClientFactory>();
+           //return new GeoDbBuscarCiudadService(httpClient);
+            return new GeoDbBuscarCiudadService(httpClient, mockFactory);
         }
-
+       
         [Fact]
         [Trait("Category", "IntegrationTest")]
         public async Task SearchCitiesAsync_ReturnsResults_ForValidPartialName()
