@@ -22,6 +22,7 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
+using WayFinder.Perfiles;
 using static System.Net.WebRequestMethods;
 
 
@@ -37,6 +38,7 @@ public class WayFinderDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+
     public DbSet<Calificacion> Calificaciones { get; set; }
 
     #region Entities from the modules
@@ -67,6 +69,10 @@ public class WayFinderDbContext :
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
     #endregion
+
+
+
+    public DbSet<PerfilUsuario> PerfilesUsuarios { get; set; }
 
     // Inyección de ICurrentUser (null en design-time)
     //private readonly ICurrentUser? _currentUser;
@@ -117,7 +123,7 @@ public class WayFinderDbContext :
             //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
             //...
         });
-
+        
         builder.Entity<Calificacion>(b =>
         {
             // 1. Configura el nombre de la tabla (igual que DestinoTuristico)
