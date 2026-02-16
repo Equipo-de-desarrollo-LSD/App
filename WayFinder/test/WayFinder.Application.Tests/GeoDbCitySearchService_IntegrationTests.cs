@@ -5,15 +5,27 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using WayFinder.DestinoTuristico;
-using WayFinder.DestinosTuristicosDTOs;
-using Xunit;
+using Volo.Abp.Domain.Repositories;
+using WayFinder.Calificacion;
 using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.DestinoTuristico;
+using WayFinder.Metricas;
+using Xunit;
+using WayFinder.Admin;
 
 namespace WayFinder
 {
-    public class GeoDbCitySearchService_IntegrationTests
+    public class GeoDbCitySearchService_IntegrationTests : WayFinder.WayFinderTestBase<WayFinderApplicationTestModule>
     {
+        private readonly IRepository<MetricaApi, Guid> _metricaRepository;
+
+        public GeoDbCitySearchService_IntegrationTests()
+        {
+            // Obtenemos el servicio de métricas para verificar que se registren correctamente
+            _metricaRepository = GetRequiredService<IRepository<MetricaApi, Guid>>();
+        }
+
         private class FailingHandler : HttpMessageHandler
         {
             protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
@@ -25,7 +37,7 @@ namespace WayFinder
         private GeoDbBuscarCiudadService CreateService()
         {
             var httpClient = new HttpClient();
-            return new GeoDbBuscarCiudadService(httpClient);
+            return new GeoDbBuscarCiudadService(httpClient, _metricaRepository);
         }
 
         [Fact]
@@ -67,7 +79,7 @@ namespace WayFinder
         {
             // Simula error de red usando un HttpClient con un handler que lanza excepción
             var httpClient = new HttpClient(new FailingHandler());
-            var service = new GeoDbBuscarCiudadService(httpClient);
+            var service = new GeoDbBuscarCiudadService(httpClient, _metricaRepository);
             var request = new BuscarCiudadRequestDto { NombreCiudad = "Rio" };
             var result = await service.SearchCitiesAsync(request);
             Assert.NotNull(result);

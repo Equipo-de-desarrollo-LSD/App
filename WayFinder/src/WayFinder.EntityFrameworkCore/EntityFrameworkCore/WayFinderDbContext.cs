@@ -63,6 +63,8 @@ public class WayFinderDbContext :
     public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
     public DbSet<IdentitySession> Sessions { get; set; }
 
+    // Agrega esta línea para la nueva entidad
+    public DbSet<MetricaApi> Metricas { get; set; }
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
@@ -142,6 +144,14 @@ public class WayFinderDbContext :
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction); // No borrar usuarios si se borra una calificación
         });
+        // Configuración opcional de la tabla MetricaApi
+        builder.Entity<MetricaApi>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "MetricaApis", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
+        });
+
+
 
         // --- FILTRO GLOBAL PARA ENTIDADES DE USUARIO (IUserOwned) ---
         // Obtener el ID del usuario actual.Si es nulo(ej.fuera de una petición http), usa Guid.Empty.
