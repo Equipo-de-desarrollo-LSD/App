@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <Import Project="..\..\common.props" />
 
@@ -12,6 +12,7 @@
     <ProjectReference Include="..\..\src\WayFinder.Application\WayFinder.Application.csproj" />
     <ProjectReference Include="..\..\src\WayFinder.EntityFrameworkCore\WayFinder.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\WayFinder.Domain.Tests\WayFinder.Domain.Tests.csproj" />
+    <ProjectReference Include="..\WayFinder.EntityFrameworkCore.Tests\WayFinder.EntityFrameworkCore.Tests.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -13,10 +13,8 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-
-    [Migration("20251107232200_Recuperando_BD")]
-    partial class Recuperando_BD
-
+    [Migration("20260206171114_Limpiando_Memoria_EF")]
+    partial class Limpiando_Memoria_EF
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1886,13 +1884,13 @@ namespace WayFinder.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
-            modelBuilder.Entity("WayFinder.DestinosTuristicos.Calificacion", b =>
+            modelBuilder.Entity("WayFinder.Calificaciones.Calificacion", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Comentario")
-                        .IsRequired()
                         .HasMaxLength(512)
                         .HasColumnType("nvarchar(512)");
 
@@ -1911,6 +1909,14 @@ namespace WayFinder.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("CreatorId");
 
+                    b.Property<Guid?>("DeleterId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("DeleterId");
+
+                    b.Property<DateTime?>("DeletionTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("DeletionTime");
+
                     b.Property<Guid>("DestinoId")
                         .HasColumnType("uniqueidentifier");
 
@@ -1918,6 +1924,12 @@ namespace WayFinder.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("ExtraProperties");
+
+                    b.Property<bool>("IsDeleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(false)
+                        .HasColumnName("IsDeleted");
 
                     b.Property<DateTime?>("LastModificationTime")
                         .HasColumnType("datetime2")
@@ -2141,7 +2153,7 @@ namespace WayFinder.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("WayFinder.DestinosTuristicos.Calificacion", b =>
+            modelBuilder.Entity("WayFinder.Calificaciones.Calificacion", b =>
                 {
                     b.HasOne("WayFinder.DestinosTuristicos.DestinoTuristico", null)
                         .WithMany()
