@@ -2,7 +2,11 @@ using AutoMapper;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.Favoritos;
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
 using WayFinder.NotificacionesDTOs;
+
 
 namespace WayFinder;
 
@@ -23,6 +27,7 @@ public class WayFinderApplicationAutoMapperProfile : Profile
         CreateMap<CrearCalificacionDto, WayFinder.Calificaciones.Calificacion>();
         CreateMap<CalificacionDto, WayFinder.Calificaciones.Calificacion>();
         CreateMap<NotificacionDto, Notificacion>();
+        CreateMap<ExperienciaViaje, ExperienciaViajeDto>();
 
         // and vice versa
 
@@ -34,6 +39,9 @@ public class WayFinderApplicationAutoMapperProfile : Profile
         CreateMap<WayFinder.Calificaciones.Calificacion, CrearCalificacionDto>();
         CreateMap<WayFinder.Calificaciones.Calificacion, CalificacionDto>();
         CreateMap<Notificacion, NotificacionDto>();
+        CreateMap<CreateUpdateExperienciaViajeDto, ExperienciaViaje>(); 
+        CreateMap<DestinoFavorito, DestinoFavoritoDto>();
+
         /* You can configure your AutoMapper mapping configuration here.
          * Alternatively, you can split your mapping configurations
          * into multiple profile classes for a better organization. */
@@ -41,8 +49,8 @@ public class WayFinderApplicationAutoMapperProfile : Profile
 }
 /* public WayFinderApplicationAutoMapperProfile()
 {
-    // --- MAPEO CORRECTO PARA LA CREACIÓN ---
-    // Le dice a AutoMapper cómo construir los ValueObjects desde el DTO de entrada.
+    // --- MAPEO CORRECTO PARA LA CREACIÃ“N ---
+    // Le dice a AutoMapper cÃ³mo construir los ValueObjects desde el DTO de entrada.
     CreateMap<GuardarDestinos, DestinoTuristico>()
         .ForMember(dest => dest.Pais, // Para la propiedad 'Pais' de la entidad...
                    opt => opt.MapFrom(src => new Pais(src.PaisNombre, src.PaisPoblacion))) // ...crea un nuevo objeto Pais.
@@ -50,7 +58,7 @@ public class WayFinderApplicationAutoMapperProfile : Profile
                    opt => opt.MapFrom(src => new Coordenadas(src.CoordenadasLatitud, src.CoordenadasLongitud))); // ...crea un nuevo objeto Coordenadas.
 
     // --- MAPEO PARA LA RESPUESTA ---
-    // Le dice a AutoMapper cómo convertir la entidad de vuelta a un DTO para la respuesta de la API.
+    // Le dice a AutoMapper cÃ³mo convertir la entidad de vuelta a un DTO para la respuesta de la API.
     CreateMap<DestinoTuristico, DestinoTuristicoDto>();
 }
 */

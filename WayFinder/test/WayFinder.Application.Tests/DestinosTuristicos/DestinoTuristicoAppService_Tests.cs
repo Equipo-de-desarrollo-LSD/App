@@ -20,13 +20,13 @@ using WayFinder.DestinoTuristicos;
 
 namespace WayFinder.DestinosTuristicos
 {
-    public abstract class DestinoTurisiticoAppService_Tests<TStartupModule> : WayFinder.WayFinderTestBase<TStartupModule>
+    public abstract class DestinoTuristicoAppService_Tests<TStartupModule> : WayFinder.WayFinderTestBase<TStartupModule>
     where TStartupModule : IAbpModule
     {
         private readonly IDestinoTuristicoAppService _services;
         private readonly IDbContextProvider<WayFinderDbContext> _dbContextProvider;
         private readonly IUnitOfWorkManager _unitOfWorkManager ;
-        protected DestinoTurisiticoAppService_Tests()
+        protected DestinoTuristicoAppService_Tests()
         {
             _services = GetRequiredService<IDestinoTuristicoAppService>();
             _dbContextProvider = GetRequiredService<IDbContextProvider<WayFinderDbContext>>();
