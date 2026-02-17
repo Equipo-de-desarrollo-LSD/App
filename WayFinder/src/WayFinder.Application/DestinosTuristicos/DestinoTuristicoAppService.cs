@@ -45,6 +45,18 @@ public class DestinoTuristicoAppService :
 
     }
 
+    // Este es el constructor que usan tus tests. ¡Ahora sí guarda los datos!
+    public DestinoTuristicoAppService(
+        IRepository<DestinoTuristico, Guid> repository,
+        IBuscarCiudadService citySearchMock,
+        IRepository<Calificaciones.Calificacion, Guid> calificacionRepoMock)
+        : base(repository)
+    {
+        _repository = repository;
+        _buscarCiudadService = citySearchMock; // <--- AQUÍ ESTABA EL ERROR (antes no se asignaba)
+        _calificacionRepository = calificacionRepoMock;
+    }
+
     public async Task<BuscarCiudadResultDto> BuscarCiudadAsync(BuscarCiudadRequestDto request)
     {
         return await _buscarCiudadService.SearchCitiesAsync(request);
