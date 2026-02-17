@@ -65,6 +65,8 @@ public class WayFinderDbContext :
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
     public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
     public DbSet<IdentitySession> Sessions { get; set; }
+    public DbSet<Notificacion> Notificaciones { get; set; }
+    public DbSet<ListaSeguimiento> ListasSeguimiento { get; set; }
 
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
