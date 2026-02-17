@@ -17,7 +17,6 @@ using Volo.Abp.Identity;
 namespace WayFinder.EntityFrameworkCore;
 
 [DependsOn(
-    typeof(WayFinderApplicationTestModule),
     typeof(WayFinderEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule),
     typeof(AbpSecurityModule),

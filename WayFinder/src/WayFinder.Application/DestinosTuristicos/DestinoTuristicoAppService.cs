@@ -44,16 +44,51 @@ public class DestinoTuristicoAppService :
         return await _buscarCiudadService.SearchCitiesAsync(request);
     }
     //alta
+    // Asegúrate de tener estos using arriba:
+    // using WayFinder.DestinosTuristicos; 
+    // using WayFinder.Dominios; (Si Pais está ahí)
+
     public async Task<DestinoTuristicoDto> Crear(GuardarDestinos input)
- 
     {
+        // 1. Validaciones básicas
         if (string.IsNullOrWhiteSpace(input.Nombre))
         {
             throw new ArgumentException("El nombre no puede estar vacío.");
         }
-        var DestinoTuristico = await _repository.InsertAsync(ObjectMapper.Map<GuardarDestinos, DestinoTuristico>(input));
-        return ObjectMapper.Map<DestinoTuristico, DestinoTuristicoDto>(DestinoTuristico);
+
+        // 2. Preparar los "ingredientes" complejos (Value Objects)
+        // Asumo que tu constructor de Pais y Coordenadas es simple
+        var nuevoPais = new Pais(input.PaisNombre, input.PaisPoblacion);
+        var nuevasCoordenadas = new Coordenadas(input.CoordenadasLatitud, input.CoordenadasLongitud);
+
+        // 3. CREACIÓN MANUAL (Aquí está la magia para arreglar el error 500)
+        // Usamos el constructor que TÚ creaste (el que pide ID)
+        var nuevoDestino = new DestinoTuristico(GuidGenerator.Create())
+        {
+            // Asignamos las propiedades una a una
+            nombre = input.Nombre, 
+            foto = input.Foto,     
+            Pais = nuevoPais,      
+            Coordenadas = nuevasCoordenadas,
+            UltimaActualizacion = DateTime.Now
+        };
+
+        // 4. Guardar en Base de Datos
+        var destinoGuardado = await _repository.InsertAsync(nuevoDestino);
+
+        // 5. Convertir a DTO para responder (Esto sí lo puede hacer AutoMapper de vuelta)
+        return ObjectMapper.Map<DestinoTuristico, DestinoTuristicoDto>(destinoGuardado);
     }
+    /* public async Task<DestinoTuristicoDto> Crear(GuardarDestinos input)
+
+     {
+         if (string.IsNullOrWhiteSpace(input.Nombre))
+         {
+             throw new ArgumentException("El nombre no puede estar vacío.");
+         }
+         var DestinoTuristico = await _repository.InsertAsync(ObjectMapper.Map<GuardarDestinos, DestinoTuristico>(input));
+         return ObjectMapper.Map<DestinoTuristico, DestinoTuristicoDto>(DestinoTuristico);
+     }*/
 
     //listar
     public async Task<List<DestinoTuristicoDto>> GetAllDestinosTuristicosAsync()

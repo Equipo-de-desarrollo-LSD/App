@@ -13,8 +13,10 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
+
     [Migration("20251107232200_Recuperando_BD")]
     partial class Recuperando_BD
+
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1961,6 +1963,31 @@ namespace WayFinder.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("AppDestinosTuristicos", (string)null);
+                });
+
+            modelBuilder.Entity("WayFinder.Favoritos.DestinoFavorito", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreationTime")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("CreationTime");
+
+                    b.Property<Guid?>("CreatorId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CreatorId");
+
+                    b.Property<Guid>("DestinoTuristicoId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatorId", "DestinoTuristicoId")
+                        .IsUnique()
+                        .HasFilter("[CreatorId] IS NOT NULL");
+
+                    b.ToTable("AppDestinosFavoritos", (string)null);
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
