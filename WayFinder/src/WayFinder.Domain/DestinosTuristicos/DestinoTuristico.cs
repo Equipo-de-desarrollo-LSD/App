@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Domain.Entities;
+using WayFinder.DestinosTuristicos;
 
 namespace WayFinder.DestinosTuristicos
 {
@@ -24,8 +25,8 @@ namespace WayFinder.DestinosTuristicos
         public required string foto { get; set; }
         public DateTime UltimaActualizacion { get; set; }
         public Pais Pais { get; set; }
-        public Coordenadas Coordenadas { get; set; }
-
+        public Coordenadas Coordenadas {get; set;}
+    
 
     
 

@@ -33,6 +33,8 @@ namespace WayFinder.Experiencias
             {
                 nombre = "Ciudad Test",
                 foto = "foto_falsa.jpg", 
+                Pais = new Pais("Francia", 67000000), 
+    Coordenadas = new Coordenadas(48.8566, 2.3522)
             };
 
             await _destinoRepository.InsertAsync(destinoFalso);
@@ -62,7 +64,9 @@ namespace WayFinder.Experiencias
             var destinoFalso = new WayFinder.DestinosTuristicos.DestinoTuristico(destinoId)
             {
                 nombre = "Ciudad para Editar",
-                foto = "foto.jpg"
+                foto = "foto.jpg",
+                Pais = new Pais("Francia", 67000000),
+                Coordenadas = new Coordenadas(48.8566, 2.3522)
             };
             await _destinoRepository.InsertAsync(destinoFalso);
 

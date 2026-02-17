@@ -23,6 +23,7 @@ using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
 using static System.Net.WebRequestMethods;
+using WayFinder.Favoritos;
 
 
 
@@ -67,6 +68,7 @@ public class WayFinderDbContext :
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
     #endregion
+    public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
 
     // Inyección de ICurrentUser (null en design-time)
     //private readonly ICurrentUser? _currentUser;
@@ -117,6 +119,15 @@ public class WayFinderDbContext :
             //b.HasMany(x => x.Reviews).WithOne().HasForeignKey(x => x.DestinoTuristicoId);
             //...
         });
+        builder.Entity<DestinoFavorito>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "DestinosFavoritos", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            // Regla de Oro: Un usuario NO puede guardar el mismo destino 2 veces.
+            b.HasIndex(x => new { x.CreatorId, x.DestinoTuristicoId }).IsUnique();
+        });
+
 
         builder.Entity<Calificacion>(b =>
         {
