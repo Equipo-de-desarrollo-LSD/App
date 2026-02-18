@@ -1,6 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
@@ -8,6 +9,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
 using WayFinder.DestinosTuristicosDTOs;
 
 namespace WayFinder.DestinosTuristicos
@@ -17,18 +19,20 @@ namespace WayFinder.DestinosTuristicos
         private const string ApiKey = "99e8cc679dmsh984e4eac00f43f7p1cdaabjsnb5ae10c85bc6";
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
         private const string Host = "wft-geo-db.p.rapidapi.com";
+        
         private readonly HttpClient _httpClient;
-        private readonly IHttpClientFactory _httpClientFactory;
+        private readonly IHttpClientFactory _httpClientFactory; // De tu rama 3.2
+        private readonly IRepository<MetricaApi, Guid> _metricaRepository; // De rama Main
 
-        public GeoDbBuscarCiudadService(HttpClient httpClient, IHttpClientFactory httpClientFactory)
+        // Constructor fusionado: Recibe las 3 cosas
+        public GeoDbBuscarCiudadService(
+            HttpClient httpClient, 
+            IHttpClientFactory httpClientFactory, 
+            IRepository<MetricaApi, Guid> metricaRepository)
         {
             _httpClient = httpClient;
             _httpClientFactory = httpClientFactory;
-        }
-
-        public GeoDbBuscarCiudadService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
+            _metricaRepository = metricaRepository;
         }
 
         public async Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request)
@@ -42,14 +46,20 @@ namespace WayFinder.DestinosTuristicos
             httpRequest.Headers.Add("X-RapidAPI-Key", ApiKey);
             httpRequest.Headers.Add("X-RapidAPI-Host", Host);
 
+            // Iniciamos el cronómetro para la métrica (Código de Main)
+            var stopwatch = Stopwatch.StartNew();
+            var statusCode = 0;
+
             try
             {
                 var response = await _httpClient.SendAsync(httpRequest);
+                statusCode = (int)response.StatusCode; // Capturamos status real
+
                 if (!response.IsSuccessStatusCode)
                     return result;
 
                 var json = await response.Content.ReadAsStringAsync();
-                var geoDbResponse = JsonSerializer.Deserialize<GeoDbCitiesResponse>(json);
+                var geoDbResponse = System.Text.Json.JsonSerializer.Deserialize<GeoDbCitiesResponse>(json);
                 if (geoDbResponse?.Data != null)
                 {
                     foreach (var city in geoDbResponse.Data)
@@ -58,44 +68,37 @@ namespace WayFinder.DestinosTuristicos
                         {
                             Nombre = city.Name,
                             Pais = city.Country,
+                            Latitud = city.Latitude ?? 0,
+                            Longitud = city.Longitude ?? 0,
                         });
                     }
                 }
             }
-            catch
+            catch (Exception)
             {
-                // Manejo de error: retorna lista vacía
+                statusCode = 500;
+            }
+            finally
+            {
+                stopwatch.Stop();
+                // Guardamos métrica (Código de Main)
+                await _metricaRepository.InsertAsync(new MetricaApi(
+                    Guid.NewGuid(),
+                    "GeoDB",
+                    "/v1/geo/cities",
+                    statusCode,
+                    stopwatch.ElapsedMilliseconds
+                ));
             }
             return result;
         }
 
-        private class GeoDbCitiesResponse
-        {
-            [JsonPropertyName("data")]
-            public List<GeoDbCity> Data { get; set; }
-        }
-
-        private class GeoDbCity
-        {
-            //[JsonPropertyName("id")]
-            //public int Id { get; set; }
-
-            [JsonPropertyName("name")]
-            public string Name { get; set; }
-
-            [JsonPropertyName("country")]
-            public string Country { get; set; }
-
-            //[JsonPropertyName("region")]
-            //public string Region { get; set; }
-        }
-        // Asegúrate de tener los usings necesarios (Newtonsoft, System.Net.Http, etc)
+        // --- AQUI AGREGAMOS TU MÉTODO DE LA RAMA 3.2 ---
         public async Task<FiltrarCiudadesResultDto> FiltrarCiudadesExternasAsync(FiltrarCiudadesRequestDto input)
         {
             var resultado = new FiltrarCiudadesResultDto();
 
-            // Aquí movemos toda la lógica de conexión que antes pusimos en el AppService
-            var client = _httpClientFactory.CreateClient(); // O como lo estés instanciando ahí
+            var client = _httpClientFactory.CreateClient(); 
             var url = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?";
 
             var parameters = new List<string>();
@@ -118,7 +121,6 @@ namespace WayFinder.DestinosTuristicos
                 {
                     foreach (var item in data)
                     {
-                        // Mapeamos a CiudadDto y lo metemos en el resultado
                         resultado.Ciudades.Add(new CiudadDto
                         {
                             Nombre = item["name"]?.ToString(),
@@ -132,70 +134,27 @@ namespace WayFinder.DestinosTuristicos
             }
             return resultado;
         }
-    }
-}
-    
-    /*
-            // ⚠️ Advertencia: Revisa la nota al final sobre esta forma de usar HttpClient
-            using (HttpClient client = new HttpClient())
-            {
-                // Configuración de Headers
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Key", apiKey);
-                client.DefaultRequestHeaders.Add("X-RapidAPI-Host", "wft-geo-db.p.rapidapi.com");
 
-                // Endpoint con query params
-               // string url = $"{baseUrl}/cities?namePrefix={Uri.EscapeDataString(request.NombreCiudad)}&limit=5";
+        // Clases privadas para deserializar la respuesta de GeoDB (Fusionadas)
+        private class GeoDbCitiesResponse
+        {
+            [JsonPropertyName("data")]
+            public List<GeoDbCity> Data { get; set; }
+        }
 
-                HttpResponseMessage response = await client.GetAsync(url);
+        private class GeoDbCity
+        {
+            [JsonPropertyName("name")]
+            public string Name { get; set; }
 
-                if (response.IsSuccessStatusCode)
-                { 
+            [JsonPropertyName("country")]
+            public string Country { get; set; }
 
-                    // 1. Leemos el resultado como un string de texto (JSON)
-                    string jsonResult = await response.Content.ReadAsStringAsync();
+            [JsonPropertyName("latitude")]
+            public double? Latitude { get; set; }
 
-                    var cityDtos = new List<CiudadDto>();
-
-                    // 2. Parseamos el string JSON
-                    using (JsonDocument doc = JsonDocument.Parse(jsonResult))
-                    {
-                        JsonElement root = doc.RootElement;
-
-                        // 3. Buscamos la propiedad "data" que contiene el array de ciudades
-                        if (root.TryGetProperty("data", out JsonElement dataArray))
-                        {
-                            // 4. Iteramos sobre cada elemento (ciudad) en el array "data"
-                            foreach (JsonElement cityData in dataArray.EnumerateArray())
-                            {
-                                // 5. Extraemos las propiedades de cada ciudad y creamos el DTO
-                                var dto = new CiudadDto
-                                {
-                                    // Usamos TryGetProperty para evitar errores si un campo no viene
-                                    Nombre = cityData.TryGetProperty("city", out var city) ? city.GetString() : null,
-                                    Pais = cityData.TryGetProperty("country", out var country) ? country.GetString() : null,
-                                    // ... puedes añadir más propiedades aquí ...
-                                    // Id = cityData.TryGetProperty("id", out var id) ? id.GetInt32() : 0,
-                                    // Region = cityData.TryGetProperty("region", out var region) ? region.GetString() : null,
-                                };
-                                cityDtos.Add(dto);
-                            }
-                        }
-                    }
-
-                    // 6. Retornamos la lista de DTOs
-                    return new BuscarCiudadResultDto { Ciudades = cityDtos };
-
-                    // --- FIN DE CAMBIOS ---
-                }
-                else
-                {
-                    Console.WriteLine($"Error: {response.StatusCode}");
-                }
-            }
-
-            // Si hubo un error o no se pudo completar, devolvemos una lista vacía
-            return new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
+            [JsonPropertyName("longitude")]
+            public double? Longitude { get; set; }
         }
     }
 }
-   */

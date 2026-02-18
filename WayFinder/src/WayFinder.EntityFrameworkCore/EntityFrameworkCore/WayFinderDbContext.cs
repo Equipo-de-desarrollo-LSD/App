@@ -22,7 +22,9 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
+using WayFinder.Perfiles;
 using static System.Net.WebRequestMethods;
+using WayFinder.Favoritos;
 
 
 
@@ -37,8 +39,9 @@ public class WayFinderDbContext :
     IIdentityDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
-    public DbSet<Calificacion> Calificaciones { get; set; }
 
+    public DbSet<Calificacion> Calificaciones { get; set; }
+    public DbSet<ExperienciaViaje> ExperienciasViajes { get; set; }
     #region Entities from the modules
 
     /* Notice: We only implemented IIdentityProDbContext and ISaasDbContext
@@ -62,13 +65,22 @@ public class WayFinderDbContext :
     public DbSet<IdentityLinkUser> LinkUsers { get; set; }
     public DbSet<IdentityUserDelegation> UserDelegations { get; set; }
     public DbSet<IdentitySession> Sessions { get; set; }
+    public DbSet<Notificacion> Notificaciones { get; set; }
+    public DbSet<ListaSeguimiento> ListasSeguimiento { get; set; }
 
+    // Agrega esta lÌnea para la nueva entidad
+    public DbSet<MetricaApi> Metricas { get; set; }
     // Tenant Management
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
     #endregion
+    public DbSet<DestinoFavorito> DestinosFavoritos { get; set; }
 
-    // InyecciÛn de ICurrentUser (null en design-time)
+
+
+    public DbSet<PerfilUsuario> PerfilesUsuarios { get; set; }
+
+    // Inyecci√≥n de ICurrentUser (null en design-time)
     //private readonly ICurrentUser? _currentUser;
     private readonly ICurrentUser _currentUser;
     public WayFinderDbContext(  
@@ -118,6 +130,15 @@ public class WayFinderDbContext :
             //...
         });
 
+        builder.Entity<DestinoFavorito>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "DestinosFavoritos", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            // Regla de Oro: Un usuario NO puede guardar el mismo destino 2 veces.
+            b.HasIndex(x => new { x.CreatorId, x.DestinoTuristicoId }).IsUnique();
+        });
+
         builder.Entity<Calificacion>(b =>
         {
             // 1. Configura el nombre de la tabla (igual que DestinoTuristico)
@@ -128,23 +149,31 @@ public class WayFinderDbContext :
 
             // 3. Configura tus propiedades
             b.Property(x => x.Puntaje).IsRequired();
-            b.Property(x => x.Comentario).HasMaxLength(512); // Siempre es bueno poner un lÌmite
+            b.Property(x => x.Comentario).HasMaxLength(512); // Siempre es bueno poner un l√≠mite
 
-            // 4. Configura la relaciÛn con el Destino
+            // 4. Configura la relaci√≥n con el Destino
             b.HasOne<DestinoTuristico>().WithMany()
                 .HasForeignKey(x => x.DestinoId)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.Cascade); // Opcional: si borras un destino, se borran sus calificaciones
 
-            // 5. Configura la relaciÛn con el Usuario (de IUserOwned)
+            // 5. Configura la relaci√≥n con el Usuario (de IUserOwned)
             b.HasOne<IdentityUser>().WithMany()
                 .HasForeignKey(x => x.UserId)
                 .IsRequired()
-                .OnDelete(DeleteBehavior.NoAction); // No borrar usuarios si se borra una calificaciÛn
+                .OnDelete(DeleteBehavior.NoAction); // No borrar usuarios si se borra una calificaci√≥n
+        });
+        // ConfiguraciÛn opcional de la tabla MetricaApi
+        builder.Entity<MetricaApi>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "MetricaApis", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
         });
 
+
+
         // --- FILTRO GLOBAL PARA ENTIDADES DE USUARIO (IUserOwned) ---
-        // Obtener el ID del usuario actual.Si es nulo(ej.fuera de una peticiÛn http), usa Guid.Empty.
+        // Obtener el ID del usuario actual.Si es nulo(ej.fuera de una petici√≥n http), usa Guid.Empty.
         //var currentUserId = _currentUser.Id ?? Guid.Empty;
 
         // Iterar sobre todas las entidades definidas en el modelo
@@ -156,9 +185,9 @@ public class WayFinderDbContext :
                 var method = typeof(WayFinderDbContext)
                     .GetMethod(nameof(ApplyUserOwnedFilter),
                         System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
-                    .MakeGenericMethod(entityType.ClrType); // Hacer el mÈtodo genÈrico para el tipo actual
+                    .MakeGenericMethod(entityType.ClrType); // Hacer el m√©todo gen√©rico para el tipo actual
 
-                method.Invoke(this, new object[] { builder }); // Ejecutar el mÈtodo con la configuraciÛn de EF Core
+                method.Invoke(this, new object[] { builder }); // Ejecutar el m√©todo con la configuraci√≥n de EF Core
             }
         }
         //builder.Entity<YourEntity>(b =>
@@ -174,8 +203,8 @@ public class WayFinderDbContext :
     {
         builder.Entity<TEntity>().HasQueryFilter(e =>
             _currentUser != null && _currentUser.IsAuthenticated // 1. Chequeo de seguridad
-                ? e.UserId == _currentUser.GetId() // 2.Filtro si est· autenticado
-                : false // 3. Si no est·, no devuelve filas (seguridad estricta)
+                ? e.UserId == _currentUser.GetId() // 2.Filtro si est√° autenticado
+                : false // 3. Si no est√°, no devuelve filas (seguridad estricta)
         );
 
     }
