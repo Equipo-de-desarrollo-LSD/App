@@ -9,7 +9,8 @@ namespace WayFinder.DestinosTuristicosDTOs
     public interface IBuscarCiudadService
     {
         Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request);
-        
+        Task<FiltrarCiudadesResultDto> FiltrarCiudadesExternasAsync(FiltrarCiudadesRequestDto input);
+
     }
 }
 

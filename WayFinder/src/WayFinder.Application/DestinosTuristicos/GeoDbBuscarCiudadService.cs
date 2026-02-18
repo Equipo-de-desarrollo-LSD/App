@@ -1,4 +1,5 @@
-﻿using System;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -18,18 +19,20 @@ namespace WayFinder.DestinosTuristicos
         private const string ApiKey = "99e8cc679dmsh984e4eac00f43f7p1cdaabjsnb5ae10c85bc6";
         private const string BaseUrl = "https://wft-geo-db.p.rapidapi.com/v1/geo";
         private const string Host = "wft-geo-db.p.rapidapi.com";
+        
         private readonly HttpClient _httpClient;
-        // Inyectamos el repositorio de métricas para guardar los datos de cada llamada a la API
-        private readonly IRepository<MetricaApi, Guid> _metricaRepository; 
+        private readonly IHttpClientFactory _httpClientFactory; // De tu rama 3.2
+        private readonly IRepository<MetricaApi, Guid> _metricaRepository; // De rama Main
 
-        public GeoDbBuscarCiudadService(HttpClient httpClient, IRepository<MetricaApi, Guid> metricaRepository)
+        // Constructor fusionado: Recibe las 3 cosas
+        public GeoDbBuscarCiudadService(
+            HttpClient httpClient, 
+            IHttpClientFactory httpClientFactory, 
+            IRepository<MetricaApi, Guid> metricaRepository)
         {
             _httpClient = httpClient;
-            /* Utilizaremos la métrica para registrar el tiempo de respuesta
-             y el status code de cada llamada a la API, lo que nos ayudará a 
-            monitorear su rendimiento y detectar posibles problemas.
-            */
-            _metricaRepository = metricaRepository; 
+            _httpClientFactory = httpClientFactory;
+            _metricaRepository = metricaRepository;
         }
 
         public async Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request)
@@ -43,18 +46,20 @@ namespace WayFinder.DestinosTuristicos
             httpRequest.Headers.Add("X-RapidAPI-Key", ApiKey);
             httpRequest.Headers.Add("X-RapidAPI-Host", Host);
 
-            // 2. Iniciamos el cronómetro para la metrica
+            // Iniciamos el cronómetro para la métrica (Código de Main)
             var stopwatch = Stopwatch.StartNew();
             var statusCode = 0;
 
             try
             {
                 var response = await _httpClient.SendAsync(httpRequest);
+                statusCode = (int)response.StatusCode; // Capturamos status real
+
                 if (!response.IsSuccessStatusCode)
                     return result;
 
                 var json = await response.Content.ReadAsStringAsync();
-                var geoDbResponse = JsonSerializer.Deserialize<GeoDbCitiesResponse>(json);
+                var geoDbResponse = System.Text.Json.JsonSerializer.Deserialize<GeoDbCitiesResponse>(json);
                 if (geoDbResponse?.Data != null)
                 {
                     foreach (var city in geoDbResponse.Data)
@@ -71,18 +76,16 @@ namespace WayFinder.DestinosTuristicos
             }
             catch (Exception)
             {
-                statusCode = 500; // Si hay una excepción de red, asumimos 500
-                // Manejo de error: retorna lista vacía
+                statusCode = 500;
             }
             finally
             {
-                // Detenemos y registramos la métrica pase lo que pase
                 stopwatch.Stop();
-
+                // Guardamos métrica (Código de Main)
                 await _metricaRepository.InsertAsync(new MetricaApi(
                     Guid.NewGuid(),
                     "GeoDB",
-                    "/v1/geo/cities", // Endpoint simplificado para la métrica
+                    "/v1/geo/cities",
                     statusCode,
                     stopwatch.ElapsedMilliseconds
                 ));
@@ -90,6 +93,49 @@ namespace WayFinder.DestinosTuristicos
             return result;
         }
 
+        // --- AQUI AGREGAMOS TU MÉTODO DE LA RAMA 3.2 ---
+        public async Task<FiltrarCiudadesResultDto> FiltrarCiudadesExternasAsync(FiltrarCiudadesRequestDto input)
+        {
+            var resultado = new FiltrarCiudadesResultDto();
+
+            var client = _httpClientFactory.CreateClient(); 
+            var url = "http://geodb-free-service.wirefreethought.com/v1/geo/cities?";
+
+            var parameters = new List<string>();
+            if (!string.IsNullOrEmpty(input.PaisCodigo)) parameters.Add($"countryIds={input.PaisCodigo}");
+            if (input.MinPoblacion.HasValue) parameters.Add($"minPopulation={input.MinPoblacion}");
+            parameters.Add($"limit={input.Limit}");
+            parameters.Add("sort=-population");
+            parameters.Add("offset=0");
+            parameters.Add("hateoasMode=false");
+
+            var response = await client.GetAsync(url + string.Join("&", parameters));
+
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonString = await response.Content.ReadAsStringAsync();
+                var json = JObject.Parse(jsonString);
+                var data = json["data"];
+
+                if (data != null)
+                {
+                    foreach (var item in data)
+                    {
+                        resultado.Ciudades.Add(new CiudadDto
+                        {
+                            Nombre = item["name"]?.ToString(),
+                            Pais = item["country"]?.ToString(),
+                            Latitud = (double?)item["latitude"] ?? 0,
+                            Longitud = (double?)item["longitude"] ?? 0,
+                            PaisPoblacion = (double?)item["population"] ?? 0
+                        });
+                    }
+                }
+            }
+            return resultado;
+        }
+
+        // Clases privadas para deserializar la respuesta de GeoDB (Fusionadas)
         private class GeoDbCitiesResponse
         {
             [JsonPropertyName("data")]
@@ -98,9 +144,6 @@ namespace WayFinder.DestinosTuristicos
 
         private class GeoDbCity
         {
-            //[JsonPropertyName("id")]
-            //public int Id { get; set; }
-
             [JsonPropertyName("name")]
             public string Name { get; set; }
 
@@ -112,12 +155,6 @@ namespace WayFinder.DestinosTuristicos
 
             [JsonPropertyName("longitude")]
             public double? Longitude { get; set; }
-
-
-            //[JsonPropertyName("region")]
-            //public string Region { get; set; }
         }
     }
 }
-    
-    
