@@ -94,5 +94,26 @@ namespace WayFinder.Perfiles
                 await _perfilRepository.UpdateAsync(perfil);
             }
         }
+            public async Task EliminarMiCuentaAsync()
+            {
+            // 1. Obtenemos el ID del usuario que está logueado
+            var userId = CurrentUser.GetId();
+
+            // 2. Buscamos si tiene datos en nuestra tabla personalizada (PerfilUsuario)
+            var perfil = await _perfilRepository.FindAsync(userId);
+            if (perfil != null)
+            {
+                // Borramos sus datos extra (Foto, Preferencias)
+                await _perfilRepository.DeleteAsync(perfil);
+            }
+
+            // 3. Buscamos su usuario principal de ABP (Login, Password, Email)
+            var user = await _userManager.GetByIdAsync(userId);
+
+            // 4. Eliminamos la cuenta por completo
+            // Nota: ABP usa "Soft Delete", así que no rompe la base de datos, 
+            // solo lo marca como IsDeleted = true.
+            await _userManager.DeleteAsync(user);
+        }
     }
 }

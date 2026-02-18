@@ -131,5 +131,26 @@ namespace WayFinder.Perfiles
                 perfilFinal.Preferencias.ShouldBe("Gustos V2");
             }
         }
+        // Este test verifica que al eliminar la cuenta del usuario admin, su perfil ya no se pueda obtener 
+        public async Task Should_Eliminar_Mi_Cuenta_Correctamente()
+        {
+            // Arrange: 
+            // En ABP, las pruebas corren automáticamente bajo un usuario "Admin" simulado.
+            // Primero, nos aseguramos de que el perfil exista (podemos llamar a GetMiPerfilAsync para confirmar que no explota antes de borrar)
+            var perfilAntes = await _perfilAppService.GetMiPerfilAsync();
+            perfilAntes.ShouldNotBeNull();
+
+            // Act: 
+            // ¡Apretamos el botón rojo!
+            await _perfilAppService.EliminarMiCuentaAsync();
+
+            // Assert: 
+            // Si el usuario se eliminó correctamente, intentar buscar su perfil nuevamente 
+            // debería lanzar una excepción (porque _userManager.GetByIdAsync no lo va a encontrar).
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await _perfilAppService.GetMiPerfilAsync();
+            });
+        }
     }
 }
