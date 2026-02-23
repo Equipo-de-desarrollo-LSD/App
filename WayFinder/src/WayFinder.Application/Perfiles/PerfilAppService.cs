@@ -1,12 +1,13 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Identity;
 using Volo.Abp.Users;
+using WayFinder.DestinosTuristicosDTOs.Perfiles;
 
 namespace WayFinder.Perfiles
 {
@@ -114,6 +115,28 @@ namespace WayFinder.Perfiles
             // Nota: ABP usa "Soft Delete", así que no rompe la base de datos, 
             // solo lo marca como IsDeleted = true.
             await _userManager.DeleteAsync(user);
+            }
+
+        // Este método es para consultar el perfil de otro usuario, usando su ID.
+        [AllowAnonymous]
+        public async Task<PerfilPublicoDto> GetPerfilPublicoAsync(Guid id)
+        {
+            // 1. Buscamos los datos básicos del usuario solicitado
+            var user = await _userManager.GetByIdAsync(id);
+
+            // 2. Buscamos si ese usuario tiene foto/preferencias en nuestra tabla
+            var perfil = await _perfilRepository.FindAsync(id);
+
+            // 3. Armamos y devolvemos el DTO
+            return new PerfilPublicoDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                Nombre = user.Name,
+                Apellido = user.Surname,
+                Foto = perfil?.Foto,
+                Preferencias = perfil?.Preferencias
+            };
         }
     }
 }

@@ -132,6 +132,7 @@ namespace WayFinder.Perfiles
             }
         }
         // Este test verifica que al eliminar la cuenta del usuario admin, su perfil ya no se pueda obtener 
+        [Fact]
         public async Task Should_Eliminar_Mi_Cuenta_Correctamente()
         {
             // Arrange: 
