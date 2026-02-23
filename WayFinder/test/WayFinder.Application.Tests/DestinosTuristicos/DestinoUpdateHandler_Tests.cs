@@ -14,7 +14,7 @@ using Xunit;
 
 namespace WayFinder.DestinosTuristicos
 {
-    public class DestinoUpdateHandler_Tests : DestinoTurisiticoAppService_Tests<WayFinderApplicationTestModule>
+    public class DestinoUpdateHandler_Tests : DestinoTuristicoAppService_Tests<WayFinderApplicationTestModule>
     {
 
         private readonly IUnitOfWorkManager _unitOfWorkManager;
