@@ -27,4 +27,9 @@ export const APP_ROUTES: Routes = [
     path: 'ciudades',
     loadComponent: () => import('./ciudades/buscar-ciudades/buscar-ciudades').then(m => m.BuscarCiudades)
   },
+  {
+    path: 'mi-perfil',
+    canActivate: [authGuard], // Solo permitimos entrar a usuarios logueados
+    loadComponent: () => import('./perfiles/mi-perfil/mi-perfil').then(m => m.MiPerfil)
+  }
 ];
