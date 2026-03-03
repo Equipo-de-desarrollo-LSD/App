@@ -1,1 +1,50 @@
-<p>mi-perfil works!</p>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-primary text-white">
+      <h3 class="card-title mb-0">Mi Perfil</h3>
+    </div>
+    
+    <div class="card-body">
+      <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
+
+        <div class="row mb-3">
+          <div class="col-md-6">
+            <label for="nombre" class="form-label fw-bold">Nombre *</label>
+            <input type="text" id="nombre" class="form-control" formControlName="nombre" placeholder="Tu nombre">
+            <div *ngIf="perfilForm.get('nombre')?.invalid && perfilForm.get('nombre')?.touched" class="text-danger small mt-1">
+              El nombre es obligatorio.
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label for="apellido" class="form-label fw-bold">Apellido *</label>
+            <input type="text" id="apellido" class="form-control" formControlName="apellido" placeholder="Tu apellido">
+            <div *ngIf="perfilForm.get('apellido')?.invalid && perfilForm.get('apellido')?.touched" class="text-danger small mt-1">
+              El apellido es obligatorio.
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="foto" class="form-label fw-bold">URL de la Foto de Perfil</label>
+          <input type="text" id="foto" class="form-control" formControlName="foto" placeholder="https://ejemplo.com/mi-foto.jpg">
+        </div>
+
+        <div class="mb-3">
+          <label for="preferencias" class="form-label fw-bold">Preferencias de Viaje</label>
+          <textarea id="preferencias" class="form-control" formControlName="preferencias" rows="3" placeholder="Ej: Me gustan los climas fríos, hacer trekking, visitar museos..."></textarea>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary px-4" [disabled]="perfilForm.invalid || estaGuardando">
+            <span *ngIf="estaGuardando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+            <span *ngIf="!estaGuardando">Guardar Cambios</span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

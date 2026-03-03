@@ -873,13 +873,783 @@
       "rootPath": "app",
       "remoteServiceName": "Default",
       "controllers": {
-        "WayFinder.DestinosTuristicos.DestinoTuristicoAppService": {
+        "WayFinder.Calificacion.CalificacionAppService": {
+          "controllerName": "Calificacion",
+          "controllerGroupName": "Calificacion",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.Calificacion.CalificacionAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.Calificacion.ICalificacionAppService",
+              "name": "ICalificacionAppService",
+              "methods": [
+                {
+                  "name": "CalificarDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                    "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                      "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.CalificacionDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.CalificacionDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                    "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                    "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CalificarDestinoAsyncByInput": {
+              "uniqueName": "CalificarDestinoAsyncByInput",
+              "name": "CalificarDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion/calificar-destino",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Calificacion.CalificacionAppService"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/calificacion",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto>"
+            },
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/calificacion/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto>"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/calificacion/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/calificacion/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto>"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/calificacion",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                  "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.CalificacionDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.CalificacionDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto>"
+            }
+          }
+        },
+        "WayFinder.DestinosTuristicos.ExperienciaViajeAppService": {
+          "controllerName": "ExperienciaViaje",
+          "controllerGroupName": "ExperienciaViaje",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.DestinosTuristicos.ExperienciaViajeAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.DestinosTuristicos.IExperienciaViajeAppService",
+              "name": "IExperienciaViajeAppService",
+              "methods": [
+                {
+                  "name": "GetAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                    "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicos.GetExperienciasInput, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicos.GetExperienciasInput",
+                      "typeSimple": "WayFinder.DestinosTuristicos.GetExperienciasInput",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicos.ExperienciaViajeDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicos.ExperienciaViajeDto>"
+                  }
+                },
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                      "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                    "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+                  }
+                },
+                {
+                  "name": "UpdateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    },
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                      "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                    "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+                  }
+                },
+                {
+                  "name": "DeleteAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "UpdateAsyncByIdAndInput": {
+              "uniqueName": "UpdateAsyncByIdAndInput",
+              "name": "UpdateAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/experiencia-viaje/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                },
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicos.ExperienciaViajeDto,System.Guid,WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto>"
+            },
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/experiencia-viaje",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "typeSimple": "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<WayFinder.DestinosTuristicos.ExperienciaViajeDto,WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto>"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/experiencia-viaje/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "GetAsyncById": {
+              "uniqueName": "GetAsyncById",
+              "name": "GetAsync",
+              "httpMethod": "GET",
+              "url": "api/app/experiencia-viaje/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicos.ExperienciaViajeDto",
+                "typeSimple": "WayFinder.DestinosTuristicos.ExperienciaViajeDto"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicos.ExperienciaViajeDto,WayFinder.DestinosTuristicos.ExperienciaViajeDto,System.Guid,WayFinder.DestinosTuristicos.GetExperienciasInput>"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/experiencia-viaje",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicos.GetExperienciasInput, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicos.GetExperienciasInput",
+                  "typeSimple": "WayFinder.DestinosTuristicos.GetExperienciasInput",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "DestinoTuristicoId",
+                  "jsonName": null,
+                  "type": "System.Guid?",
+                  "typeSimple": "string?",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sentimiento",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Filter",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicos.ExperienciaViajeDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicos.ExperienciaViajeDto>"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicos.ExperienciaViajeDto,WayFinder.DestinosTuristicos.ExperienciaViajeDto,System.Guid,WayFinder.DestinosTuristicos.GetExperienciasInput>"
+            }
+          }
+        },
+        "WayFinder.DestinoTuristicos.DestinoTuristicoAppService": {
           "controllerName": "DestinoTuristico",
           "controllerGroupName": "DestinoTuristico",
           "isRemoteService": true,
           "isIntegrationService": false,
           "apiVersion": null,
-          "type": "WayFinder.DestinosTuristicos.DestinoTuristicoAppService",
+          "type": "WayFinder.DestinoTuristicos.DestinoTuristicoAppService",
           "interfaces": [
             {
               "type": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService",
@@ -1058,8 +1828,8 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto"
               },
-              "allowAnonymous": null,
-              "implementFrom": "WayFinder.DestinosTuristicos.DestinoTuristicoAppService"
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.DestinoTuristicos.DestinoTuristicoAppService"
             },
             "CrearByInput": {
               "uniqueName": "CrearByInput",
@@ -1095,7 +1865,7 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
             },
             "GetAllDestinosTuristicosAsync": {
@@ -1110,7 +1880,7 @@
                 "type": "System.Collections.Generic.List<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto>",
                 "typeSimple": "[WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto]"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
             },
             "BuscarCiudadesByRequest": {
@@ -1147,7 +1917,7 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
             },
             "CreateAsyncByInput": {
@@ -1184,7 +1954,7 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,WayFinder.DestinosTuristicosDTOs.GuardarDestinos>"
             },
             "UpdateAsyncByIdAndInput": {
@@ -1241,7 +2011,7 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,System.Guid,WayFinder.DestinosTuristicosDTOs.GuardarDestinos>"
             },
             "DeleteAsyncById": {
@@ -1278,7 +2048,7 @@
                 "type": "System.Void",
                 "typeSimple": "System.Void"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
             },
             "GetAsyncById": {
@@ -1315,7 +2085,7 @@
                 "type": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,System.Guid,Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto>"
             },
             "GetListAsyncByInput": {
@@ -1376,8 +2146,438 @@
                 "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto>",
                 "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto>"
               },
-              "allowAnonymous": null,
+              "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IReadOnlyAppService<WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,WayFinder.DestinosTuristicosDTOs.DestinoTuristicoDto,System.Guid,Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto>"
+            }
+          }
+        },
+        "WayFinder.Favoritos.DestinoFavoritoAppService": {
+          "controllerName": "DestinoFavorito",
+          "controllerGroupName": "DestinoFavorito",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.Favoritos.DestinoFavoritoAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.Favoritos.IDestinoFavoritoAppService",
+              "name": "IDestinoFavoritoAppService",
+              "methods": [
+                {
+                  "name": "CreateAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.Favoritos.CreateDestinoFavoritoDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                      "typeSimple": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DeleteByDestinoIdAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                      "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.Favoritos.DestinoFavoritoDto>",
+                    "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.Favoritos.DestinoFavoritoDto>"
+                  }
+                },
+                {
+                  "name": "IsFavoritoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Boolean",
+                    "typeSimple": "boolean"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "CreateAsyncByInput": {
+              "uniqueName": "CreateAsyncByInput",
+              "name": "CreateAsync",
+              "httpMethod": "POST",
+              "url": "api/app/destino-favorito",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.Favoritos.CreateDestinoFavoritoDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                  "typeSimple": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                  "typeSimple": "WayFinder.Favoritos.CreateDestinoFavoritoDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Favoritos.IDestinoFavoritoAppService"
+            },
+            "DeleteByDestinoIdAsyncByDestinoId": {
+              "uniqueName": "DeleteByDestinoIdAsyncByDestinoId",
+              "name": "DeleteByDestinoIdAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/destino-favorito/by-destino-id/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Favoritos.IDestinoFavoritoAppService"
+            },
+            "GetListAsyncByInput": {
+              "uniqueName": "GetListAsyncByInput",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/destino-favorito",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto, Volo.Abp.Ddd.Application.Contracts",
+                  "type": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "typeSimple": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "Sorting",
+                  "jsonName": null,
+                  "type": "System.String",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "SkipCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                },
+                {
+                  "nameOnMethod": "input",
+                  "name": "MaxResultCount",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "ModelBinding",
+                  "descriptorName": "input"
+                }
+              ],
+              "returnValue": {
+                "type": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.Favoritos.DestinoFavoritoDto>",
+                "typeSimple": "Volo.Abp.Application.Dtos.PagedResultDto<WayFinder.Favoritos.DestinoFavoritoDto>"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Favoritos.IDestinoFavoritoAppService"
+            },
+            "IsFavoritoAsyncByDestinoId": {
+              "uniqueName": "IsFavoritoAsyncByDestinoId",
+              "name": "IsFavoritoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/destino-favorito/is-favorito/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Boolean",
+                "typeSimple": "boolean"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Favoritos.IDestinoFavoritoAppService"
+            }
+          }
+        },
+        "WayFinder.Perfiles.PerfilAppService": {
+          "controllerName": "Perfil",
+          "controllerGroupName": "Perfil",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.Perfiles.PerfilAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.Perfiles.IPerfilAppService",
+              "name": "IPerfilAppService",
+              "methods": [
+                {
+                  "name": "GetMiPerfilAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "WayFinder.Perfiles.PerfilDto",
+                    "typeSimple": "WayFinder.Perfiles.PerfilDto"
+                  }
+                },
+                {
+                  "name": "UpdateMiPerfilAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.Perfiles.ActualizarPerfilDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.Perfiles.ActualizarPerfilDto",
+                      "typeSimple": "WayFinder.Perfiles.ActualizarPerfilDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "EliminarMiCuentaAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "GetPerfilPublicoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicosDTOs.Perfiles.PerfilPublicoDto",
+                    "typeSimple": "WayFinder.DestinosTuristicosDTOs.Perfiles.PerfilPublicoDto"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetMiPerfilAsync": {
+              "uniqueName": "GetMiPerfilAsync",
+              "name": "GetMiPerfilAsync",
+              "httpMethod": "GET",
+              "url": "api/app/perfil/mi-perfil",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "WayFinder.Perfiles.PerfilDto",
+                "typeSimple": "WayFinder.Perfiles.PerfilDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Perfiles.IPerfilAppService"
+            },
+            "UpdateMiPerfilAsyncByInput": {
+              "uniqueName": "UpdateMiPerfilAsyncByInput",
+              "name": "UpdateMiPerfilAsync",
+              "httpMethod": "PUT",
+              "url": "api/app/perfil/mi-perfil",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.Perfiles.ActualizarPerfilDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.Perfiles.ActualizarPerfilDto",
+                  "typeSimple": "WayFinder.Perfiles.ActualizarPerfilDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.Perfiles.ActualizarPerfilDto",
+                  "typeSimple": "WayFinder.Perfiles.ActualizarPerfilDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Perfiles.IPerfilAppService"
+            },
+            "EliminarMiCuentaAsync": {
+              "uniqueName": "EliminarMiCuentaAsync",
+              "name": "EliminarMiCuentaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/perfil/eliminar-mi-cuenta",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Perfiles.IPerfilAppService"
+            },
+            "GetPerfilPublicoAsyncById": {
+              "uniqueName": "GetPerfilPublicoAsyncById",
+              "name": "GetPerfilPublicoAsync",
+              "httpMethod": "GET",
+              "url": "api/app/perfil/{id}/perfil-publico",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.Perfiles.PerfilPublicoDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.Perfiles.PerfilPublicoDto"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "WayFinder.Perfiles.IPerfilAppService"
             }
           }
         }
@@ -4136,6 +5336,41 @@
     }
   },
   "types": {
+    "System.Nullable<T0>": {
+      "baseType": "System.ValueType",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": [
+        "T"
+      ],
+      "properties": [
+        {
+          "name": "HasValue",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Value",
+          "jsonName": null,
+          "type": "T",
+          "typeSimple": "T",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "Volo.Abp.Account.ChangePasswordInput": {
       "baseType": null,
       "isEnum": false,
@@ -9743,6 +10978,193 @@
         }
       ]
     },
+    "WayFinder.DestinosTuristicos.CreateUpdateExperienciaViajeDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Titulo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": 0,
+          "maxLength": 100,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Contenido",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Sentimiento",
+          "jsonName": null,
+          "type": "WayFinder.DestinosTuristicos.TipoExperiencia",
+          "typeSimple": "enum",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicos.ExperienciaViajeDto": {
+      "baseType": "Volo.Abp.Application.Dtos.AuditedEntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Titulo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Contenido",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Sentimiento",
+          "jsonName": null,
+          "type": "WayFinder.DestinosTuristicos.TipoExperiencia",
+          "typeSimple": "enum",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "CreatorName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicos.GetExperienciasInput": {
+      "baseType": "Volo.Abp.Application.Dtos.PagedAndSortedResultRequestDto",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid?",
+          "typeSimple": "string?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Sentimiento",
+          "jsonName": null,
+          "type": "WayFinder.DestinosTuristicos.TipoExperiencia?",
+          "typeSimple": "enum?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Filter",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicos.TipoExperiencia": {
+      "baseType": "System.Enum",
+      "isEnum": true,
+      "enumNames": [
+        "Positiva",
+        "Neutral",
+        "Negativa"
+      ],
+      "enumValues": [
+        0,
+        1,
+        2
+      ],
+      "genericArguments": null,
+      "properties": null
+    },
     "WayFinder.DestinosTuristicosDTOs.BuscarCiudadRequestDto": {
       "baseType": null,
       "isEnum": false,
@@ -9776,6 +11198,63 @@
           "jsonName": null,
           "type": "[WayFinder.DestinosTuristicosDTOs.CiudadDto]",
           "typeSimple": "[WayFinder.DestinosTuristicosDTOs.CiudadDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.CalificacionDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Comentario",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Puntaje",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DestinoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -9866,6 +11345,63 @@
           "jsonName": null,
           "type": "System.Double",
           "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Puntaje",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": "1",
+          "maximum": "5",
+          "regex": null
+        },
+        {
+          "name": "Comentario",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -10073,6 +11609,315 @@
           "jsonName": null,
           "type": "System.Double",
           "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.Perfiles.PerfilPublicoDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Id",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Apellido",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Foto",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Preferencias",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.Favoritos.CreateDestinoFavoritoDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.Favoritos.DestinoFavoritoDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "DestinoTuristicoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "NombreDestino",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FotoDestino",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "PaisDestino",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.Perfiles.ActualizarPerfilDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Apellido",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Email",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": true,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Foto",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Preferencias",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.Perfiles.PerfilDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "UserName",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Email",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Apellido",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Foto",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Preferencias",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
