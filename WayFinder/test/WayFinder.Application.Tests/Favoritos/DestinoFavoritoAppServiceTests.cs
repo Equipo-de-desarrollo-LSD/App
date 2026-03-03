@@ -126,7 +126,7 @@ namespace WayFinder.Favoritos
             }
         }
 
-        // 👇👇 ¡ESTA ES LA JOYA DE TUS COMPAÑEROS! 👇👇
+        
         // Este método fabrica el usuario falso cada vez que lo necesitas
         private ClaimsPrincipal CreateTestPrincipal(Guid userId)
         {
