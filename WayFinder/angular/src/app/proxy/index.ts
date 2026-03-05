@@ -1,4 +1,12 @@
+import * as Calificacion from './calificacion';
+import * as DestinoTuristicos from './destino-turisticos';
 import * as DestinosTuristicos from './destinos-turisticos';
 import * as DestinosTuristicosDtos from './destinos-turisticos-dtos';
+import * as Favoritos from './favoritos';
+import * as Metricas from './metricas';
+import * as MetricasDtos from './metricas-dtos';
+import * as Notificaciones from './notificaciones';
+import * as NotificacionesDtos from './notificaciones-dtos';
+import * as Perfiles from './perfiles';
 export * from './model';
-export { DestinosTuristicos, DestinosTuristicosDtos };
+export { Calificacion, DestinoTuristicos, DestinosTuristicos, DestinosTuristicosDtos, Favoritos, Metricas, MetricasDtos, Notificaciones, NotificacionesDtos, Perfiles };

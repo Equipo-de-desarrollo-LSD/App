@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Volo.Abp.Application.Services;
+using WayFinder.DestinosTuristicosDTOs.Perfiles;
 
 namespace WayFinder.Perfiles
 {
@@ -16,5 +17,11 @@ namespace WayFinder.Perfiles
 
         // Método para guardar cambios en MI perfil
         Task UpdateMiPerfilAsync(ActualizarPerfilDto input);
+
+        // Método para eliminar MI perfil 
+        Task EliminarMiCuentaAsync();
+
+        // Consultar el perfil de alguien más usando su ID
+        Task<PerfilPublicoDto> GetPerfilPublicoAsync(Guid id);
     }
 }
