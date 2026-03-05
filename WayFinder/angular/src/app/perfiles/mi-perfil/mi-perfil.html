@@ -23,6 +23,14 @@
               El apellido es obligatorio.
             </div>
           </div>
+          
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label fw-bold">Correo Electrónico *</label>
+          <input type="email" id="email" class="form-control" formControlName="email">
+          <div *ngIf="perfilForm.get('email')?.invalid && perfilForm.get('email')?.touched" class="text-danger small mt-1">
+            El correo electrónico es obligatorio y debe ser válido.
+          </div>
         </div>
 
         <div class="mb-3">
@@ -37,7 +45,11 @@
 
         <hr class="my-4">
 
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-between align-items-center mt-4">
+          <button type="button" class="btn btn-outline-danger" (click)="eliminarMiCuenta()">
+            <i class="fa fa-trash me-2"></i> Eliminar mi cuenta
+          </button>
+
           <button type="submit" class="btn btn-primary px-4" [disabled]="perfilForm.invalid || estaGuardando">
             <span *ngIf="estaGuardando" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
             <span *ngIf="!estaGuardando">Guardar Cambios</span>

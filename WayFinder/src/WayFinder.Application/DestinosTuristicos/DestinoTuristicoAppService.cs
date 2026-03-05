@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
 using Volo.Abp;
 using Volo.Abp.Account;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
 using Volo.Abp.Domain.Repositories;
+using Newtonsoft.Json.Linq;
 using Volo.Abp.Domain.Repositories;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
@@ -29,14 +31,30 @@ public class DestinoTuristicoAppService :
     private readonly IRepository<DestinoTuristico, Guid> _repository;
     private readonly IBuscarCiudadService _buscarCiudadService;
     private readonly IRepository<Calificaciones.Calificacion, Guid> _calificacionRepository;
+    private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
 
-    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository)
+    public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository,
+             IRepository<DestinoTuristico, Guid> destinoRepository)
         : base(repository)
 
     {
         _repository = repository;
         _buscarCiudadService = buscarCiudadService;
         _calificacionRepository = calificacionRepository;
+        _destinoRepository = destinoRepository;
+
+    }
+
+    // Este es el constructor que usan tus tests. ¡Ahora sí guarda los datos!
+    public DestinoTuristicoAppService(
+        IRepository<DestinoTuristico, Guid> repository,
+        IBuscarCiudadService citySearchMock,
+        IRepository<Calificaciones.Calificacion, Guid> calificacionRepoMock)
+        : base(repository)
+    {
+        _repository = repository;
+        _buscarCiudadService = citySearchMock; // <--- AQUÍ ESTABA EL ERROR (antes no se asignaba)
+        _calificacionRepository = calificacionRepoMock;
     }
 
     public async Task<BuscarCiudadResultDto> BuscarCiudadAsync(BuscarCiudadRequestDto request)
@@ -104,9 +122,15 @@ public class DestinoTuristicoAppService :
         // Esto cumple con el Punto 4: "utilice la interfaz para buscar ciudades".
         return await _buscarCiudadService.SearchCitiesAsync(request);
     }
+    // Asegúrate de ponerle "Async" aquí también
+    // Recuerda inyectar tu servicio GeoDbBuscarCiudadService en el constructor si no lo tienes
+    // private readonly GeoDbBuscarCiudadService _geoDbService;
 
-    
+    public async Task<FiltrarCiudadesResultDto> FiltrarCiudadesAsync(FiltrarCiudadesRequestDto input)
+    {
+        // El AppService solo delega. ¡Así se hace!
+        return await _buscarCiudadService.FiltrarCiudadesExternasAsync(input);
+    }
 
 
-   
 }

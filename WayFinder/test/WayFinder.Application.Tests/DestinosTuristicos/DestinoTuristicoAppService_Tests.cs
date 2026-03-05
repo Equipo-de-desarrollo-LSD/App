@@ -1,4 +1,4 @@
-﻿using Autofac.Core;
+using Autofac.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NSubstitute;
@@ -25,7 +25,9 @@ namespace WayFinder.DestinosTuristicos
     {
         private readonly IDestinoTuristicoAppService _services;
         private readonly IDbContextProvider<WayFinderDbContext> _dbContextProvider;
-        private readonly IUnitOfWorkManager _unitOfWorkManager ;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
+
+        // Corregido: Usamos el nombre correcto (sin la 'i' extra) que venía de Main
         protected DestinoTuristicoAppService_Tests()
         {
             _services = GetRequiredService<IDestinoTuristicoAppService>();
@@ -35,23 +37,23 @@ namespace WayFinder.DestinosTuristicos
 
         [Fact]
         public async Task CrearAsyncShould_CreateDestinosTuristicosDto()
-        {// arrange, que necesito para ejecutar el metodo
+        {
+            // arrange
             var input = new GuardarDestinos
-            { 
+            {
                 Nombre = "Playa Paraíso",
-                Foto = "playa_paraiso.jpg", // ← necesario
-                PaisNombre = "España", 
-                PaisPoblacion = 49000000 ,
-                CoordenadasLatitud = 36.7213, 
-                CoordenadasLongitud = -4.4214 ,
+                Foto = "playa_paraiso.jpg",
+                PaisNombre = "España",
+                PaisPoblacion = 49000000,
+                CoordenadasLatitud = 36.7213,
+                CoordenadasLongitud = -4.4214,
                 UltimaActualizacion = DateTime.Now
-
             };
-            //act, cuando se ejectuta la accion que queremos probar
-           // _services.ShouldNotBeNull();
+
+            // act
             var result = await _services.CreateAsync(input);
 
-            //assert, verificar que el resultado es el esperado
+            // assert
             result.ShouldNotBeNull();
             result.Id.ShouldNotBe(Guid.Empty);
             result.nombre.ShouldBe(input.Nombre);
@@ -61,6 +63,7 @@ namespace WayFinder.DestinosTuristicos
             result.coordenadas.longitud.ShouldBe(input.CoordenadasLongitud);
             result.ultimaActualizacion.ShouldBe(input.UltimaActualizacion);
         }
+
         [Fact]
         public async Task CreateAsync_ShouldReturnCreatedDestinoTuristicoDto()
         {
@@ -77,12 +80,12 @@ namespace WayFinder.DestinosTuristicos
                     CoordenadasLongitud = -70.6693,
                     UltimaActualizacion = DateTime.Now
                 };
+
                 // Act
                 var result = await _services.CreateAsync(input);
                 var dbContext = await _dbContextProvider.GetDbContextAsync();
                 var savedDestination = await dbContext.DestinosTuristicos.FindAsync(result.Id);
 
-              
                 // Assert
                 savedDestination.ShouldNotBeNull();
                 savedDestination.Id.ShouldNotBe(Guid.Empty);
@@ -92,9 +95,9 @@ namespace WayFinder.DestinosTuristicos
                 result.coordenadas.latitud.ShouldBe(input.CoordenadasLatitud);
                 result.coordenadas.longitud.ShouldBe(input.CoordenadasLongitud);
                 result.ultimaActualizacion.ShouldBe(input.UltimaActualizacion);
-
             }
         }
+
         [Fact]
         public async Task CreateAsync_ShouldThrowExceptionWhenCountryIsNull()
         {
@@ -103,12 +106,13 @@ namespace WayFinder.DestinosTuristicos
             {
                 Nombre = "Ciudad Fantasma",
                 Foto = "ciudad_fantasma.jpg",
-                PaisNombre = null, // País nulo para probar la excepción
+                PaisNombre = null,
                 PaisPoblacion = 0,
                 CoordenadasLatitud = 0,
                 CoordenadasLongitud = 0,
                 UltimaActualizacion = DateTime.Now
             };
+
             // Act & Assert
             await Should.ThrowAsync<AbpValidationException>(async () =>
             {
@@ -116,7 +120,7 @@ namespace WayFinder.DestinosTuristicos
             });
         }
 
-        // Mocks and Tests for BuscarCiudadAsync
+        // --- Tests con Mocks manuales (Actualizados para aceptar 3 parámetros) ---
 
         [Fact]
         public async Task SearchCiudadesAsync_ReturnsResults()
@@ -125,14 +129,19 @@ namespace WayFinder.DestinosTuristicos
             var request = new BuscarCiudadRequestDto { NombreCiudad = "Test" };
             var expected = new BuscarCiudadResultDto
             {
-                Ciudades = new List<CiudadDto> { new CiudadDto { Nombre = "TestCity", Pais = "TestCountry"} }
+                Ciudades = new List<CiudadDto> { new CiudadDto { Nombre = "TestCity", Pais = "TestCountry" } }
             };
+
+            // Mocks de las dependencias
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
+            
+            // Mock del repositorio de calificaciones (Este es el 3er parámetro nuevo)
             var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
-            var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
+            // Instanciamos el servicio con los 3 mocks
+            var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act
             var result = await service.BuscarCiudadAsync(request);
@@ -149,10 +158,13 @@ namespace WayFinder.DestinosTuristicos
             // Arrange
             var request = new BuscarCiudadRequestDto { NombreCiudad = "NoMatch" };
             var expected = new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
+
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
+            
             var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
+
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act
@@ -169,10 +181,13 @@ namespace WayFinder.DestinosTuristicos
             // Arrange
             var request = new BuscarCiudadRequestDto { NombreCiudad = "" };
             var expected = new BuscarCiudadResultDto { Ciudades = new List<CiudadDto>() };
+
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock.SearchCitiesAsync(request).Returns(expected);
+
             var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
+
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act
@@ -188,50 +203,19 @@ namespace WayFinder.DestinosTuristicos
         {
             // Arrange
             var request = new BuscarCiudadRequestDto { NombreCiudad = "Test" };
+            
             var repoMock = Substitute.For<IRepository<DestinoTuristico, Guid>>();
             var citySearchMock = Substitute.For<IBuscarCiudadService>();
             citySearchMock
                 .When(x => x.SearchCitiesAsync(request))
                 .Do(x => { throw new Exception("API error"); });
+
             var calificacionRepoMock = Substitute.For<IRepository<Calificaciones.Calificacion, Guid>>();
+
             var service = new DestinoTuristicoAppService(repoMock, citySearchMock, calificacionRepoMock);
 
             // Act & Assert
             await Assert.ThrowsAsync<Exception>(() => service.BuscarCiudadAsync(request));
         }
-        //
-
-
     }
-
-
-
-        /*  [Fact]
-          public async Task CreateAsync_ShouldPersistDestinationInDatabase()
-          {
-              using (var uow = _unitOfWorkManager.Begin())
-              {
-                  // Arrange
-                  var input = new GuardarDestinos
-                  {
-                      Nombre = "Tokyo",
-                      PaisNombre = "Japan"
-                  };
-
-                  // Act
-                  var result = await _services.CreateAsync(input);
-                  await uow.CompleteAsync();
-
-                  // Assert
-                  var dbContext = await _dbContextProvider.GetDbContextAsync();
-                  var savedDestination = await dbContext.DestinosTuristicos.FindAsync(result.Id);
-
-                  savedDestination.ShouldNotBeNull();
-                  savedDestination.nombre.ShouldBe(input.Nombre);
-                  savedDestination.Pais.nombre.ShouldBe(input.PaisNombre);
-
-              }
-          }
-        */
- }
-
+}

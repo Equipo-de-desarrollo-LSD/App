@@ -1643,6 +1643,132 @@
             }
           }
         },
+        "WayFinder.DestinosTuristicos.ListaSeguimientoAppService": {
+          "controllerName": "ListaSeguimiento",
+          "controllerGroupName": "ListaSeguimiento",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.DestinosTuristicos.ListaSeguimientoAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.DestinosTuristicosDTOs.IListaSeguimientoAppService",
+              "name": "IListaSeguimientoAppService",
+              "methods": [
+                {
+                  "name": "SeguirDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "DejarDeSeguirDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "SeguirDestinoAsyncByDestinoId": {
+              "uniqueName": "SeguirDestinoAsyncByDestinoId",
+              "name": "SeguirDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/lista-seguimiento/seguir-destino/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.DestinosTuristicosDTOs.IListaSeguimientoAppService"
+            },
+            "DejarDeSeguirDestinoAsyncByDestinoId": {
+              "uniqueName": "DejarDeSeguirDestinoAsyncByDestinoId",
+              "name": "DejarDeSeguirDestinoAsync",
+              "httpMethod": "POST",
+              "url": "api/app/lista-seguimiento/dejar-de-seguir-destino/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.DestinosTuristicosDTOs.IListaSeguimientoAppService"
+            }
+          }
+        },
         "WayFinder.DestinoTuristicos.DestinoTuristicoAppService": {
           "controllerName": "DestinoTuristico",
           "controllerGroupName": "DestinoTuristico",
@@ -1695,6 +1821,23 @@
                   "returnValue": {
                     "type": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto",
                     "typeSimple": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto"
+                  }
+                },
+                {
+                  "name": "FiltrarCiudadesAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "input",
+                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesResultDto",
+                    "typeSimple": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesResultDto"
                   }
                 },
                 {
@@ -1916,6 +2059,43 @@
               "returnValue": {
                 "type": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto",
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.BuscarCiudadResultDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
+            },
+            "FiltrarCiudadesAsyncByInput": {
+              "uniqueName": "FiltrarCiudadesAsyncByInput",
+              "name": "FiltrarCiudadesAsync",
+              "httpMethod": "POST",
+              "url": "api/app/destino-turistico/filtrar-ciudades",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "input",
+                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "input",
+                  "name": "input",
+                  "jsonName": null,
+                  "type": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": null,
+                  "bindingSourceId": "Body",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesResultDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesResultDto"
               },
               "allowAnonymous": false,
               "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
@@ -2406,6 +2586,211 @@
               },
               "allowAnonymous": false,
               "implementFrom": "WayFinder.Favoritos.IDestinoFavoritoAppService"
+            }
+          }
+        },
+        "WayFinder.Metricas.MetricaAppService": {
+          "controllerName": "Metrica",
+          "controllerGroupName": "Metrica",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.Metricas.MetricaAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.Metricas.IMetricaAppService",
+              "name": "IMetricaAppService",
+              "methods": [
+                {
+                  "name": "GetListAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<WayFinder.MetricasDTOs.MetricaDto>",
+                    "typeSimple": "[WayFinder.MetricasDTOs.MetricaDto]"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListAsync": {
+              "uniqueName": "GetListAsync",
+              "name": "GetListAsync",
+              "httpMethod": "GET",
+              "url": "api/app/metrica",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<WayFinder.MetricasDTOs.MetricaDto>",
+                "typeSimple": "[WayFinder.MetricasDTOs.MetricaDto]"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.Metricas.IMetricaAppService"
+            }
+          }
+        },
+        "WayFinder.Notificaciones.NotificacionAppService": {
+          "controllerName": "Notificacion",
+          "controllerGroupName": "Notificacion",
+          "isRemoteService": true,
+          "isIntegrationService": false,
+          "apiVersion": null,
+          "type": "WayFinder.Notificaciones.NotificacionAppService",
+          "interfaces": [
+            {
+              "type": "WayFinder.NotificacionesDTOs.INotificacionAppService",
+              "name": "INotificacionAppService",
+              "methods": [
+                {
+                  "name": "GetListaAsync",
+                  "parametersOnMethod": [],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<WayFinder.NotificacionesDTOs.NotificacionDto>",
+                    "typeSimple": "[WayFinder.NotificacionesDTOs.NotificacionDto]"
+                  }
+                },
+                {
+                  "name": "MarcarComoLeidaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                },
+                {
+                  "name": "MarcarComoNoLeidaAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "id",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Void",
+                    "typeSimple": "System.Void"
+                  }
+                }
+              ]
+            }
+          ],
+          "actions": {
+            "GetListaAsync": {
+              "uniqueName": "GetListaAsync",
+              "name": "GetListaAsync",
+              "httpMethod": "GET",
+              "url": "api/app/notificacion/a",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<WayFinder.NotificacionesDTOs.NotificacionDto>",
+                "typeSimple": "[WayFinder.NotificacionesDTOs.NotificacionDto]"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.NotificacionesDTOs.INotificacionAppService"
+            },
+            "MarcarComoLeidaAsyncById": {
+              "uniqueName": "MarcarComoLeidaAsyncById",
+              "name": "MarcarComoLeidaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificacion/{id}/marcar-como-leida",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.NotificacionesDTOs.INotificacionAppService"
+            },
+            "MarcarComoNoLeidaAsyncById": {
+              "uniqueName": "MarcarComoNoLeidaAsyncById",
+              "name": "MarcarComoNoLeidaAsync",
+              "httpMethod": "POST",
+              "url": "api/app/notificacion/{id}/marcar-como-no-leida",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.NotificacionesDTOs.INotificacionAppService"
+            },
+            "GetCountNoLeidasAsync": {
+              "uniqueName": "GetCountNoLeidasAsync",
+              "name": "GetCountNoLeidasAsync",
+              "httpMethod": "GET",
+              "url": "api/app/notificacion/count-no-leidas",
+              "supportedVersions": [],
+              "parametersOnMethod": [],
+              "parameters": [],
+              "returnValue": {
+                "type": "System.Int32",
+                "typeSimple": "number"
+              },
+              "allowAnonymous": null,
+              "implementFrom": "WayFinder.Notificaciones.NotificacionAppService"
             }
           }
         },
@@ -11318,6 +11703,18 @@
           "minimum": null,
           "maximum": null,
           "regex": null
+        },
+        {
+          "name": "PaisPoblacion",
+          "jsonName": null,
+          "type": "System.Double",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
         }
       ]
     },
@@ -11483,6 +11880,72 @@
           "jsonName": null,
           "type": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
           "typeSimple": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesRequestDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "PaisCodigo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "MinPoblacion",
+          "jsonName": null,
+          "type": "System.Int32?",
+          "typeSimple": "number?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Limit",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.FiltrarCiudadesResultDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Ciudades",
+          "jsonName": null,
+          "type": "[WayFinder.DestinosTuristicosDTOs.CiudadDto]",
+          "typeSimple": "[WayFinder.DestinosTuristicosDTOs.CiudadDto]",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
@@ -11768,6 +12231,144 @@
           "jsonName": null,
           "type": "System.String",
           "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.MetricasDTOs.MetricaDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "NombreServicio",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Endpoint",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FechaEjecucion",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "TiempoRespuestaMs",
+          "jsonName": null,
+          "type": "System.Int64",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.NotificacionesDTOs.NotificacionDto": {
+      "baseType": "Volo.Abp.Application.Dtos.EntityDto<System.Guid>",
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "UsuarioId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "DestinoId",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Titulo",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Mensaje",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FechaHora",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Leido",
+          "jsonName": null,
+          "type": "System.Boolean",
+          "typeSimple": "boolean",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,

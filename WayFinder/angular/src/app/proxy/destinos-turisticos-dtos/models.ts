@@ -20,6 +20,7 @@ export interface CiudadDto {
   pais?: string;
   latitud: number;
   longitud: number;
+  paisPoblacion: number;
 }
 
 export interface CoordenadasDto extends AuditedEntityDto<string> {
@@ -41,6 +42,16 @@ export interface DestinoTuristicoDto extends AuditedEntityDto<string> {
   ultimaActualizacion?: string;
   pais: PaisDto;
   coordenadas: CoordenadasDto;
+}
+
+export interface FiltrarCiudadesRequestDto {
+  paisCodigo?: string;
+  minPoblacion?: number;
+  limit: number;
+}
+
+export interface FiltrarCiudadesResultDto {
+  ciudades: CiudadDto[];
 }
 
 export interface GuardarDestinos {

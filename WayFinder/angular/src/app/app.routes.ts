@@ -31,5 +31,9 @@ export const APP_ROUTES: Routes = [
     path: 'mi-perfil',
     canActivate: [authGuard], // Solo permitimos entrar a usuarios logueados
     loadComponent: () => import('./perfiles/mi-perfil/mi-perfil').then(m => m.MiPerfil)
-  }
+  },
+  { 
+    path: 'perfiles/:id', 
+    loadComponent: () => import('./perfiles/perfil-publico/perfil-publico').then(m => m.PerfilPublicoComponent) 
+  },
 ];

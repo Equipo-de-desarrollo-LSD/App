@@ -27,6 +27,7 @@ export class MiPerfil implements OnInit {
     this.perfilForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]], 
       foto: [''],
       preferencias: ['']
     });
@@ -44,6 +45,7 @@ export class MiPerfil implements OnInit {
         this.perfilForm.patchValue({
           nombre: perfil.nombre,
           apellido: perfil.apellido,
+          email: perfil.email, 
           foto: perfil.foto,
           preferencias: perfil.preferencias
         });
@@ -70,6 +72,26 @@ export class MiPerfil implements OnInit {
         this.estaGuardando = false;
       }
     });
+  }
+
+  eliminarMiCuenta() {
+    // 1. Preguntamos si está realmente seguro
+    const confirmacion = confirm('⚠️ ¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer y perderás todos tus datos.');
+    
+    // 2. Si hace clic en "Aceptar", disparamos el misil
+    if (confirmacion) {
+      this.perfilService.eliminarMiCuenta().subscribe({
+        next: () => {
+          alert('Tu cuenta ha sido eliminada correctamente. Serás redirigido al inicio.');
+          // Lo mandamos de vuelta a la pantalla de inicio
+          window.location.href = '/';
+        },
+        error: (err) => {
+          console.error('Error al eliminar la cuenta', err);
+          alert('Hubo un error al intentar eliminar la cuenta. Por favor, intenta de nuevo.');
+        }
+      });
+    }
   }
 }
 
