@@ -1,4 +1,148 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { CiudadDto, FiltrarCiudadesRequestDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
+import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
+
+@Component({
+  selector: 'app-search-city',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
+  templateUrl: './buscar-ciudades.html',
+  styleUrls: ['./buscar-ciudades.scss'],
+})
+export class BuscarCiudades {
+  private readonly ciudadService = inject(DestinoTuristicoService);
+
+  ciudades: CiudadDto[] = [];
+  allCities: CiudadDto[] = [];
+  loading = false;
+  errorMsg = '';
+
+  // Campos de búsqueda
+  searchText = '';
+  codigoPais = '';
+  poblacionMinima: number | null = null;
+  
+  // Paginación
+  currentPage = 1;
+  pageSize = 10;
+  totalPages = 0;
+
+  // 🗺️ Diccionario para que Angular entienda los códigos
+  private nombresPaises: { [key: string]: string } = {
+    'AR': 'Argentina', 'BR': 'Brasil', 'CL': 'Chile', 'CO': 'Colombia',
+    'ES': 'España', 'US': 'Estados Unidos', 'MX': 'México', 'UY': 'Uruguay'
+  };
+
+  buscar(): void {
+    if (!this.searchText.trim() && !this.codigoPais.trim() && !this.poblacionMinima) {
+      this.errorMsg = 'Ingresa al menos un filtro de búsqueda.';
+      return;
+    }
+
+    this.loading = true;
+    this.errorMsg = '';
+    this.currentPage = 1;
+
+    // CAMINO 1: Búsqueda mixta (Escribió un Nombre + Opcionalmente País)
+    if (this.searchText.trim()) {
+      this.ciudadService.buscarCiudadesByRequest({ nombreCiudad: this.searchText.trim() }).subscribe({
+        next: (res) => {
+          let listaCiudades = res.ciudades || [];
+
+          // ✨ EL TRUCO FRONTEND: Filtramos manualmente si el usuario eligió un país ✨
+          if (this.codigoPais.trim()) {
+            const paisBuscado = this.nombresPaises[this.codigoPais];
+            listaCiudades = listaCiudades.filter(ciudad => ciudad.pais === paisBuscado);
+          }
+
+          this.procesarRespuesta(listaCiudades);
+        },
+        error: (err) => this.manejarError(err)
+      });
+    } 
+    // CAMINO 2: Solo Filtros (Dejó el Nombre vacío) - Esto lo maneja directo el backend
+    else {
+      const request: FiltrarCiudadesRequestDto = {
+        paisCodigo: this.codigoPais.trim() ? this.codigoPais.trim() : undefined,
+        minPoblacion: this.poblacionMinima ? this.poblacionMinima : undefined,
+        limit: 10
+      };
+
+      this.ciudadService.filtrarCiudades(request).subscribe({
+        next: (res) => this.procesarRespuesta(res.ciudades),
+        error: (err) => this.manejarError(err)
+      });
+    }
+  }
+
+  private procesarRespuesta(ciudades: CiudadDto[] | undefined | null): void {
+    this.allCities = ciudades || [];
+    this.applyFiltersAndPagination();
+    this.loading = false;
+  }
+
+  private manejarError(err: any): void {
+    console.error('Error del servidor:', err);
+    this.errorMsg = 'Hubo un error al buscar los destinos. Revisa los filtros o intenta de nuevo.';
+    this.loading = false;
+  }
+
+  limpiar(): void {
+    this.searchText = '';
+    this.codigoPais = '';
+    this.poblacionMinima = null;
+    this.currentPage = 1;
+    this.allCities = [];
+    this.ciudades = [];
+    this.errorMsg = '';
+  }
+
+  applyFiltersAndPagination(): void {
+    let filtered = [...this.allCities];
+    this.totalPages = Math.ceil(filtered.length / this.pageSize);
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+    this.ciudades = filtered.slice(startIndex, endIndex);
+  }
+
+  goToPage(page: number): void {
+    if (page >= 1 && page <= this.totalPages) {
+      this.currentPage = page;
+      this.applyFiltersAndPagination();
+    }
+  }
+
+  goToFirstPage(): void { this.goToPage(1); }
+  goToLastPage(): void { this.goToPage(this.totalPages); }
+
+  getPaginationPages(): number[] {
+    const pages: number[] = [];
+    const maxPages = 5;
+    let startPage = Math.max(1, this.currentPage - Math.floor(maxPages / 2));
+    let endPage = Math.min(this.totalPages, startPage + maxPages - 1);
+
+    if (endPage - startPage < maxPages - 1) {
+      startPage = Math.max(1, endPage - maxPages + 1);
+    }
+
+    for (let i = startPage; i <= endPage; i++) {
+      pages.push(i);
+    }
+    return pages;
+  }
+
+  verEnMapa(city: CiudadDto): void {
+    if (city.latitud != null && city.longitud != null) {
+      const url = `https://www.google.com/maps?q=${city.latitud},${city.longitud}`;
+      window.open(url, '_blank');
+    }
+  }
+}
+
+
+/*import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, of } from 'rxjs';
@@ -161,10 +305,10 @@ switchMap(term => {
     }
   }
 
-/*
-  getCityImage(city: CiudadDto): string {
-    const cityName = encodeURIComponent(city.nombre || 'city');
-    return `https://source.unsplash.com/400x250/?${cityName},city`;
-  }
-    */
-}
+
+  // getCityImage(city: CiudadDto): string {
+  //  const cityName = encodeURIComponent(city.nombre || 'city');
+  //  return `https://source.unsplash.com/400x250/?${cityName},city`;
+  // }
+    
+}*/
