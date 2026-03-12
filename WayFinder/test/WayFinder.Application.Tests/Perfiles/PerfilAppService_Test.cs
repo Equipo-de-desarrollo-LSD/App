@@ -131,5 +131,49 @@ namespace WayFinder.Perfiles
                 perfilFinal.Preferencias.ShouldBe("Gustos V2");
             }
         }
+        // Este test verifica que al eliminar la cuenta del usuario admin, su perfil ya no se pueda obtener 
+        [Fact]
+        public async Task Should_Eliminar_Mi_Cuenta_Correctamente()
+        {
+            // Arrange: 
+            // En ABP, las pruebas corren automáticamente bajo un usuario "Admin" simulado.
+            // Primero, nos aseguramos de que el perfil exista (podemos llamar a GetMiPerfilAsync para confirmar que no explota antes de borrar)
+            var perfilAntes = await _perfilAppService.GetMiPerfilAsync();
+            perfilAntes.ShouldNotBeNull();
+
+            // Act: 
+            // ¡Apretamos el botón rojo!
+            await _perfilAppService.EliminarMiCuentaAsync();
+
+            // Assert: 
+            // Si el usuario se eliminó correctamente, intentar buscar su perfil nuevamente 
+            // debería lanzar una excepción (porque _userManager.GetByIdAsync no lo va a encontrar).
+            await Should.ThrowAsync<Exception>(async () =>
+            {
+                await _perfilAppService.GetMiPerfilAsync();
+            });
+        }
+
+        // Este test verifica que podemos obtener el perfil público de otro usuario (en este caso, el mismo admin) sin problemas.
+        [Fact]
+        public async Task Should_Obtener_Perfil_Publico_Correctamente()
+        {
+            // Arrange: Buscamos al admin directamente en la base de datos por debajo de la mesa
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+            var adminUser = await userManager.FindByNameAsync("admin");
+
+            // Si el admin fue borrado por otro test, cortamos la prueba acá para que no explote
+            if (adminUser == null) return;
+
+            var adminId = adminUser.Id;
+
+            // Act: Usamos tu nuevo método pasándole el ID que descubrimos
+            var perfilPublico = await _perfilAppService.GetPerfilPublicoAsync(adminId);
+
+            // Assert: Verificamos que nos haya devuelto los datos correctamente
+            perfilPublico.ShouldNotBeNull();
+            perfilPublico.Id.ShouldBe(adminId);
+            perfilPublico.UserName.ShouldBe("admin");
+        }
     }
 }

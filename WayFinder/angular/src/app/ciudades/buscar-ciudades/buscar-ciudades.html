@@ -7,7 +7,7 @@
             </h1>
         </div>
 
-        <div class="search-section">
+     <!--   <div class="search-section">
             <div class="search-row">
                 <div class="search-field">
                     <label for="searchText">Búsqueda</label>
@@ -23,25 +23,46 @@
                         (keyup.enter)="buscar()"
                     />
                 </div>
+            </div> -->
+<div class="search-section">
+<div class="row mb-3">
+                <div class="col-md-4">
+                    <label for="searchText" class="fw-bold mb-1">Nombre de la Ciudad</label>
+                    <input type="text" id="searchText" [(ngModel)]="searchText" placeholder="Ej: London" class="form-control" (input)="onBuscadorChange()" (keyup.enter)="buscar()">
+                </div>
+                
+                <div class="col-md-4">
+                    <label for="codigoPais" class="fw-bold mb-1">País</label>
+                    <select id="codigoPais" [(ngModel)]="codigoPais" class="form-select form-control" (change)="onBuscadorChange()">
+                        <option value="">Todos los países...</option>
+                        <option value="AR">Argentina</option>
+                        <option value="BR">Brasil</option>
+                        <option value="CL">Chile</option>
+                        <option value="CO">Colombia</option>
+                        <option value="ES">España</option>
+                        <option value="US">Estados Unidos</option>
+                        <option value="MX">México</option>
+                        <option value="UY">Uruguay</option>
+                    </select>
+                </div>
+
+                <div class="col-md-4">
+                    <label for="poblacionMinima" class="fw-bold mb-1">Población Mínima</label>
+                    <input type="number" id="poblacionMinima" [(ngModel)]="poblacionMinima" placeholder="Ej: 1000000" class="form-control" (input)="onBuscadorChange()" (keyup.enter)="buscar()">
+                </div>
             </div>
             
-            <div class="search-actions">
-                <button 
-                    class="btn btn-primary" 
-                    (click)="buscar()"
-                >
-                    <i class="bi bi-search"></i>
-                    Buscar
+            <div class="search-actions text-end mt-3">
+                <button class="btn btn-primary me-2" (click)="buscar()" [disabled]="loading">
+                    <i class="bi bi-search"></i> Buscar
                 </button>
-                <button 
-                    class="btn btn-secondary" 
-                    (click)="limpiar()"
-                >
-                    <i class="bi bi-x-lg"></i>
-                    Limpiar
+                <button class="btn btn-secondary" (click)="limpiar()" [disabled]="loading">
+                    <i class="bi bi-x-lg"></i> Limpiar
                 </button>
             </div>
         </div>
+            
+
 
         <div *ngIf="errorMsg" class="alert alert-danger">
             {{ errorMsg }}
@@ -55,6 +76,10 @@
         <div class="destinos-grid"> 
             
             <div class="destino-card" *ngFor="let city of ciudades">
+    
+             <img [src]="imagenesReales[city.nombre] || getCityImage(city)" class="card-img-top" [alt]="city.nombre" style="height: 200px; object-fit: cover; border-radius: 8px 8px 0 0; width: 100%;">
+
+             <div class="card-content" style="padding: 15px;">
                 
                 <div class="card-content" style="padding: 15px;"> 
                     <div class="card-header">
@@ -75,13 +100,15 @@
                         </div>
                     </div>
                     
-                    <button 
-                        class="btn btn-primary w-100 mt-2" 
-                        (click)="verEnMapa(city)"
-                        [disabled]="city.latitud == null || city.longitud == null"
-                    >
-                        <i class="bi bi-map"></i> Ver en mapa
-                    </button>
+                   <div class="d-grid gap-2 mt-3 pb-2">
+                       <button class="btn btn-outline-primary" [routerLink]="['/ciudades', city.nombre]">
+                         <i class="bi bi-info-circle"></i> Ver detalles
+                        </button>
+                        
+                        <button class="btn btn-primary" (click)="verEnMapa(city)" [disabled]="city.latitud == null || city.longitud == null">
+                            <i class="bi bi-map"></i> Ver en mapa
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -143,4 +170,3 @@
             </button>
         </div>
     </div>
-</div>
