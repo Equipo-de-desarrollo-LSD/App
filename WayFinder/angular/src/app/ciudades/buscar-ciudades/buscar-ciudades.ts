@@ -1,17 +1,20 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { Subject, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { CiudadDto, FiltrarCiudadesRequestDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 
 @Component({
   selector: 'app-search-city',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './buscar-ciudades.html',
   styleUrls: ['./buscar-ciudades.scss'],
 })
-export class BuscarCiudades {
+export class BuscarCiudades implements OnInit, OnDestroy {
   private readonly ciudadService = inject(DestinoTuristicoService);
 
   ciudades: CiudadDto[] = [];
@@ -19,25 +22,47 @@ export class BuscarCiudades {
   loading = false;
   errorMsg = '';
 
-  // Campos de búsqueda
   searchText = '';
   codigoPais = '';
   poblacionMinima: number | null = null;
   
-  // Paginación
   currentPage = 1;
   pageSize = 10;
   totalPages = 0;
+  imagenesReales: { [nombreCiudad: string]: string } = {};
 
-  // 🗺️ Diccionario para que Angular entienda los códigos
   private nombresPaises: { [key: string]: string } = {
     'AR': 'Argentina', 'BR': 'Brasil', 'CL': 'Chile', 'CO': 'Colombia',
     'ES': 'España', 'US': 'Estados Unidos', 'MX': 'México', 'UY': 'Uruguay'
   };
 
+  // ⏱️ Variables para la búsqueda en tiempo real
+  private searchSubject = new Subject<void>();
+  private searchSubscription!: Subscription;
+
+  ngOnInit(): void {
+    // Escucha cada vez que tecleas, pero espera 500 milisegundos de pausa para buscar
+    this.searchSubscription = this.searchSubject.pipe(
+      debounceTime(500) 
+    ).subscribe(() => {
+      this.buscar();
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.searchSubscription) this.searchSubscription.unsubscribe();
+  }
+
+  // Se ejecuta cada vez que escribes una letra en el HTML
+  onBuscadorChange(): void {
+    this.searchSubject.next();
+  }
+
   buscar(): void {
     if (!this.searchText.trim() && !this.codigoPais.trim() && !this.poblacionMinima) {
       this.errorMsg = 'Ingresa al menos un filtro de búsqueda.';
+      this.ciudades = [];
+      this.allCities = [];
       return;
     }
 
@@ -45,24 +70,19 @@ export class BuscarCiudades {
     this.errorMsg = '';
     this.currentPage = 1;
 
-    // CAMINO 1: Búsqueda mixta (Escribió un Nombre + Opcionalmente País)
     if (this.searchText.trim()) {
       this.ciudadService.buscarCiudadesByRequest({ nombreCiudad: this.searchText.trim() }).subscribe({
         next: (res) => {
           let listaCiudades = res.ciudades || [];
-
-          // ✨ EL TRUCO FRONTEND: Filtramos manualmente si el usuario eligió un país ✨
           if (this.codigoPais.trim()) {
             const paisBuscado = this.nombresPaises[this.codigoPais];
             listaCiudades = listaCiudades.filter(ciudad => ciudad.pais === paisBuscado);
           }
-
           this.procesarRespuesta(listaCiudades);
         },
         error: (err) => this.manejarError(err)
       });
     } 
-    // CAMINO 2: Solo Filtros (Dejó el Nombre vacío) - Esto lo maneja directo el backend
     else {
       const request: FiltrarCiudadesRequestDto = {
         paisCodigo: this.codigoPais.trim() ? this.codigoPais.trim() : undefined,
@@ -77,8 +97,12 @@ export class BuscarCiudades {
     }
   }
 
-  private procesarRespuesta(ciudades: CiudadDto[] | undefined | null): void {
+ private procesarRespuesta(ciudades: CiudadDto[] | undefined | null): void {
     this.allCities = ciudades || [];
+    
+    // 👇 NUEVO: Mandamos a buscar las fotos reales de todas las ciudades recibidas
+    this.allCities.forEach(c => this.obtenerFotoReal(c.nombre));
+    
     this.applyFiltersAndPagination();
     this.loading = false;
   }
@@ -135,9 +159,32 @@ export class BuscarCiudades {
 
   verEnMapa(city: CiudadDto): void {
     if (city.latitud != null && city.longitud != null) {
-      const url = `https://www.google.com/maps?q=${city.latitud},${city.longitud}`;
+      // 🗺️ URL corregida y oficial de Google Maps
+      const url = `https://www.google.com/maps/search/?api=1&query=${city.latitud},${city.longitud}`;
       window.open(url, '_blank');
     }
+  }
+
+  // 📸 Función para generar imágenes atractivas
+  getCityImage(city: CiudadDto): string {
+    const seed = encodeURIComponent(city.nombre || 'city');
+    return `https://picsum.photos/seed/${seed}/400/250`;
+  }
+
+  // Busca una foto real en Wikipedia de forma silenciosa
+  obtenerFotoReal(nombreCiudad: string | null | undefined): void {
+    if (!nombreCiudad || this.imagenesReales[nombreCiudad]) return;
+
+    // Le preguntamos a Wikipedia si tiene un resumen y una foto de esta ciudad
+    fetch(`https://es.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(nombreCiudad)}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.thumbnail && data.thumbnail.source) {
+          // Si tiene foto, la guardamos en nuestro diccionario
+          this.imagenesReales[nombreCiudad] = data.thumbnail.source;
+        }
+      })
+      .catch(() => { /* Si Wikipedia falla, no hacemos nada, quedará la random */ });
   }
 }
 
