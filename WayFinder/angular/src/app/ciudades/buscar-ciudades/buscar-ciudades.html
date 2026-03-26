@@ -108,6 +108,9 @@
                         <button class="btn btn-primary" (click)="verEnMapa(city)" [disabled]="city.latitud == null || city.longitud == null">
                             <i class="bi bi-map"></i> Ver en mapa
                         </button>
+                        <button class="btn btn-success mt-2" (click)="guardarDestino(city)">
+                            <i class="bi bi-bookmark-plus"></i> Guardar en BD
+                        </button>
                     </div>
                 </div>
             </div>

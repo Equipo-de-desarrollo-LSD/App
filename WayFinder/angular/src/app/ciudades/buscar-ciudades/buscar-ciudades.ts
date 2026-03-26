@@ -6,11 +6,12 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { CiudadDto, FiltrarCiudadesRequestDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
+import { CoreModule } from '@abp/ng.core';
 
 @Component({
   selector: 'app-search-city',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [CommonModule, FormsModule, RouterModule, CoreModule],
   templateUrl: './buscar-ciudades.html',
   styleUrls: ['./buscar-ciudades.scss'],
 })
@@ -186,10 +187,35 @@ export class BuscarCiudades implements OnInit, OnDestroy {
       })
       .catch(() => { /* Si Wikipedia falla, no hacemos nada, quedará la random */ });
   }
+guardarDestino(city: CiudadDto): void {
+    // 1. Tomamos la foto real de Wikipedia que ya buscamos, o usamos la generada
+    const fotoUrl = this.imagenesReales[city.nombre || ''] || this.getCityImage(city);
+
+    // 2. Armamos el paquete EXACTAMENTE con los nombres que exige el backend
+    const destinoAGuardar = {
+      nombre: city.nombre,
+      paisNombre: city.pais,         // 👈 Corregido: antes decía 'pais'
+      poblacion: city.paisPoblacion || 0, 
+      latitud: city.latitud,
+      longitud: city.longitud,
+      foto: fotoUrl                  // 👈 Nuevo: agregamos la foto obligatoria
+    };
+
+    // 3. Lo enviamos a la base de datos
+    this.ciudadService.create(destinoAGuardar as any).subscribe({
+      next: () => {
+        alert(`¡Éxito! ${city.nombre} se guardó en tu base de datos.`);
+      },
+      error: (err) => {
+        console.error('Error al guardar:', err);
+        alert(`No se pudo guardar ${city.nombre}. Revisa la consola para más detalles.`);
+      }
+    });
+  }
 }
 
-
-/*import { Component, OnInit, inject } from '@angular/core';
+/*
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subject, of } from 'rxjs';

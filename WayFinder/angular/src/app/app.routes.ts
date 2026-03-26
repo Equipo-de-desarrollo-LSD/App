@@ -36,6 +36,10 @@ export const APP_ROUTES: Routes = [
     path: 'perfiles/:id', 
     loadComponent: () => import('./perfiles/perfil-publico/perfil-publico').then(m => m.PerfilPublicoComponent) 
   },
+  { 
+    path: 'ciudades/populares', 
+    loadComponent: () => import('./ciudades/destinos-populares/destinos-populares').then(m => m.DestinosPopularesComponent) 
+  },
 
   { 
     path: 'ciudades/:id', 
