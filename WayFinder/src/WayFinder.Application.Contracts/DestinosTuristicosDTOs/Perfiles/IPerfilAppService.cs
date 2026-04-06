@@ -16,5 +16,8 @@ namespace WayFinder.Perfiles
 
         // Método para guardar cambios en MI perfil
         Task UpdateMiPerfilAsync(ActualizarPerfilDto input);
+
+        // Método para eliminar MI perfil 
+        Task EliminarMiCuentaAsync();
     }
 }
