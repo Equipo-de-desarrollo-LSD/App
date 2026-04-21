@@ -13,6 +13,7 @@ using Volo.Abp.Authorization;
 using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
+using Volo.Abp.Uow;
 using Volo.Abp.Users;
 using Volo.Abp.Validation;
 using WayFinder.DestinosTuristicos;
@@ -129,7 +130,107 @@ namespace WayFinder.Calificacion
                 });
             }
         }
+        [Fact]
+        // Test Req 5.3: Verificar que un usuario PUEDE borrar su propia calificación
+        public async Task DeleteAsync_Should_Delete_Own_Calificacion()
+        {
+            // Arrange
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
 
+            var destino = await destinoAppService.CreateAsync(new GuardarDestinos
+            {
+                Nombre = "Playa Borrable",
+                Foto = "test.jpg",
+                PaisNombre = "Test",
+                PaisPoblacion = 100,
+                CoordenadasLatitud = 0,
+                CoordenadasLongitud = 0,
+                UltimaActualizacion = DateTime.Now
+            });
+
+            var userId = Guid.NewGuid();
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userId, "usuarioBorrador", "borrador@wayfinder.com"));
+
+            Guid calificacionId;
+
+            using (SetCurrentUser(userId))
+            {
+                var input = new CrearCalificacionDto { DestinoId = destino.Id, Puntaje = 5, Comentario = "Para borrar" };
+                var result = await _calificacionAppService.CreateAsync(input);
+                calificacionId = result.Id; // Guardamos el ID generado
+
+                // Act: El mismo usuario intenta borrarla
+                await _calificacionAppService.DeleteAsync(calificacionId);
+            }
+
+            // Assert: Verificamos que la lista del destino quedó vacía
+            var lista = await _calificacionAppService.GetCalificacionesPorDestinoAsync(destino.Id);
+            lista.ShouldBeEmpty();
+        }
+       
+        [Fact]
+        public async Task DeleteAsync_Should_Throw_If_Not_Owner()
+        {
+            // Arrange
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+
+            var destino = await destinoAppService.CreateAsync(new GuardarDestinos
+            {
+                Nombre = "Playa Intocable",
+                Foto = "test.jpg",
+                PaisNombre = "Test",
+                PaisPoblacion = 100,
+                CoordenadasLatitud = 0,
+                CoordenadasLongitud = 0,
+                UltimaActualizacion = DateTime.Now
+            });
+
+            var userA = Guid.NewGuid();
+            var userB = Guid.NewGuid();
+            // Importante: Crear los usuarios en el IdentityManager para que existan en la BD del test
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userA, "UserA", "usera@wayfinder.com"));
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userB, "UserB", "userb@wayfinder.com"));
+
+            Guid calificacionId;
+
+            // User A crea la calificación
+            using (SetCurrentUser(userA))
+            {
+                var result = await _calificacionAppService.CreateAsync(new CrearCalificacionDto
+                {
+                    DestinoId = destino.Id,
+                    Puntaje = 5,
+                    UserId = userA // Asegúrate que tu DTO o servicio asigne esto
+                });
+                calificacionId = result.Id;
+            }
+
+            // Act & Assert: User B intenta borrarla
+            using (SetCurrentUser(userB))
+            {
+                // Si tu AppService no tiene un "if (calificacion.UserId != CurrentUser.Id) throw...", 
+                // este test seguirá fallando.
+                await Should.ThrowAsync<Volo.Abp.Domain.Entities.EntityNotFoundException>(async () =>
+                {
+                    await _calificacionAppService.DeleteAsync(calificacionId);
+                });
+            }
+        }
+        [Fact]
+        // Test extra: El promedio debe ser 0 si nadie calificó el destino aún
+        public async Task GetPromedioAsync_Should_Return_Zero_If_No_Ratings()
+        {
+            // Arrange: Un ID de destino inventado que sabemos que no tiene calificaciones
+            var destinoVacioId = Guid.NewGuid();
+
+            // Act
+            var promedio = await _calificacionAppService.GetPromedioAsync(destinoVacioId);
+
+            // Assert
+            promedio.ShouldBe(0.0);
+        }
         // Método auxiliar para establecer el usuario actual en el contexto de seguridad
         // Esto es crucial para simular la autenticación en las pruebas unitarias.
         protected virtual IDisposable SetCurrentUser(Guid? userId, string userName = "test_user")

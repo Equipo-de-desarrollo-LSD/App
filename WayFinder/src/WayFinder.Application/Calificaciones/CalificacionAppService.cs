@@ -12,6 +12,7 @@ using Volo.Abp.Domain.Repositories;
 using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicosDTOs;
+using Volo.Abp.Data;
 
 namespace WayFinder.Calificacion
 {
@@ -27,11 +28,13 @@ namespace WayFinder.Calificacion
 
         {
             private readonly ICurrentUser _currentUser;
+            private readonly IDataFilter _dataFilter;
 
-        public CalificacionAppService(IRepository<Calificaciones.Calificacion, Guid> repository, ICurrentUser currentUser): base(repository)
+        public CalificacionAppService(IRepository<Calificaciones.Calificacion, Guid> repository, ICurrentUser currentUser, IDataFilter dataFilter): base(repository)
         {
                 _currentUser = currentUser;
-            }
+                _dataFilter = dataFilter;
+        }
 
    //     public Task<CalificacionDto> CalificarDestinoAsync(CrearCalificacionDto input)
    //     {
@@ -41,11 +44,11 @@ namespace WayFinder.Calificacion
         public override async Task<CalificacionDto> CreateAsync(CrearCalificacionDto input)
             {
                 if (!_currentUser.IsAuthenticated)
-                    throw new AbpAuthorizationException();
+                    throw new AbpAuthorizationException("Debe estar logueado para calificar.");
 
                 var entity = ObjectMapper.Map<CrearCalificacionDto, WayFinder.Calificaciones.Calificacion>(input);
                 entity.UserId = _currentUser.GetId();
-                await Repository.InsertAsync(entity);
+                await Repository.InsertAsync(entity, autoSave:true);
                 return ObjectMapper.Map<WayFinder.Calificaciones.Calificacion, CalificacionDto>(entity);
             }
         // --- REQ 5.3: ELIMINAR CALIFICACIÓN PROPIA ---
@@ -65,28 +68,39 @@ namespace WayFinder.Calificacion
         [AllowAnonymous] // Permitimos que cualquiera vea el promedio, aunque no esté logueado
         public async Task<double> GetPromedioAsync(Guid destinoId)
         {
-            var query = await Repository.GetQueryableAsync();
-            var calificaciones = query.Where(c => c.DestinoId == destinoId);
-
-            if (!calificaciones.Any())
+            using (_dataFilter.Disable<Volo.Abp.Auditing.ICreationAuditedObject>())
             {
-                return 0.0; // Si nadie calificó, el promedio es 0
-            }
+                //var query = await Repository.GetQueryableAsync();
+                //var calificaciones = query.Where(c => c.DestinoId == destinoId);
+                var calificaciones = await Repository.GetListAsync(c => c.DestinoId == destinoId);
 
-            // Calculamos el promedio matemático del puntaje
-            return calificaciones.Average(c => c.Puntaje);
+                if (!calificaciones.Any())
+                {
+                    return 0.0; // Si nadie calificó, el promedio es 0
+                }
+
+                // Calculamos el promedio matemático del puntaje
+                return calificaciones.Average(c => c.Puntaje);
+            }
         }
         // --- REQ 5.5: LISTAR COMENTARIOS DE UN DESTINO ---
         [AllowAnonymous] // Permitimos que cualquiera lea los comentarios
         public async Task<List<CalificacionDto>> GetCalificacionesPorDestinoAsync(Guid destinoId)
         {
+            /*
             var query = await Repository.GetQueryableAsync();
 
             var calificaciones = query
                 .Where(c => c.DestinoId == destinoId)
                 .ToList();
+            */
+            using (_dataFilter.Disable<Volo.Abp.Auditing.ICreationAuditedObject>())
+            {
+                var calificaciones = await Repository.GetListAsync(c => c.DestinoId == destinoId);
 
-            return ObjectMapper.Map<List<WayFinder.Calificaciones.Calificacion>, List<CalificacionDto>>(calificaciones);
+                return ObjectMapper.Map<List<WayFinder.Calificaciones.Calificacion>, List<CalificacionDto>>(calificaciones);
+            }
+
         }
 
       //  Task ICalificacionAppService.CalificarDestinoAsync(CrearCalificacionDto input)
