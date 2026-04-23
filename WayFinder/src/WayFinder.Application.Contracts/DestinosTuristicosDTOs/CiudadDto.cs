@@ -1,14 +1,16 @@
 ﻿namespace WayFinder.DestinosTuristicosDTOs
 {
-  public class CiudadDto
-{
-    // Mantenemos el "= string.Empty" que venía de Main (es mejor práctica)
-    public string Nombre { get; set; } = string.Empty;
-    public string Pais { get; set; } = string.Empty;
-    
-    public double Latitud { get; set; }
-    public double Longitud { get; set; }
+    public class CiudadDto
+    {
+        public int Id { get; set; }
+        // Mantenemos el "= string.Empty" que venía de Main (es mejor práctica)
+        public string Nombre { get; set; } = string.Empty;
+        public string Pais { get; set; } = string.Empty;
 
-    // Mantenemos tu nueva propiedad que venía de la 3.2
-    public double PaisPoblacion { get; set; } 
+        public double Latitud { get; set; }
+        public double Longitud { get; set; }
+
+        // Mantenemos tu nueva propiedad que venía de la 3.2
+        public double PaisPoblacion { get; set; }
+    }
 }
