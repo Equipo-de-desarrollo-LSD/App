@@ -33,7 +33,7 @@ namespace WayFinder.Migrations
                 });
         }
 
-        /// <inheritdoc />
+        /// <inheritdoc />.
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(

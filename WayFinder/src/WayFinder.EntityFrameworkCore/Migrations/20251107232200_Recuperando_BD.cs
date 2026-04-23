@@ -786,7 +786,10 @@ namespace WayFinder.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+<<<<<<< feature/front-destinos-turisticos
+=======
 
+>>>>>>> main
             migrationBuilder.CreateTable(
                 name: "OpenIddictAuthorizations",
                 columns: table => new
@@ -1102,7 +1105,10 @@ namespace WayFinder.Migrations
                 table: "AbpUsers",
                 column: "UserName");
 
+<<<<<<< feature/front-destinos-turisticos
+=======
 
+>>>>>>> main
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
@@ -1215,7 +1221,10 @@ namespace WayFinder.Migrations
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
 
+<<<<<<< feature/front-destinos-turisticos
+=======
 
+>>>>>>> main
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
