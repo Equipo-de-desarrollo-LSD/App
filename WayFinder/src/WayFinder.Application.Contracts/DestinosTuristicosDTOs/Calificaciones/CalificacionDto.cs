@@ -9,6 +9,7 @@ namespace WayFinder.DestinosTuristicosDTOs
 {
     public class CalificacionDto
     {
+        public Guid Id { get; set; }
         public string? Comentario { get; set; }
 
         public int Puntaje { get; set; }

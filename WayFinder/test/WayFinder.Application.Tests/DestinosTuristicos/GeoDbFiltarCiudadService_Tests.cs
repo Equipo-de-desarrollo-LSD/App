@@ -7,6 +7,10 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading.Tasks;
+using Volo.Abp.Domain.Repositories;
+using WayFinder.Application.Tests; // Para poder usar el FakeHttpMessageHandler que creamos en el paso 1
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
 using WayFinder.Application.Tests; // Para poder usar el FakeHttpMessageHandler que creamos en el paso 1
 using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
