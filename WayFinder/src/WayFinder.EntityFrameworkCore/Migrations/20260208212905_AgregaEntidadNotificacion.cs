@@ -11,24 +11,6 @@ namespace WayFinder.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "DeleterId",
-                table: "AppCalificaciones",
-                type: "uniqueidentifier",
-                nullable: true);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DeletionTime",
-                table: "AppCalificaciones",
-                type: "datetime2",
-                nullable: true);
-
-            migrationBuilder.AddColumn<bool>(
-                name: "IsDeleted",
-                table: "AppCalificaciones",
-                type: "bit",
-                nullable: false,
-                defaultValue: false);
 
             migrationBuilder.CreateTable(
                 name: "ListasSeguimiento",
@@ -84,18 +66,6 @@ namespace WayFinder.Migrations
 
             migrationBuilder.DropTable(
                 name: "Notificaciones");
-
-            migrationBuilder.DropColumn(
-                name: "DeleterId",
-                table: "AppCalificaciones");
-
-            migrationBuilder.DropColumn(
-                name: "DeletionTime",
-                table: "AppCalificaciones");
-
-            migrationBuilder.DropColumn(
-                name: "IsDeleted",
-                table: "AppCalificaciones");
         }
     }
 }

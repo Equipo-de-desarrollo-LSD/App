@@ -10,7 +10,7 @@ namespace WayFinder.DestinosTuristicosDTOs
     {
         Task<BuscarCiudadResultDto> SearchCitiesAsync(BuscarCiudadRequestDto request);
         Task<FiltrarCiudadesResultDto> FiltrarCiudadesExternasAsync(FiltrarCiudadesRequestDto input);
-
+        Task<DetalleCiudadDto> ObtenerDetalleCiudadAsync(int cityId);
     }
 }
 

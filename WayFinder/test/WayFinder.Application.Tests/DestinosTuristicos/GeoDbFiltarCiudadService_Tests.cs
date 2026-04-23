@@ -11,6 +11,12 @@ using Volo.Abp.Domain.Repositories;
 using WayFinder.Application.Tests; // Para poder usar el FakeHttpMessageHandler que creamos en el paso 1
 using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
+using WayFinder.Application.Tests; // Para poder usar el FakeHttpMessageHandler que creamos en el paso 1
+using WayFinder.DestinosTuristicos;
+using WayFinder.DestinosTuristicosDTOs;
+using NSubstitute;
+using Volo.Abp.Domain.Repositories;
+using WayFinder.Metricas;
 using Xunit;       // Librería de pruebas
 
 namespace WayFinder.Application.Tests.DestinosTuristicos
@@ -49,12 +55,8 @@ namespace WayFinder.Application.Tests.DestinosTuristicos
             var mockFactory = Substitute.For<IHttpClientFactory>();
             mockFactory.CreateClient(Arg.Any<string>()).Returns(httpClient);
 
-            //
-            var mockMetricaRepository = Substitute.For<IRepository<MetricaApi, Guid>>();
-
-            // Instanciamos TU servicio pasándole las TRES piezas falsas
-            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, mockMetricaRepository);
-            // var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory);
+            // Instanciamos TU servicio con las piezas falsas
+            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, Substitute.For<IRepository<MetricaApi, Guid>>());
 
             // 2. ACT (Ejecutar)
             var request = new FiltrarCiudadesRequestDto
@@ -88,9 +90,7 @@ namespace WayFinder.Application.Tests.DestinosTuristicos
             var mockFactory = Substitute.For<IHttpClientFactory>();
             mockFactory.CreateClient(Arg.Any<string>()).Returns(httpClient);
 
-            var mockMetricaRepository = Substitute.For<IRepository<MetricaApi, Guid>>();
-
-            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, mockMetricaRepository);
+            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, Substitute.For<IRepository<MetricaApi, Guid>>());
 
             // 2. ACT
             var resultado = await servicio.FiltrarCiudadesExternasAsync(new FiltrarCiudadesRequestDto());
@@ -129,9 +129,7 @@ namespace WayFinder.Application.Tests.DestinosTuristicos
             var mockFactory = Substitute.For<IHttpClientFactory>();
             mockFactory.CreateClient(Arg.Any<string>()).Returns(httpClient);
 
-            var mockMetricaRepository = Substitute.For<IRepository<MetricaApi, Guid>>();
-
-            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, mockMetricaRepository);
+            var servicio = new GeoDbBuscarCiudadService(httpClient, mockFactory, Substitute.For<IRepository<MetricaApi, Guid>>());
 
             // 2. ACT
             var resultado = await servicio.FiltrarCiudadesExternasAsync(new FiltrarCiudadesRequestDto());

@@ -25,5 +25,12 @@ function configureRoutes() {
           order: 2, // Aparecerá después de 'Home'
           layout: eLayoutType.application,
         },
+      {
+        path: '/mi-perfil',
+        name: 'Mi Perfil',
+        iconClass: 'fas fa-user-cog', // Un ícono de usuario con un engranaje
+        order: 3, // El orden en el que quieres que aparezca de arriba hacia abajo
+        layout: eLayoutType.application,
+      }
   ]);
 }

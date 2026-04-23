@@ -2,6 +2,7 @@
 {
     public class CiudadDto
     {
+        public int Id { get; set; }
         // Mantenemos el "= string.Empty" que venía de Main (es mejor práctica)
         public string Nombre { get; set; } = string.Empty;
         public string Pais { get; set; } = string.Empty;

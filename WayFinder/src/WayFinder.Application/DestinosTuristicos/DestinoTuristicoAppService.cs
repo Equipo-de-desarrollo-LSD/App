@@ -132,5 +132,9 @@ public class DestinoTuristicoAppService :
         return await _buscarCiudadService.FiltrarCiudadesExternasAsync(input);
     }
 
-
+    public async Task<DetalleCiudadDto> GetDetalleCiudadAsync(int id)
+    {
+        return await _buscarCiudadService.ObtenerDetalleCiudadAsync(id);
+    }
 }
+
