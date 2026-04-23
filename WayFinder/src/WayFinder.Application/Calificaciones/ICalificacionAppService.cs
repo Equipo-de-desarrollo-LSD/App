@@ -15,6 +15,12 @@ namespace WayFinder.Calificacion
          PagedAndSortedResultRequestDto,
          CrearCalificacionDto>
     {
-        Task CalificarDestinoAsync(CrearCalificacionDto input);
+       // Task CalificarDestinoAsync(CrearCalificacionDto input);
+        
+        Task<double> GetPromedioAsync(Guid destinoId);
+
+        Task<List<CalificacionDto>> GetCalificacionesPorDestinoAsync(Guid destinoId);
     }
+    
 }
+
