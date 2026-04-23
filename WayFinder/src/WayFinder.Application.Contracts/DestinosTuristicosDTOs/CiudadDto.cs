@@ -2,6 +2,10 @@
 {
     public class CiudadDto
     {
+<<<<<<< feature/front-destinos-turisticos
+=======
+        public int Id { get; set; }
+>>>>>>> main
         // Mantenemos el "= string.Empty" que venía de Main (es mejor práctica)
         public string Nombre { get; set; } = string.Empty;
         public string Pais { get; set; } = string.Empty;

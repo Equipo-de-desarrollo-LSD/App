@@ -11,7 +11,8 @@ namespace WayFinder.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-             migrationBuilder.CreateTable(
+
+            migrationBuilder.CreateTable(
                 name: "PerfilesUsuarios",
                 columns: table => new
                 {
@@ -37,6 +38,7 @@ namespace WayFinder.Migrations
         {
             migrationBuilder.DropTable(
                 name: "PerfilesUsuarios");
+
         }
     }
 }

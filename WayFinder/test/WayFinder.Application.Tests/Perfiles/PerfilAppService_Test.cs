@@ -1,13 +1,15 @@
-﻿using System.Security.Claims;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Volo.Abp.Security.Claims;
-using Volo.Abp.Users;
-using Xunit;
-using WayFinder.Perfiles;
-using Volo.Abp.Identity;
 using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using Volo.Abp.Identity;
+using Volo.Abp.Security.Claims;
+using Volo.Abp.Uow;
+using Volo.Abp.Users;
+using WayFinder.Perfiles;
+using Xunit;
 
 namespace WayFinder.Perfiles
 {
@@ -16,12 +18,14 @@ namespace WayFinder.Perfiles
         private readonly IPerfilAppService _perfilAppService;
         private readonly IdentityUserManager _userManager;
         private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
+        private readonly IUnitOfWorkManager _unitOfWorkManager;
 
         public PerfilAppService_Tests()
         {
             _perfilAppService = GetRequiredService<IPerfilAppService>();
             _userManager = GetRequiredService<IdentityUserManager>();
             _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
+            _unitOfWorkManager = GetRequiredService<IUnitOfWorkManager>();
         }
 
         // Este método es el "truco" para simular que estamos logueados como admin.
@@ -135,23 +139,31 @@ namespace WayFinder.Perfiles
         [Fact]
         public async Task Should_Eliminar_Mi_Cuenta_Correctamente()
         {
-            // Arrange: 
-            // En ABP, las pruebas corren automáticamente bajo un usuario "Admin" simulado.
-            // Primero, nos aseguramos de que el perfil exista (podemos llamar a GetMiPerfilAsync para confirmar que no explota antes de borrar)
-            var perfilAntes = await _perfilAppService.GetMiPerfilAsync();
-            perfilAntes.ShouldNotBeNull();
+            // Inventamos un ID
+            var userId = Guid.NewGuid();
 
-            // Act: 
-            // ¡Apretamos el botón rojo!
-            await _perfilAppService.EliminarMiCuentaAsync();
+            // Guardamos al usuario físicamente en la BD de pruebas de ABP
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+            var nuevoUsuario = new Volo.Abp.Identity.IdentityUser(userId, "usuarioBorrar", "borrar@wayfinder.com");
+            await userManager.CreateAsync(nuevoUsuario);
 
-            // Assert: 
-            // Si el usuario se eliminó correctamente, intentar buscar su perfil nuevamente 
-            // debería lanzar una excepción (porque _userManager.GetByIdAsync no lo va a encontrar).
-            await Should.ThrowAsync<Exception>(async () =>
+            // Usamos un usuario que "ya existe"
+            using (SetCurrentUser(userId))
             {
-                await _perfilAppService.GetMiPerfilAsync();
-            });
+                // Arrange: 
+                // Llamamos a GetMiPerfilAsync para que cree el perfil atado a este usuario
+                var perfilAntes = await _perfilAppService.GetMiPerfilAsync();
+                perfilAntes.ShouldNotBeNull();
+
+                // Borramos el perfil de la base de datos
+                await _perfilAppService.EliminarMiCuentaAsync();
+
+                // Si lo borró bien, intentar buscarlo de nuevo y tiene que lanzar una Excepción
+                await Should.ThrowAsync<Exception>(async () =>
+                {
+                    await _perfilAppService.GetMiPerfilAsync();
+                });
+            }
         }
 
         // Este test verifica que podemos obtener el perfil público de otro usuario (en este caso, el mismo admin) sin problemas.

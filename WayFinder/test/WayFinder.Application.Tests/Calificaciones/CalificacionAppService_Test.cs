@@ -1,4 +1,6 @@
-﻿using NSubstitute;
+﻿using Autofac.Core;
+using Microsoft.AspNetCore.Identity;
+using NSubstitute;
 using Polly.Caching;
 using Shouldly;
 using System;
@@ -13,6 +15,7 @@ using Volo.Abp.Modularity;
 using Volo.Abp.Security.Claims;
 using Volo.Abp.Users;
 using Volo.Abp.Validation;
+using WayFinder.DestinosTuristicos;
 using WayFinder.DestinosTuristicosDTOs;
 using Xunit;
 
@@ -24,6 +27,7 @@ namespace WayFinder.Calificacion
     public class CalificacionAppService_Test: WayFinder.WayFinderTestBase<WayFinderApplicationTestModule>
     {
         // Servicio que vamos a probar
+        private readonly IDestinoTuristicoAppService _services;
         private readonly ICalificacionAppService _calificacionAppService; 
         // private readonly ICurrentPrincipalAccessor _currentPrincipalAccessor;
 
@@ -32,6 +36,7 @@ namespace WayFinder.Calificacion
             // Utilizamos el contenedor de dependencias para obtener una instancia del servicio que queremos probar.
             // Esto asegura que todas las dependencias se resuelvan correctamente.
             // Algo similar hicimos en DestinoTurisiticoAppService_Tests
+            _services = GetRequiredService<IDestinoTuristicoAppService>();
             _calificacionAppService = GetRequiredService<ICalificacionAppService>();
             // _currentPrincipalAccessor = GetRequiredService<ICurrentPrincipalAccessor>();
         }
@@ -39,28 +44,49 @@ namespace WayFinder.Calificacion
         // Test para verificar que la calificación se asocia correctamente con el usuario actual
         public async Task CalificarDestinoAsync_Should_Associate_Puntaje_With_Current_User()
         {
-            // await Task.Delay(2000);
-            // Arrange
-            // Creamos un ID de usuario simulado
+            // 1. Inyectamos el servicio de destinos y de usuarios
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+
+            // Creamos el destino de prueba
+            var nuevoDestino = new GuardarDestinos
+            {
+                Nombre = "Playa Paraíso",
+                Foto = "playa_paraiso.jpg", // ← necesario
+                PaisNombre = "España",
+                PaisPoblacion = 49000000,
+                CoordenadasLatitud = 36.7213,
+                CoordenadasLongitud = -4.4214,
+                UltimaActualizacion = DateTime.Now
+            };
+
+            var destino = await destinoAppService.CreateAsync(nuevoDestino);
+
+            // Creamos el usuario físicamente en la BD
             var userId = Guid.NewGuid();
-            // 2. ARRANGE: Simular la autenticación ANTES de llamar al AppService.
-            // Esto asegura que _currentUser en el AppService tenga el contexto correcto.
-            using (SetCurrentUser(userId))            
+            var nuevoUsuario = new Volo.Abp.Identity.IdentityUser(userId, "usuarioPrueba", "prueba@wayfinder.com");
+            await userManager.CreateAsync(nuevoUsuario);
+
+            // Simulamos ser el usuario logueado
+            using (SetCurrentUser(userId))
             {
                 var input = new CrearCalificacionDto
                 {
-                    DestinoId = Guid.NewGuid(),
+                    // Usamos el ID del destino que acabamos de crear con éxito
+                    UserId = userId,
+                    DestinoId = destino.Id,
                     Puntaje = 5,
                     Comentario = "Excelente destino turístico"
                 };
-                // Act
-                // CalificacionDto result = await service.CreateAsync(input);
-                CalificacionDto result = await _calificacionAppService.CreateAsync(input);
-                // Assert
+
+                // Act: Creamos la calificación
+                var result = await _calificacionAppService.CreateAsync(input);
+
+                // Assert: Verificamos que todo guardó bien
                 result.ShouldNotBeNull();
                 result.Puntaje.ShouldBe(5);
                 result.Comentario.ShouldBe("Excelente destino turístico");
-                result.DestinoId.ShouldBe(input.DestinoId);
+                result.DestinoId.ShouldBe(destino.Id);
                 result.UserId.ShouldBe(userId);
                 Assert.Equal(userId, result.UserId);
             }
