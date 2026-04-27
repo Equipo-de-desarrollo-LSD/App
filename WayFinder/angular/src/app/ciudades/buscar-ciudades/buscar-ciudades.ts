@@ -11,7 +11,7 @@ import {
   finalize,
 } from 'rxjs/operators';
 import { CiudadDto } from '../../proxy/destinos-turisticos-dtos/models';
-import { DestinoTuristicoService } from 'src/app/proxy/destinos-turisticos';
+import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos';
 import { BuscarCiudadRequestDto, BuscarCiudadResultDto } from 'src/app/proxy/destinos-turisticos-dtos';
 
 @Component({
