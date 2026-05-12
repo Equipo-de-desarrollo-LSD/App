@@ -9,6 +9,7 @@ export interface BuscarCiudadResultDto {
 }
 
 export interface CalificacionDto {
+  id?: string;
   comentario?: string;
   puntaje: number;
   destinoId?: string;
@@ -16,6 +17,7 @@ export interface CalificacionDto {
 }
 
 export interface CiudadDto {
+  id: number;
   nombre?: string;
   pais?: string;
   latitud: number;
@@ -42,6 +44,18 @@ export interface DestinoTuristicoDto extends AuditedEntityDto<string> {
   ultimaActualizacion?: string;
   pais: PaisDto;
   coordenadas: CoordenadasDto;
+}
+
+export interface DetalleCiudadDto {
+  geoDbId?: string;
+  wikiDataId?: string;
+  nombre?: string;
+  pais?: string;
+  region?: string;
+  poblacion: number;
+  coordenadas: CoordenadasDto;
+  zonaHoraria?: string;
+  elevacionMetros?: number;
 }
 
 export interface FiltrarCiudadesRequestDto {

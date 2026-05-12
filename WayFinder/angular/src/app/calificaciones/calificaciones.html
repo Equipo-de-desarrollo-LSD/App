@@ -1,0 +1,107 @@
+<div class="card border-0 shadow-sm p-4 mt-4"> 
+  
+  <div class="row align-items-center mb-4">
+    <div class="col-md-5 text-center border-end">
+      <h3 class="display-2 fw-bold text-warning mb-0">{{ promedio | number:'1.1-1' }}</h3>
+      <div class="fs-4 mb-2">
+        @for (i of [1, 2, 3, 4, 5]; track i) {
+          <i class="bi" [ngClass]="getIconoEstrella(i, promedio)"></i>
+        }
+      </div>
+      <p class="text-muted mb-0">Basado en {{ totalResenas }} opiniones</p>
+    </div>
+
+    <div class="col-md-7 px-4 text-center">
+      
+      <div *ngIf="!mostrarFormulario">
+        <!-- Si el usuario NO ha calificado -->
+        <div *ngIf="!miCalificacionPrevia">
+          <h5 class="fw-bold mb-3 text-dark">¿Qué te pareció este destino?</h5>
+          <div class="display-5 text-warning mb-3" style="cursor: pointer;" (mouseleave)="hoverEstrella(0)">
+            @for (estrella of estrellas; track estrella) {
+              <i class="bi mx-1 transition-all"
+                 [ngClass]="estrella <= (puntajeHover || puntajeSeleccionado) ? 'bi-star-fill' : 'bi-star'"
+                 (mouseenter)="hoverEstrella(estrella)"
+                 (click)="seleccionarEstrella(estrella); mostrarFormulario = true">
+              </i>
+            }
+          </div>
+          <p class="text-muted small mb-0">Haz clic en una estrella para calificar</p>
+        </div>
+
+        <!-- Si el usuario YA calificó -->
+        <div *ngIf="miCalificacionPrevia" class="bg-light p-3 rounded border text-start">
+          <h6 class="fw-bold text-warning mb-2"><i class="bi bi-check-circle-fill"></i> Ya calificaste este destino</h6>
+          <p class="text-dark mb-3">Tu puntuación: <strong>{{ miCalificacionPrevia.puntaje }} estrellas</strong></p>
+          <button class="btn btn-outline-info btn-sm fw-bold w-100" (click)="editarMiCalificacion(miCalificacionPrevia)">
+            <i class="bi bi-pencil"></i> Modificar mi reseña
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="mostrarFormulario" class="text-start p-3 bg-light rounded border shadow-sm">
+        
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <!-- Título dinámico que avisa si estás editando -->
+          <div class="d-flex align-items-center">
+            <span class="fw-bold text-warning fs-5 me-3">
+              @for (estrella of estrellas; track estrella) {
+                <i class="bi me-1" style="cursor: pointer;"
+                   [ngClass]="estrella <= puntajeSeleccionado ? 'bi-star-fill' : 'bi-star'"
+                   (click)="seleccionarEstrella(estrella)">
+                </i>
+              }
+            </span>
+            <span *ngIf="calificacionAEditarId" class="badge bg-info text-dark"><i class="bi bi-pencil"></i> Editando</span>
+          </div>
+          <button type="button" class="btn-close" aria-label="Cerrar" (click)="toggleFormulario()"></button>
+        </div>
+
+        <div class="form-group mb-3">
+          <textarea class="form-control border shadow-none bg-white text-dark" rows="3" 
+                    placeholder="Cuéntanos más sobre tu experiencia (opcional)..." 
+                    [(ngModel)]="textoComentario"></textarea>
+        </div>
+        
+        <div class="text-end">
+          <button class="btn btn-warning fw-bold text-dark px-4" (click)="guardarCalificacion()">
+            {{ calificacionAEditarId ? 'Guardar Cambios' : 'Publicar Reseña' }}
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <div class="resenas-list">
+    <h5 class="fw-bold mb-4 text-dark">Opiniones de viajeros ({{ listaComentarios.length }})</h5>
+    
+    @for (item of listaComentarios; track item.id) {
+      <div class="mb-4 pb-3 border-bottom position-relative">
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-warning fs-6">
+            @for (i of [1,2,3,4,5]; track i) {
+              <i class="bi" [ngClass]="getIconoEstrella(i, item.puntaje)"></i>
+            }
+          </span>
+          <small class="text-muted">Hace poco</small>
+        </div>
+        
+        <p class="mb-3 text-dark">{{ item.comentario }}</p>
+        
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm btn-outline-info" (click)="editarMiCalificacion(item)">
+            <i class="bi bi-pencil"></i> Editar
+          </button>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminarMiCalificacion(item.id)">
+            <i class="bi bi-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    } @empty {
+      <p class="text-center text-muted fst-italic mt-5">Aún no hay reseñas. ¡Anímate a ser el primero en opinar!</p>
+    }
+  </div>
+</div>

@@ -886,20 +886,37 @@
               "name": "ICalificacionAppService",
               "methods": [
                 {
-                  "name": "CalificarDestinoAsync",
+                  "name": "GetPromedioAsync",
                   "parametersOnMethod": [
                     {
-                      "name": "input",
-                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
-                      "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
                       "isOptional": false,
                       "defaultValue": null
                     }
                   ],
                   "returnValue": {
-                    "type": "System.Void",
-                    "typeSimple": "System.Void"
+                    "type": "System.Double",
+                    "typeSimple": "number"
+                  }
+                },
+                {
+                  "name": "GetCalificacionesPorDestinoAsync",
+                  "parametersOnMethod": [
+                    {
+                      "name": "destinoId",
+                      "typeAsString": "System.Guid, System.Private.CoreLib",
+                      "type": "System.Guid",
+                      "typeSimple": "string",
+                      "isOptional": false,
+                      "defaultValue": null
+                    }
+                  ],
+                  "returnValue": {
+                    "type": "System.Collections.Generic.List<WayFinder.DestinosTuristicosDTOs.CalificacionDto>",
+                    "typeSimple": "[WayFinder.DestinosTuristicosDTOs.CalificacionDto]"
                   }
                 },
                 {
@@ -999,43 +1016,6 @@
             }
           ],
           "actions": {
-            "CalificarDestinoAsyncByInput": {
-              "uniqueName": "CalificarDestinoAsyncByInput",
-              "name": "CalificarDestinoAsync",
-              "httpMethod": "POST",
-              "url": "api/app/calificacion/calificar-destino",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "input",
-                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
-                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "input",
-                  "name": "input",
-                  "jsonName": null,
-                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": null,
-                  "bindingSourceId": "Body",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "WayFinder.DestinosTuristicosDTOs.CalificacionDto",
-                "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "WayFinder.Calificacion.CalificacionAppService"
-            },
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
               "name": "CreateAsync",
@@ -1072,6 +1052,117 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.ICreateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto>"
+            },
+            "DeleteAsyncById": {
+              "uniqueName": "DeleteAsyncById",
+              "name": "DeleteAsync",
+              "httpMethod": "DELETE",
+              "url": "api/app/calificacion/{id}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Void",
+                "typeSimple": "System.Void"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
+            },
+            "GetPromedioAsyncByDestinoId": {
+              "uniqueName": "GetPromedioAsyncByDestinoId",
+              "name": "GetPromedioAsync",
+              "httpMethod": "GET",
+              "url": "api/app/calificacion/promedio/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Double",
+                "typeSimple": "number"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "WayFinder.Calificacion.ICalificacionAppService"
+            },
+            "GetCalificacionesPorDestinoAsyncByDestinoId": {
+              "uniqueName": "GetCalificacionesPorDestinoAsyncByDestinoId",
+              "name": "GetCalificacionesPorDestinoAsync",
+              "httpMethod": "GET",
+              "url": "api/app/calificacion/calificaciones-por-destino/{destinoId}",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "destinoId",
+                  "typeAsString": "System.Guid, System.Private.CoreLib",
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "destinoId",
+                  "name": "destinoId",
+                  "jsonName": null,
+                  "type": "System.Guid",
+                  "typeSimple": "string",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "System.Collections.Generic.List<WayFinder.DestinosTuristicosDTOs.CalificacionDto>",
+                "typeSimple": "[WayFinder.DestinosTuristicosDTOs.CalificacionDto]"
+              },
+              "allowAnonymous": true,
+              "implementFrom": "WayFinder.Calificacion.ICalificacionAppService"
             },
             "UpdateAsyncByIdAndInput": {
               "uniqueName": "UpdateAsyncByIdAndInput",
@@ -1129,43 +1220,6 @@
               },
               "allowAnonymous": false,
               "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto>"
-            },
-            "DeleteAsyncById": {
-              "uniqueName": "DeleteAsyncById",
-              "name": "DeleteAsync",
-              "httpMethod": "DELETE",
-              "url": "api/app/calificacion/{id}",
-              "supportedVersions": [],
-              "parametersOnMethod": [
-                {
-                  "name": "id",
-                  "typeAsString": "System.Guid, System.Private.CoreLib",
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null
-                }
-              ],
-              "parameters": [
-                {
-                  "nameOnMethod": "id",
-                  "name": "id",
-                  "jsonName": null,
-                  "type": "System.Guid",
-                  "typeSimple": "string",
-                  "isOptional": false,
-                  "defaultValue": null,
-                  "constraintTypes": [],
-                  "bindingSourceId": "Path",
-                  "descriptorName": ""
-                }
-              ],
-              "returnValue": {
-                "type": "System.Void",
-                "typeSimple": "System.Void"
-              },
-              "allowAnonymous": false,
-              "implementFrom": "Volo.Abp.Application.Services.IDeleteAppService<System.Guid>"
             },
             "GetAsyncById": {
               "uniqueName": "GetAsyncById",
@@ -2099,6 +2153,43 @@
               },
               "allowAnonymous": false,
               "implementFrom": "WayFinder.DestinosTuristicosDTOs.IDestinoTuristicoAppService"
+            },
+            "GetDetalleCiudadAsyncById": {
+              "uniqueName": "GetDetalleCiudadAsyncById",
+              "name": "GetDetalleCiudadAsync",
+              "httpMethod": "GET",
+              "url": "api/app/destino-turistico/{id}/detalle-ciudad",
+              "supportedVersions": [],
+              "parametersOnMethod": [
+                {
+                  "name": "id",
+                  "typeAsString": "System.Int32, System.Private.CoreLib",
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null
+                }
+              ],
+              "parameters": [
+                {
+                  "nameOnMethod": "id",
+                  "name": "id",
+                  "jsonName": null,
+                  "type": "System.Int32",
+                  "typeSimple": "number",
+                  "isOptional": false,
+                  "defaultValue": null,
+                  "constraintTypes": [],
+                  "bindingSourceId": "Path",
+                  "descriptorName": ""
+                }
+              ],
+              "returnValue": {
+                "type": "WayFinder.DestinosTuristicosDTOs.DetalleCiudadDto",
+                "typeSimple": "WayFinder.DestinosTuristicosDTOs.DetalleCiudadDto"
+              },
+              "allowAnonymous": false,
+              "implementFrom": "WayFinder.DestinoTuristicos.DestinoTuristicoAppService"
             },
             "CreateAsyncByInput": {
               "uniqueName": "CreateAsyncByInput",
@@ -11600,6 +11691,18 @@
       "genericArguments": null,
       "properties": [
         {
+          "name": "Id",
+          "jsonName": null,
+          "type": "System.Guid",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
           "name": "Comentario",
           "jsonName": null,
           "type": "System.String",
@@ -11656,6 +11759,18 @@
       "enumValues": null,
       "genericArguments": null,
       "properties": [
+        {
+          "name": "Id",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
         {
           "name": "Nombre",
           "jsonName": null,
@@ -11880,6 +11995,123 @@
           "jsonName": null,
           "type": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
           "typeSimple": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.DetalleCiudadDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "GeoDbId",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "WikiDataId",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Pais",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Region",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Poblacion",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Coordenadas",
+          "jsonName": null,
+          "type": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
+          "typeSimple": "WayFinder.DestinosTuristicosDTOs.CoordenadasDto",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ZonaHoraria",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ElevacionMetros",
+          "jsonName": null,
+          "type": "System.Double?",
+          "typeSimple": "number?",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,
