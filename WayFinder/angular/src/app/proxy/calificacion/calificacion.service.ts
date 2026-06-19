@@ -10,15 +10,6 @@ export class CalificacionService {
   apiName = 'Default';
   
 
-  calificarDestino = (input: CrearCalificacionDto, config?: Partial<Rest.Config>) =>
-    this.restService.request<any, CalificacionDto>({
-      method: 'POST',
-      url: '/api/app/calificacion/calificar-destino',
-      body: input,
-    },
-    { apiName: this.apiName,...config });
-  
-
   create = (input: CrearCalificacionDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, CalificacionDto>({
       method: 'POST',
@@ -44,11 +35,27 @@ export class CalificacionService {
     { apiName: this.apiName,...config });
   
 
+  getCalificacionesPorDestino = (destinoId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, CalificacionDto[]>({
+      method: 'GET',
+      url: `/api/app/calificacion/calificaciones-por-destino/${destinoId}`,
+    },
+    { apiName: this.apiName,...config });
+  
+
   getList = (input: PagedAndSortedResultRequestDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, PagedResultDto<CalificacionDto>>({
       method: 'GET',
       url: '/api/app/calificacion',
       params: { sorting: input.sorting, skipCount: input.skipCount, maxResultCount: input.maxResultCount },
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getPromedio = (destinoId: string, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, number>({
+      method: 'GET',
+      url: `/api/app/calificacion/promedio/${destinoId}`,
     },
     { apiName: this.apiName,...config });
   
