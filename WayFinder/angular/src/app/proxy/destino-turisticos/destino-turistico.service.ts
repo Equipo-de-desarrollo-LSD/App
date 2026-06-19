@@ -1,7 +1,7 @@
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { BuscarCiudadRequestDto, BuscarCiudadResultDto, DestinoTuristicoDto, FiltrarCiudadesRequestDto, FiltrarCiudadesResultDto, GuardarDestinos } from '../destinos-turisticos-dtos/models';
+import type { BuscarCiudadRequestDto, BuscarCiudadResultDto, DestinoTuristicoDto, DetalleCiudadDto, FiltrarCiudadesRequestDto, FiltrarCiudadesResultDto, GuardarDestinos } from '../destinos-turisticos-dtos/models';
 
 @Injectable({
   providedIn: 'root',
@@ -75,6 +75,14 @@ export class DestinoTuristicoService {
     this.restService.request<any, DestinoTuristicoDto[]>({
       method: 'GET',
       url: '/api/app/destino-turistico/destinos-turisticos',
+    },
+    { apiName: this.apiName,...config });
+  
+
+  getDetalleCiudad = (id: number, config?: Partial<Rest.Config>) =>
+    this.restService.request<any, DetalleCiudadDto>({
+      method: 'GET',
+      url: `/api/app/destino-turistico/${id}/detalle-ciudad`,
     },
     { apiName: this.apiName,...config });
   
