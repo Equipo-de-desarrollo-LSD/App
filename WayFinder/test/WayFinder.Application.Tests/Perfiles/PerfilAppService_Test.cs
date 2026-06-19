@@ -148,7 +148,7 @@ namespace WayFinder.Perfiles
             await userManager.CreateAsync(nuevoUsuario);
 
             // Usamos un usuario que "ya existe"
-            using (SetCurrentUser(userId))
+            using (SetCurrentUser(userId))  
             {
                 // Arrange: 
                 // Llamamos a GetMiPerfilAsync para que cree el perfil atado a este usuario
@@ -188,9 +188,6 @@ namespace WayFinder.Perfiles
             perfilPublico.UserName.ShouldBe("admin");
         }
 
-
-        // Método auxiliar para establecer el usuario actual en el contexto de seguridad
-        // Esto es crucial para simular la autenticación en las pruebas unitarias.
         protected virtual IDisposable SetCurrentUser(Guid? userId, string userName = "test_user")
         {
             // Resolvemos el servicio de ABP que maneja la identidad del usuario en el hilo actual.
