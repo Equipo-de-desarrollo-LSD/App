@@ -57,17 +57,9 @@ import { CalificacionesComponent } from 'src/app/calificaciones/calificaciones';
         </div>
       </div>
 
-      <div *ngIf="destinoId">
-         <app-calificaciones [destinoId]="destinoId"></app-calificaciones>
+      <div *ngIf="!loading && !error && ciudad">
+         <app-calificaciones [destinoId]="destinoId" [ciudad]="ciudad"></app-calificaciones>
       </div>
-      
-      <div *ngIf="!loading && !error && ciudad && !destinoId" class="alert alert-warning shadow-sm p-4 text-center mt-4 border-0">
-         <i class="bi bi-info-circle display-4 text-warning d-block mb-3"></i>
-         <h4 class="fw-bold">Este destino aún no está en tu base de datos</h4>
-         <p class="fs-5 mb-0">Para poder ver o dejar reseñas, primero debes guardar este destino desde el buscador principal.</p>
-      </div>
-
-    </div>
   `
 })
 export class DetalleCiudadComponent implements OnInit {

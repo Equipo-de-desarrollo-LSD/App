@@ -16,8 +16,9 @@ import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destin
 })
 export class HomeComponent {
   // TODO: Reemplazar este Mock con la llamada al backend cuando esté listo el merge de Favoritos
-  destinosPopulares = [
+ destinosPopulares: any[] = [
     {
+      id: '11111111-1111-1111-1111-111111111111',
       nombre: 'Buenos Aires',
       pais: 'Argentina',
       imagenUrl: 'https://images.unsplash.com/photo-1612294037345-b4eb04c96e1b?q=80&w=800&auto=format&fit=crop',
@@ -25,6 +26,7 @@ export class HomeComponent {
       calificacion: 4.8
     },
     {
+      id: '22222222-2222-2222-2222-222222222222',
       nombre: 'Bariloche',
       pais: 'Argentina',
       imagenUrl: 'https://images.unsplash.com/photo-1522228115018-d838bcce5c3a?q=80&w=800&auto=format&fit=crop',
@@ -32,6 +34,7 @@ export class HomeComponent {
       calificacion: 4.9
     },
     {
+      id: '33333333-3333-3333-3333-333333333333',
       nombre: 'Mendoza',
       pais: 'Argentina',
       imagenUrl: 'https://images.unsplash.com/photo-1584464491033-06628f3a6b7b?q=80&w=800&auto=format&fit=crop',
@@ -39,7 +42,9 @@ export class HomeComponent {
       calificacion: 4.7
     }
   ];
-  private authService = inject(AuthService);
+  private router = inject(Router);
+  private ciudadService = inject(DestinoTuristicoService);
+  
 
   // --- VARIABLES DEL BUSCADOR ---
   ciudades: CiudadDto[] = [];
@@ -62,10 +67,6 @@ export class HomeComponent {
   private searchSubject = new Subject<void>();
   private searchSubscription!: Subscription;
 
-  // --- VARIABLES DE DESTINOS POPULARES (Intactas) ---
-  destinosPopulares: any[] = [
-    // Aquí pon tus datos de prueba como los tenías...
-  ];
 
   ngOnInit(): void {
     this.searchSubscription = this.searchSubject.pipe(
@@ -213,7 +214,14 @@ export class HomeComponent {
       error: (err) => alert(`No se pudo guardar ${city.nombre}. Revisa la consola para más detalles.`)
     });
   }
-
+  calificarDirecto(city: CiudadDto): void {
+    // La forma más rápida y limpia sin crear ventanas flotantes nuevas
+    // es redirigir al usuario directamente a la pantalla de detalle de esa ciudad.
+    
+    if (city && city.nombre) {
+      this.irADetalle(city.nombre);
+    }
+  }
   // --- LÓGICA DE NAVEGACIÓN COMPARTIDA ---
   irADetalle(nombreDestino: string) {
     this.router.navigate(['/ciudades', nombreDestino]);

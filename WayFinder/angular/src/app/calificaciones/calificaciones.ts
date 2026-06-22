@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CalificacionService } from 'src/app/proxy/calificacion/calificacion.service';
 import { CalificacionDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { ConfigStateService } from '@abp/ng.core';
+import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 
 @Component({
   selector: 'app-calificaciones',
@@ -14,9 +15,11 @@ import { ConfigStateService } from '@abp/ng.core';
 })
 export class CalificacionesComponent implements OnChanges {
   @Input() destinoId!: string; 
+  @Input() ciudad: any; 
 
   private calificacionService = inject(CalificacionService);
   private configState = inject(ConfigStateService); // NUEVO: Inyectamos el estado general
+  private destinoTuristicoService = inject(DestinoTuristicoService);
 
   currentUser = this.configState.getOne('currentUser'); // NUEVO: Obtenemos el usuario logueado
   miCalificacionPrevia: any = null;
@@ -89,38 +92,74 @@ export class CalificacionesComponent implements OnChanges {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  guardarCalificacion() {
+guardarCalificacion() {
     if (this.puntajeSeleccionado === 0) return; 
 
+    // Verificamos si el ID actual es un Guid válido (los Guid tienen guiones '-')
+    const yaEsGuid = this.destinoId && this.destinoId.includes('-');
+
+    if (yaEsGuid) {
+      // Si ya es un Guid, la ciudad ya existe en tu BD. Guardamos directo.
+      this.procesarGuardadoCalificacion(this.destinoId);
+    } else {
+      // Si NO es Guid, la ciudad no existe en tu BD. La creamos con los datos reales.
+      const destinoAGuardar = {
+        nombre: this.ciudad?.nombre || 'Destino Calificado',
+        paisNombre: this.ciudad?.pais || 'Desconocido',         
+        poblacion: this.ciudad?.poblacion || 0, 
+        latitud: this.ciudad?.latitud || 0,
+        longitud: this.ciudad?.longitud || 0,
+        foto: this.ciudad?.foto || 'https://picsum.photos/400/250'                  
+      };
+
+      this.destinoTuristicoService.create(destinoAGuardar as any).subscribe({
+        next: (nuevoDestino) => {
+          // ¡MAGIA! El backend creó la ciudad y nos devuelve el objeto con el NUEVO Guid
+          const nuevoGuidReal = nuevoDestino.id;
+          
+          // Actualizamos nuestra variable local por si el usuario quiere editar la reseña luego
+          this.destinoId = nuevoGuidReal; 
+          
+          // Ahora sí, guardamos la reseña usando el Guid válido
+          this.procesarGuardadoCalificacion(nuevoGuidReal);
+        },
+        error: (err) => {
+          console.error(err);
+          alert('Hubo un error al sincronizar la ciudad con la base de datos.');
+        }
+      });
+    }
+  }
+
+  // Extraemos la lógica de la calificación a un método que recibe el Guid REAL
+  private procesarGuardadoCalificacion(idReal: string) {
     const input = {
-      destinoId: this.destinoId,
+      destinoId: idReal, // Usamos el ID validado
       puntaje: this.puntajeSeleccionado, 
       comentario: this.textoComentario
     };
-    
+
     if (this.calificacionAEditarId) {
-      // MODO EDICIÓN (Usamos .update() de ABP)
       this.calificacionService.update(this.calificacionAEditarId, input as any).subscribe({
         next: () => {
           this.mostrarFormulario = false;
           this.limpiarFormulario();
           this.cargarComentarios(); 
         },
-        error: (err) => console.error('Error al editar', err)
+        error: (err) => alert('Error al editar la calificación')
       });
     } else {
-      // MODO CREACIÓN (Usamos .create() de ABP)
       this.calificacionService.create(input as any).subscribe({
         next: () => {
           this.mostrarFormulario = false;
           this.limpiarFormulario();
           this.cargarComentarios();
         },
-        error: (err) => console.error('Error al guardar', err)
+        error: (err) => alert('Error al guardar la calificación')
       });
     }
   }
-
+  
   eliminarMiCalificacion(id: string) {
     if(confirm('¿Estás seguro de que deseas eliminar esta calificación?')) {
       this.calificacionService.delete(id).subscribe(() => {
