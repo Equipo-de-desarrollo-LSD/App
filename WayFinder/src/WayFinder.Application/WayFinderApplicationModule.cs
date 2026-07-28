@@ -28,7 +28,7 @@ public class WayFinderApplicationModule : AbpModule
     public override void ConfigureServices(ServiceConfigurationContext context)
     {
         //context.Services.AddAutoMapperObjectMapper<WayFinderApplicationModule>();
-        
+        context.Services.AddHttpClient<IEventosService, TicketMasterEventosService>();
 
         Configure<AbpAutoMapperOptions>(options =>
         {
