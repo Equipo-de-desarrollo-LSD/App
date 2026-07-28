@@ -13,6 +13,7 @@ using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicosDTOs;
 using Volo.Abp.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace WayFinder.Calificacion
 {
@@ -65,50 +66,49 @@ namespace WayFinder.Calificacion
             await base.DeleteAsync(id);
         }
         // --- REQ 5.4: CONSULTAR PROMEDIO ---
-        [AllowAnonymous] // Permitimos que cualquiera vea el promedio, aunque no esté logueado
+        [AllowAnonymous]
         public async Task<double> GetPromedioAsync(Guid destinoId)
         {
             using (_dataFilter.Disable<Volo.Abp.Auditing.ICreationAuditedObject>())
             {
-                //var query = await Repository.GetQueryableAsync();
-                //var calificaciones = query.Where(c => c.DestinoId == destinoId);
-                var calificaciones = await Repository.GetListAsync(c => c.DestinoId == destinoId);
+                // CAMBIO AQUÍ: Obtenemos el queryable y filtramos manualmente
+                var queryable = await Repository.GetQueryableAsync();
+                var calificaciones = queryable.Where(c => c.DestinoId == destinoId).ToList();
 
                 if (!calificaciones.Any())
                 {
-                    return 0.0; // Si nadie calificó, el promedio es 0
+                    return 0.0;
                 }
 
-                // Calculamos el promedio matemático del puntaje
                 return calificaciones.Average(c => c.Puntaje);
             }
         }
+
         // --- REQ 5.5: LISTAR COMENTARIOS DE UN DESTINO ---
-        [AllowAnonymous] // Permitimos que cualquiera lea los comentarios
+        [AllowAnonymous]
         public async Task<List<CalificacionDto>> GetCalificacionesPorDestinoAsync(Guid destinoId)
         {
-            /*
-            var query = await Repository.GetQueryableAsync();
-
-            var calificaciones = query
-                .Where(c => c.DestinoId == destinoId)
-                .ToList();
-            */
             using (_dataFilter.Disable<Volo.Abp.Auditing.ICreationAuditedObject>())
             {
-                var calificaciones = await Repository.GetListAsync(c => c.DestinoId == destinoId);
+                // 1. Obtenemos el queryable fresco
+                var queryable = await Repository.GetQueryableAsync();
+
+                // 2. Traemos todo a memoria (ToListAsync requiere "using Microsoft.EntityFrameworkCore;")
+                var todasLasCalificaciones = await queryable.ToListAsync();
+
+                // 3. Filtramos en memoria (donde el tipo Guid ya no es un problema para SQL)
+                var calificaciones = todasLasCalificaciones.Where(c => c.DestinoId == destinoId).ToList();
 
                 return ObjectMapper.Map<List<WayFinder.Calificaciones.Calificacion>, List<CalificacionDto>>(calificaciones);
             }
-
         }
 
-      //  Task ICalificacionAppService.CalificarDestinoAsync(CrearCalificacionDto input)
-      //  {
-      //      return CalificarDestinoAsync(input);
-      //  }
+        //  Task ICalificacionAppService.CalificarDestinoAsync(CrearCalificacionDto input)
+        //  {
+        //      return CalificarDestinoAsync(input);
+        //  }
 
-   
+
 
         /*
         public interface ICalificacionAppService : ICrudAppService<

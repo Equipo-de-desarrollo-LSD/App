@@ -9,5 +9,6 @@ namespace WayFinder.Favoritos
     public class CreateDestinoFavoritoDto
     {
         public Guid DestinoTuristicoId { get; set; }
+
     }
 }
