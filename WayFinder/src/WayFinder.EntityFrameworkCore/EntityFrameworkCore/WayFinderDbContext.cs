@@ -151,6 +151,7 @@ public class WayFinderDbContext :
             b.Property(x => x.Puntaje).IsRequired();
             b.Property(x => x.Comentario).HasMaxLength(512); // Siempre es bueno poner un límite
 
+            b.Property(x => x.DestinoId).IsRequired().HasColumnType("uniqueidentifier");
             // 4. Configura la relación con el Destino
             b.HasOne<DestinoTuristico>().WithMany()
                 .HasForeignKey(x => x.DestinoId)

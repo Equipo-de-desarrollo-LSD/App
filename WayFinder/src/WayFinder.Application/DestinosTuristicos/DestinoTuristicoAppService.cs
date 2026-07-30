@@ -32,9 +32,10 @@ public class DestinoTuristicoAppService :
     private readonly IBuscarCiudadService _buscarCiudadService;
     private readonly IRepository<Calificaciones.Calificacion, Guid> _calificacionRepository;
     private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
+    private readonly IEventosService _eventosService;
 
     public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository,
-             IRepository<DestinoTuristico, Guid> destinoRepository)
+             IRepository<DestinoTuristico, Guid> destinoRepository, IEventosService eventosService)
         : base(repository)
 
     {
@@ -42,6 +43,7 @@ public class DestinoTuristicoAppService :
         _buscarCiudadService = buscarCiudadService;
         _calificacionRepository = calificacionRepository;
         _destinoRepository = destinoRepository;
+        _eventosService = eventosService;
 
     }
 
@@ -134,7 +136,22 @@ public class DestinoTuristicoAppService :
 
     public async Task<DetalleCiudadDto> GetDetalleCiudadAsync(int id)
     {
-        return await _buscarCiudadService.ObtenerDetalleCiudadAsync(id);
+        // Primero, buscamos los detalles básicos de la ciudad (igual que antes)
+        var detalle = await _buscarCiudadService.ObtenerDetalleCiudadAsync(id);
+
+        // Si la ciudad se encontró y tiene coordenadas, disparamos a TicketMaster
+        if (detalle != null && detalle.Coordenadas != null)
+        {
+            var eventosResult = await _eventosService.ObtenerEventosPorCoordenadasAsync(
+                detalle.Coordenadas.latitud,
+                detalle.Coordenadas.longitud
+            );
+
+            // Asignamos la lista de eventos al DTO
+            detalle.Eventos = eventosResult.Eventos;
+        }
+
+        return detalle;
     }
 }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WayFinder.DestinosTuristicosDTOs.Eventos;
 
 namespace WayFinder.DestinosTuristicosDTOs
 {
@@ -22,5 +23,8 @@ namespace WayFinder.DestinosTuristicosDTOs
             // Información Detallada 
             public string ZonaHoraria { get; set; }      // Ej: "America/Argentina/Cordoba"
             public double? ElevacionMetros { get; set; } // Altura sobre el nivel del mar
-        }
+
+            // Información sobre Eventos
+            public List<EventoDto> Eventos { get; set; } = new List<EventoDto>();
     }
+}

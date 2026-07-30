@@ -6,16 +6,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WayFinder.Migrations
 {
     /// <inheritdoc />
-
-    
-
-    public partial class Recuperando_BD : Migration
-
+    public partial class InitialFinal : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-             migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
                 name: "AbpAuditLogExcelFiles",
                 columns: table => new
                 {
@@ -450,7 +446,20 @@ namespace WayFinder.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AppDestinosFavoritos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DestinoTuristicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppDestinosFavoritos", x => x.Id);
+                });
 
+            migrationBuilder.CreateTable(
                 name: "AppDestinosTuristicos",
                 columns: table => new
                 {
@@ -466,6 +475,86 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AppDestinosTuristicos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppMetricaApis",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NombreServicio = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Endpoint = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaEjecucion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StatusCode = table.Column<int>(type: "int", nullable: false),
+                    TiempoRespuestaMs = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppMetricaApis", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ExperienciasViajes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DestinoTuristicoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Contenido = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sentimiento = table.Column<int>(type: "int", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ExperienciasViajes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ListasSeguimiento",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ListasSeguimiento", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UsuarioId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Mensaje = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaHora = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Leido = table.Column<bool>(type: "bit", nullable: false),
+                    DestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notificaciones", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -529,6 +618,26 @@ namespace WayFinder.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PerfilesUsuarios",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Foto = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Preferencias = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PerfilesUsuarios", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -782,6 +891,41 @@ namespace WayFinder.Migrations
                         name: "FK_AbpUserTokens_AbpUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AbpUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AppCalificaciones",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Comentario = table.Column<string>(type: "nvarchar(512)", maxLength: 512, nullable: true),
+                    Puntaje = table.Column<int>(type: "int", nullable: false),
+                    DestinoId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ExtraProperties = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreationTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LastModificationTime = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    LastModifierId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
+                    DeleterId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DeletionTime = table.Column<DateTime>(type: "datetime2", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppCalificaciones", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AbpUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AbpUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AppCalificaciones_AppDestinosTuristicos_DestinoId",
+                        column: x => x.DestinoId,
+                        principalTable: "AppDestinosTuristicos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -1102,6 +1246,23 @@ namespace WayFinder.Migrations
                 column: "UserName");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AppCalificaciones_DestinoId",
+                table: "AppCalificaciones",
+                column: "DestinoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppCalificaciones_UserId",
+                table: "AppCalificaciones",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AppDestinosFavoritos_CreatorId_DestinoTuristicoId",
+                table: "AppDestinosFavoritos",
+                columns: new[] { "CreatorId", "DestinoTuristicoId" },
+                unique: true,
+                filter: "[CreatorId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_ClientId",
                 table: "OpenIddictApplications",
                 column: "ClientId");
@@ -1213,12 +1374,32 @@ namespace WayFinder.Migrations
             migrationBuilder.DropTable(
                 name: "AbpUserTokens");
 
+            migrationBuilder.DropTable(
+                name: "AppCalificaciones");
+
+            migrationBuilder.DropTable(
+                name: "AppDestinosFavoritos");
+
+            migrationBuilder.DropTable(
+                name: "AppMetricaApis");
+
+            migrationBuilder.DropTable(
+                name: "ExperienciasViajes");
+
+            migrationBuilder.DropTable(
+                name: "ListasSeguimiento");
+
+            migrationBuilder.DropTable(
+                name: "Notificaciones");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictScopes");
 
             migrationBuilder.DropTable(
                 name: "OpenIddictTokens");
+
+            migrationBuilder.DropTable(
+                name: "PerfilesUsuarios");
 
             migrationBuilder.DropTable(
                 name: "AbpBlobContainers");
