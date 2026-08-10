@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
@@ -47,8 +47,17 @@ namespace WayFinder.Calificacion
                 if (!_currentUser.IsAuthenticated)
                     throw new AbpAuthorizationException("Debe estar logueado para calificar.");
 
+                var userId = _currentUser.GetId();
+                var queryable = await Repository.GetQueryableAsync();
+                var yaCalifico = queryable.Any(c => c.UserId == userId && c.DestinoId == input.DestinoId);
+                
+                if (yaCalifico)
+                {
+                    throw new UserFriendlyException("Ya has calificado este destino.");
+                }
+
                 var entity = ObjectMapper.Map<CrearCalificacionDto, WayFinder.Calificaciones.Calificacion>(input);
-                entity.UserId = _currentUser.GetId();
+                entity.UserId = userId;
                 await Repository.InsertAsync(entity, autoSave:true);
                 return ObjectMapper.Map<WayFinder.Calificaciones.Calificacion, CalificacionDto>(entity);
             }
@@ -63,7 +72,24 @@ namespace WayFinder.Calificacion
                 throw new AbpAuthorizationException("Solo puedes eliminar tus propias calificaciones.");
             }
 
-            await base.DeleteAsync(id);
+            await Repository.DeleteAsync(id, autoSave: true);
+            await CurrentUnitOfWork.SaveChangesAsync();
+        }
+
+        public override async Task<CalificacionDto> UpdateAsync(Guid id, CrearCalificacionDto input)
+        {
+            var entity = await Repository.GetAsync(id);
+            if (entity.UserId != _currentUser.GetId())
+            {
+                throw new AbpAuthorizationException("Solo puedes editar tus propias calificaciones.");
+            }
+
+            // Actualizamos los datos
+            entity.Puntaje = input.Puntaje;
+            entity.Comentario = input.Comentario;
+
+            await Repository.UpdateAsync(entity, autoSave: true);
+            return ObjectMapper.Map<WayFinder.Calificaciones.Calificacion, CalificacionDto>(entity);
         }
         // --- REQ 5.4: CONSULTAR PROMEDIO ---
         [AllowAnonymous]

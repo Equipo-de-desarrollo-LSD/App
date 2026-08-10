@@ -163,7 +163,15 @@ guardarCalificacion() {
   eliminarMiCalificacion(id: string) {
     if(confirm('¿Estás seguro de que deseas eliminar esta calificación?')) {
       this.calificacionService.delete(id).subscribe(() => {
-        this.cargarComentarios();
+        // Actualizamos la lista local inmediatamente
+        this.listaComentarios = this.listaComentarios.filter(c => c.id !== id);
+        this.miCalificacionPrevia = null; // Eliminamos la referencia a nuestra propia reseña
+        this.totalResenas = this.listaComentarios.length;
+        
+        // Recalcular el promedio si es necesario
+        this.calificacionService.getPromedio(this.destinoId).subscribe(promedio => {
+          this.promedio = promedio;
+        });
       });
     }
   }

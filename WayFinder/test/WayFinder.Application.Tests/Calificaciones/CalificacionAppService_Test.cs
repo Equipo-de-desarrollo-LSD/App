@@ -1,4 +1,4 @@
-﻿using Autofac.Core;
+using Autofac.Core;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using Polly.Caching;
@@ -231,6 +231,57 @@ namespace WayFinder.Calificacion
             // Assert
             promedio.ShouldBe(0.0);
         }
+        [Fact]
+        public async Task UpdateAsync_Should_Update_Calificacion()
+        {
+            // Arrange
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+
+            var destino = await destinoAppService.CreateAsync(new GuardarDestinos
+            {
+                Nombre = "Playa a Editar",
+                Foto = "test.jpg",
+                PaisNombre = "Test",
+                PaisPoblacion = 100,
+                CoordenadasLatitud = 0,
+                CoordenadasLongitud = 0,
+                UltimaActualizacion = DateTime.Now
+            });
+
+            var userId = Guid.NewGuid();
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userId, "usuarioEditor", "editor@wayfinder.com"));
+
+            Guid calificacionId;
+
+            using (SetCurrentUser(userId))
+            {
+                // Crear calificación
+                var result = await _calificacionAppService.CreateAsync(new CrearCalificacionDto
+                {
+                    DestinoId = destino.Id,
+                    Puntaje = 3,
+                    Comentario = "Regular"
+                });
+                calificacionId = result.Id;
+
+                // Act: El mismo usuario la actualiza
+                var inputUpdate = new CrearCalificacionDto
+                {
+                    DestinoId = destino.Id,
+                    Puntaje = 5,
+                    Comentario = "Excelente!"
+                };
+                await _calificacionAppService.UpdateAsync(calificacionId, inputUpdate);
+
+                // Assert: Verificamos que se actualizó
+                var updatedCalificacion = await _calificacionAppService.GetAsync(calificacionId);
+                updatedCalificacion.ShouldNotBeNull();
+                updatedCalificacion.Puntaje.ShouldBe(5);
+                updatedCalificacion.Comentario.ShouldBe("Excelente!");
+            }
+        }
+
         // Método auxiliar para establecer el usuario actual en el contexto de seguridad
         // Esto es crucial para simular la autenticación en las pruebas unitarias.
         protected virtual IDisposable SetCurrentUser(Guid? userId, string userName = "test_user")
