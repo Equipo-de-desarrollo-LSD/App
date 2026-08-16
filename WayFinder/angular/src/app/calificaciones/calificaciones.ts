@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalificacionService } from 'src/app/proxy/calificacion/calificacion.service';
 import { CalificacionDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
-import { ConfigStateService } from '@abp/ng.core';
+import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 
 @Component({
@@ -18,10 +18,11 @@ export class CalificacionesComponent implements OnChanges {
   @Input() ciudad: any; 
 
   private calificacionService = inject(CalificacionService);
-  private configState = inject(ConfigStateService); // NUEVO: Inyectamos el estado general
+  private configState = inject(ConfigStateService); 
+  private permissionService = inject(PermissionService); // Inyectamos servicio de permisos de ABP
   private destinoTuristicoService = inject(DestinoTuristicoService);
 
-  currentUser = this.configState.getOne('currentUser'); // NUEVO: Obtenemos el usuario logueado
+  currentUser = this.configState.getOne('currentUser');
   miCalificacionPrevia: any = null;
   listaComentarios: CalificacionDto[] = [];
   promedio: number = 0;
@@ -50,7 +51,7 @@ export class CalificacionesComponent implements OnChanges {
 
       // NUEVO: Buscamos si en la lista hay un comentario que me pertenezca
       // Nota: Si tu DTO usa otro nombre en vez de 'creatorId' (ej: 'usuarioId'), cámbialo aquí
-      this.miCalificacionPrevia = this.listaComentarios.find(c => c.userId === this.currentUser.id);
+      // this.miCalificacionPrevia = this.listaComentarios.find(c => c.userId === this.currentUser.id);
     });
 
     this.calificacionService.getPromedio(this.destinoId).subscribe(promedio => {
@@ -176,5 +177,17 @@ guardarCalificacion() {
     } else {
       return 'bi-star text-secondary';
     }
+  }
+
+  // Validaciones de UI
+  puedeEditar(item: CalificacionDto): boolean {
+    return this.currentUser?.id === item.userId;
+  }
+
+  puedeEliminar(item: CalificacionDto): boolean {
+    // Es mi reseña, o tengo permiso global de administrador para borrarlas
+    const esMia = this.currentUser?.id === item.userId;
+    const esAdmin = this.permissionService.getGrantedPolicy('WayFinder.Calificaciones.Delete');
+    return esMia || esAdmin;
   }
 }

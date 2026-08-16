@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Volo.Abp.Domain.Entities.Auditing;
 using Volo.Abp.Domain.Entities;
 using WayFinder;
@@ -6,7 +6,8 @@ using WayFinder;
 namespace WayFinder.Calificaciones
 {
     // Implementamos IUserOwned para que ABP sepa que esta entidad "pertenece" a un usuario
-    public class Calificacion : FullAuditedAggregateRoot<Guid>, IUserOwned
+    //public class Calificacion : FullAuditedAggregateRoot<Guid>, IUserOwned
+    public class Calificacion : AuditedAggregateRoot<Guid>, IUserOwned
     {
         public string? Comentario { get; set; }
         public int Puntaje { get; set; } // ej. 1 a 5 estrellas

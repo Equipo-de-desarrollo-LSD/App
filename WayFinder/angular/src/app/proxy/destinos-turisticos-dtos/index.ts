@@ -1,3 +1,4 @@
+import * as Eventos from './eventos';
 import * as Perfiles from './perfiles';
 export * from './models';
-export { Perfiles };
+export { Eventos, Perfiles };

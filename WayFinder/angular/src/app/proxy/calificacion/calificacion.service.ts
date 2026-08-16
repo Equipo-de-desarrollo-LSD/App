@@ -1,7 +1,7 @@
 import { RestService, Rest } from '@abp/ng.core';
 import type { PagedAndSortedResultRequestDto, PagedResultDto } from '@abp/ng.core';
 import { Injectable } from '@angular/core';
-import type { CalificacionDto, CrearCalificacionDto } from '../destinos-turisticos-dtos/models';
+import type { ActualizarCalificacionDto, CalificacionDto, CrearCalificacionDto } from '../destinos-turisticos-dtos/models';
 
 @Injectable({
   providedIn: 'root',
@@ -60,7 +60,7 @@ export class CalificacionService {
     { apiName: this.apiName,...config });
   
 
-  update = (id: string, input: CrearCalificacionDto, config?: Partial<Rest.Config>) =>
+  update = (id: string, input: ActualizarCalificacionDto, config?: Partial<Rest.Config>) =>
     this.restService.request<any, CalificacionDto>({
       method: 'PUT',
       url: `/api/app/calificacion/${id}`,

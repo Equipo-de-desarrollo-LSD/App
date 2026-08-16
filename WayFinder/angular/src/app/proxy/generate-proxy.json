@@ -983,9 +983,9 @@
                     },
                     {
                       "name": "input",
-                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
-                      "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                      "typeAsString": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto, WayFinder.Application.Contracts",
+                      "type": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
+                      "typeSimple": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
                       "isOptional": false,
                       "defaultValue": null
                     }
@@ -1181,9 +1181,9 @@
                 },
                 {
                   "name": "input",
-                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto, WayFinder.Application.Contracts",
-                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "typeAsString": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto, WayFinder.Application.Contracts",
+                  "type": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
                   "isOptional": false,
                   "defaultValue": null
                 }
@@ -1205,8 +1205,8 @@
                   "nameOnMethod": "input",
                   "name": "input",
                   "jsonName": null,
-                  "type": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
-                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto",
+                  "type": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
+                  "typeSimple": "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto",
                   "isOptional": false,
                   "defaultValue": null,
                   "constraintTypes": null,
@@ -1219,7 +1219,7 @@
                 "typeSimple": "WayFinder.DestinosTuristicosDTOs.CalificacionDto"
               },
               "allowAnonymous": false,
-              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,WayFinder.DestinosTuristicosDTOs.CrearCalificacionDto>"
+              "implementFrom": "Volo.Abp.Application.Services.IUpdateAppService<WayFinder.DestinosTuristicosDTOs.CalificacionDto,System.Guid,WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto>"
             },
             "GetAsyncById": {
               "uniqueName": "GetAsyncById",
@@ -11641,6 +11641,39 @@
       "genericArguments": null,
       "properties": null
     },
+    "WayFinder.DestinosTuristicosDTOs.ActualizarCalificacionDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "Puntaje",
+          "jsonName": null,
+          "type": "System.Int32",
+          "typeSimple": "number",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": "1",
+          "maximum": "5",
+          "regex": null
+        },
+        {
+          "name": "Comentario",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
     "WayFinder.DestinosTuristicosDTOs.BuscarCiudadRequestDto": {
       "baseType": null,
       "isEnum": false,
@@ -12112,6 +12145,99 @@
           "jsonName": null,
           "type": "System.Double?",
           "typeSimple": "number?",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Eventos",
+          "jsonName": null,
+          "type": "[WayFinder.DestinosTuristicosDTOs.Eventos.EventoDto]",
+          "typeSimple": "[WayFinder.DestinosTuristicosDTOs.Eventos.EventoDto]",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        }
+      ]
+    },
+    "WayFinder.DestinosTuristicosDTOs.Eventos.EventoDto": {
+      "baseType": null,
+      "isEnum": false,
+      "enumNames": null,
+      "enumValues": null,
+      "genericArguments": null,
+      "properties": [
+        {
+          "name": "IdExterno",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Nombre",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "UrlTicket",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "FechaInicio",
+          "jsonName": null,
+          "type": "System.DateTime",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "ImagenUrl",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
+          "isRequired": false,
+          "minLength": null,
+          "maxLength": null,
+          "minimum": null,
+          "maximum": null,
+          "regex": null
+        },
+        {
+          "name": "Lugar",
+          "jsonName": null,
+          "type": "System.String",
+          "typeSimple": "string",
           "isRequired": false,
           "minLength": null,
           "maxLength": null,

@@ -1,4 +1,4 @@
-﻿using Autofac.Core;
+using Autofac.Core;
 using Microsoft.AspNetCore.Identity;
 using NSubstitute;
 using Polly.Caching;
@@ -212,7 +212,7 @@ namespace WayFinder.Calificacion
             {
                 // Si tu AppService no tiene un "if (calificacion.UserId != CurrentUser.Id) throw...", 
                 // este test seguirá fallando.
-                await Should.ThrowAsync<Volo.Abp.Domain.Entities.EntityNotFoundException>(async () =>
+                await Should.ThrowAsync<Volo.Abp.Authorization.AbpAuthorizationException>(async () =>
                 {
                     await _calificacionAppService.DeleteAsync(calificacionId);
                 });
@@ -230,6 +230,92 @@ namespace WayFinder.Calificacion
 
             // Assert
             promedio.ShouldBe(0.0);
+        }
+
+        [Fact]
+        // Test para verificar que el autor PUEDE editar su propia calificación
+        public async Task UpdateAsync_Should_Update_Own_Calificacion()
+        {
+            // Arrange
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+
+            var destino = await destinoAppService.CreateAsync(new GuardarDestinos
+            {
+                Nombre = "Destino para Editar",
+                Foto = "url_foto_editar",
+                PaisNombre = "Arg",
+                PaisPoblacion = 40,
+                CoordenadasLatitud = -34,
+                CoordenadasLongitud = -58
+            });
+
+            var userId = Guid.NewGuid();
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userId, "usuarioUpdate", "update@wayfinder.com"));
+
+            Guid calificacionId;
+
+            // Act: El usuario crea su propia calificación
+            using (SetCurrentUser(userId))
+            {
+                var input = new CrearCalificacionDto { DestinoId = destino.Id, Puntaje = 5, Comentario = "Original" };
+                var result = await _calificacionAppService.CreateAsync(input);
+                calificacionId = result.Id;
+
+                // Editamos la calificación
+                var updateInput = new ActualizarCalificacionDto { Puntaje = 4, Comentario = "Editado" };
+                var updateResult = await _calificacionAppService.UpdateAsync(calificacionId, updateInput);
+
+                // Assert
+                updateResult.Puntaje.ShouldBe(4);
+                updateResult.Comentario.ShouldBe("Editado");
+            }
+        }
+
+        [Fact]
+        // Test para verificar que NO se puede editar la calificación de otro usuario
+        public async Task UpdateAsync_Should_Throw_If_Not_Author()
+        {
+            // Arrange
+            var destinoAppService = GetRequiredService<IDestinoTuristicoAppService>();
+            var userManager = GetRequiredService<Volo.Abp.Identity.IdentityUserManager>();
+
+            var destino = await destinoAppService.CreateAsync(new GuardarDestinos
+            {
+                Nombre = "Destino Update Other",
+                Foto = "url",
+                PaisNombre = "Arg",
+                PaisPoblacion = 40,
+                CoordenadasLatitud = -34,
+                CoordenadasLongitud = -58
+            });
+
+            var userA = Guid.NewGuid(); 
+            var userB = Guid.NewGuid(); 
+            
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userA, "UserAUpdate", "usera_up@wayfinder.com"));
+            await userManager.CreateAsync(new Volo.Abp.Identity.IdentityUser(userB, "UserBUpdate", "userb_up@wayfinder.com"));
+
+            Guid calificacionId;
+
+            // User A crea la calificación
+            using (SetCurrentUser(userA))
+            {
+                var result = await _calificacionAppService.CreateAsync(new CrearCalificacionDto
+                { DestinoId = destino.Id, Puntaje = 4, Comentario = "Review de User A" });
+                calificacionId = result.Id;
+            }
+
+            // Act & Assert: User B intenta editarla
+            using (SetCurrentUser(userB))
+            {
+                var updateInput = new ActualizarCalificacionDto { Puntaje = 1, Comentario = "Hackeado" };
+                
+                await Should.ThrowAsync<Volo.Abp.Domain.Entities.EntityNotFoundException>(async () =>
+                {
+                    await _calificacionAppService.UpdateAsync(calificacionId, updateInput);
+                });
+            }
         }
         // Método auxiliar para establecer el usuario actual en el contexto de seguridad
         // Esto es crucial para simular la autenticación en las pruebas unitarias.
