@@ -1,4 +1,10 @@
 import type { AuditedEntityDto } from '@abp/ng.core';
+import type { EventoDto } from './eventos/models';
+
+export interface ActualizarCalificacionDto {
+  puntaje: number;
+  comentario?: string;
+}
 
 export interface BuscarCiudadRequestDto {
   nombreCiudad?: string;
@@ -56,6 +62,7 @@ export interface DetalleCiudadDto {
   coordenadas: CoordenadasDto;
   zonaHoraria?: string;
   elevacionMetros?: number;
+  eventos: EventoDto[];
 }
 
 export interface FiltrarCiudadesRequestDto {

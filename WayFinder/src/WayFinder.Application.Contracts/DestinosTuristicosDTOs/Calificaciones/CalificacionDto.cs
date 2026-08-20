@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -30,5 +30,12 @@ namespace WayFinder.DestinosTuristicosDTOs
         public string? Comentario { get; set; }
         public Guid UserId { get; set; }
 
+    }
+
+    public class ActualizarCalificacionDto
+    {
+        [Range(1, 5)]
+        public int Puntaje { get; set; }
+        public string? Comentario { get; set; }
     }
 }

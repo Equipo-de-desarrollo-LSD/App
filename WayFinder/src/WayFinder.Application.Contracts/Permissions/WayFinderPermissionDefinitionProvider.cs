@@ -11,6 +11,9 @@ public class WayFinderPermissionDefinitionProvider : PermissionDefinitionProvide
     {
         var myGroup = context.AddGroup(WayFinderPermissions.GroupName);
 
+        var calificacionesGroup = context.GetGroupOrNull(WayFinderPermissions.GroupName) ?? context.AddGroup(WayFinderPermissions.GroupName);
+        calificacionesGroup.AddPermission(WayFinderPermissions.DeleteCalificacion, L("Permission:DeleteCalificacion"));
+
         //Define your own permissions here. Example:
         //myGroup.AddPermission(WayFinderPermissions.MyPermission1, L("Permission:MyPermission1"));
     }

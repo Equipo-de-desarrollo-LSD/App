@@ -1,4 +1,5 @@
-﻿using System;
+using Microsoft.AspNetCore.Authorization;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,10 +14,11 @@ namespace WayFinder.Calificacion
          CalificacionDto,
          Guid,
          PagedAndSortedResultRequestDto,
-         CrearCalificacionDto>
+         CrearCalificacionDto,
+         ActualizarCalificacionDto>
     {
-       // Task CalificarDestinoAsync(CrearCalificacionDto input);
-        
+        // Task CalificarDestinoAsync(CrearCalificacionDto input);
+
         Task<double> GetPromedioAsync(Guid destinoId);
 
         Task<List<CalificacionDto>> GetCalificacionesPorDestinoAsync(Guid destinoId);

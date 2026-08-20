@@ -92,10 +92,10 @@
         <p class="mb-3 text-dark">{{ item.comentario }}</p>
         
         <div class="d-flex gap-2">
-          <button class="btn btn-sm btn-outline-info" (click)="editarMiCalificacion(item)">
+          <button *ngIf="puedeEditar(item)" class="btn btn-sm btn-outline-info" (click)="editarMiCalificacion(item)">
             <i class="bi bi-pencil"></i> Editar
           </button>
-          <button class="btn btn-sm btn-outline-danger" (click)="eliminarMiCalificacion(item.id!)">
+          <button *ngIf="puedeEliminar(item)" class="btn btn-sm btn-outline-danger" (click)="eliminarMiCalificacion(item.id!)">
             <i class="bi bi-trash"></i> Eliminar
           </button>
         </div>
