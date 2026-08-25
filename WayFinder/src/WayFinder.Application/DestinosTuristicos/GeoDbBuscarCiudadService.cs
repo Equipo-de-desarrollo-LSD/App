@@ -40,7 +40,7 @@ namespace WayFinder.DestinosTuristicos
             if (string.IsNullOrWhiteSpace(request?.NombreCiudad))
                 return result;
 
-            var url = $"{BaseUrl}/cities?namePrefix={Uri.EscapeDataString(request.NombreCiudad)}&limit=5";
+            var url = $"{BaseUrl}/cities?namePrefix={Uri.EscapeDataString(request.NombreCiudad)}&limit=5&sort=-population";
             var httpRequest = new HttpRequestMessage(HttpMethod.Get, url);
             httpRequest.Headers.Add("X-RapidAPI-Key", ApiKey);
             httpRequest.Headers.Add("X-RapidAPI-Host", Host);
@@ -69,6 +69,7 @@ namespace WayFinder.DestinosTuristicos
                             Pais = city.Country,
                             Latitud = city.Latitude ?? 0,
                             Longitud = city.Longitude ?? 0,
+                            PaisPoblacion = city.Population ?? 0
                         });
                     }
                 }
@@ -208,6 +209,9 @@ namespace WayFinder.DestinosTuristicos
 
             [JsonPropertyName("longitude")]
             public double? Longitude { get; set; }
+
+            [JsonPropertyName("population")]
+            public int? Population { get; set; }
         }
     }
 }

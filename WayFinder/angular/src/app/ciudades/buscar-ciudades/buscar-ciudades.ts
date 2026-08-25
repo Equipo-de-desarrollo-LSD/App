@@ -79,6 +79,9 @@ export class BuscarCiudades implements OnInit, OnDestroy {
             const paisBuscado = this.nombresPaises[this.codigoPais];
             listaCiudades = listaCiudades.filter(ciudad => ciudad.pais === paisBuscado);
           }
+          if (this.poblacionMinima) {
+            listaCiudades = listaCiudades.filter(ciudad => (ciudad.paisPoblacion || 0) >= this.poblacionMinima!);
+          }
           this.procesarRespuesta(listaCiudades);
         },
         error: (err) => this.manejarError(err)
