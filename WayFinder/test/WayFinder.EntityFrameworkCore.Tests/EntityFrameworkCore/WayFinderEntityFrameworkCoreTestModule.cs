@@ -4,23 +4,28 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Volo.Abp;
+using Volo.Abp.Autofac;
+using Volo.Abp.Data;
 using Volo.Abp.EntityFrameworkCore;
 using Volo.Abp.EntityFrameworkCore.Sqlite;
 using Volo.Abp.FeatureManagement;
+using Volo.Abp.Identity;
 using Volo.Abp.Modularity;
 using Volo.Abp.PermissionManagement;
-using Volo.Abp.Uow;
 using Volo.Abp.Security;
+using Volo.Abp.Threading;
+using Volo.Abp.Uow;
 using Volo.Abp.Validation;
-using Volo.Abp.Identity;
 
 namespace WayFinder.EntityFrameworkCore;
 
 [DependsOn(
     typeof(WayFinderEntityFrameworkCoreModule),
     typeof(AbpEntityFrameworkCoreSqliteModule),
+    typeof(WayfinderTestBaseModule),
     typeof(AbpSecurityModule),
-    typeof(WayFinderApplicationModule)
+    typeof(WayFinderApplicationModule),
+    typeof(AbpAutofacModule)
 )]
 public class WayFinderEntityFrameworkCoreTestModule : AbpModule
 {
@@ -44,6 +49,20 @@ public class WayFinderEntityFrameworkCoreTestModule : AbpModule
 
     }
 
+    public override void OnApplicationInitialization(ApplicationInitializationContext context)
+    {
+        // Siembra los datos iniciales (crea el usuario admin y roles para los tests)
+        AsyncHelper.RunSync(async () =>
+        {
+            using (var scope = context.ServiceProvider.CreateScope())
+            {
+                await scope.ServiceProvider
+                    .GetRequiredService<IDataSeeder>()
+                    .SeedAsync();
+            }
+        });
+    }
+
     private void ConfigureInMemorySqlite(IServiceCollection services)
     {
         _sqliteConnection = CreateDatabaseAndGetConnection();
@@ -59,7 +78,22 @@ public class WayFinderEntityFrameworkCoreTestModule : AbpModule
 
     public override void OnApplicationShutdown(ApplicationShutdownContext context)
     {
-        _sqliteConnection?.Dispose();
+        if (_sqliteConnection != null)
+        {
+            try
+            {
+                _sqliteConnection.Close();
+                _sqliteConnection.Dispose();
+            }
+            catch
+            {
+                // Ignora errores en el dispose durante el apagado del contexto
+            }
+            finally
+            {
+                _sqliteConnection = null;
+            }
+        }
     }
 
     private static SqliteConnection CreateDatabaseAndGetConnection()
