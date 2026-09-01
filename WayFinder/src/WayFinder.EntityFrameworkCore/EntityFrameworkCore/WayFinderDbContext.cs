@@ -67,6 +67,7 @@ public class WayFinderDbContext :
     public DbSet<IdentitySession> Sessions { get; set; }
     public DbSet<Notificacion> Notificaciones { get; set; }
     public DbSet<ListaSeguimiento> ListasSeguimiento { get; set; }
+    public DbSet<WayFinder.Eventos.Evento> Eventos { get; set; }
 
     // Agrega esta línea para la nueva entidad
     public DbSet<MetricaApi> Metricas { get; set; }
