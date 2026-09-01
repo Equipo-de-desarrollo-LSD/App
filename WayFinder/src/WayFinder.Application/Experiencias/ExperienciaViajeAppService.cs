@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Volo.Abp;
@@ -66,7 +66,6 @@ namespace WayFinder.DestinosTuristicos
             var query = await base.CreateFilteredQueryAsync(input);
 
             return query
-                .Where(x => x.CreatorId == CurrentUser.Id) 
                 .WhereIf(input.DestinoTuristicoId.HasValue, x => x.DestinoTuristicoId == input.DestinoTuristicoId)
                 .WhereIf(input.Sentimiento.HasValue, x => x.Sentimiento == input.Sentimiento)
                 .WhereIf(!string.IsNullOrWhiteSpace(input.Filter),
