@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,17 +18,20 @@ namespace WayFinder.Workers
         // Dependencias
         private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
         private readonly IEventosService _eventosService;
+        
         public TicketMasterEventosWorker(
             AbpAsyncTimer timer,
             IServiceScopeFactory serviceScopeFactory,
             IRepository<DestinoTuristico, Guid> destinoRepository,
-            IEventosService eventosService)
+            IEventosService eventosService,
+            IConfiguration configuration)
             : base(timer, serviceScopeFactory)
         {
             _destinoRepository = destinoRepository;
             _eventosService = eventosService;
-            // Configurar que se ejecute cada 24 horas (en milisegundos)
-            Timer.Period = 86400000;
+            
+            // Leemos el tiempo desde el appsettings.json, si no existe o falla, usamos 24 horas por defecto
+            Timer.Period = configuration.GetValue<int>("TicketMaster:WorkerPeriodMs", 86400000);
         }
         protected override async Task DoWorkAsync(PeriodicBackgroundWorkerContext workerContext)
         {
