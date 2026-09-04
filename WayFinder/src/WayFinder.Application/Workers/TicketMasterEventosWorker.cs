@@ -58,18 +58,31 @@ namespace WayFinder.Workers
                         {
                             foreach (var eventoExterno in resultadoTicketMaster.Eventos)
                             {
-                                // AGREGADO: Mapeo correcto de propiedades
-                                var nuevoEvento = new Evento(
-                                    id: Guid.NewGuid(), // O GuidGenerator.Create() si inyectas IGuidGenerator
-                                    destinoTuristicoId: destino.Id,
-                                    idExterno: eventoExterno.IdExterno,
-                                    nombre: eventoExterno.Nombre,
-                                    urlTicket: eventoExterno.UrlTicket,
-                                    fechaInicio: eventoExterno.FechaInicio,
-                                    imagenUrl: eventoExterno.ImagenUrl,
-                                    lugar: eventoExterno.Lugar
-                                );
-                                await eventoRepository.InsertAsync(nuevoEvento);
+                                var eventoExistente = await eventoRepository.FindAsync(e => e.DestinoTuristicoId == destino.Id && e.IdExterno == eventoExterno.IdExterno);
+                                if (eventoExistente != null)
+                                {
+                                    eventoExistente.Nombre = eventoExterno.Nombre ?? string.Empty;
+                                    eventoExistente.UrlTicket = eventoExterno.UrlTicket ?? string.Empty;
+                                    eventoExistente.FechaInicio = eventoExterno.FechaInicio;
+                                    eventoExistente.ImagenUrl = eventoExterno.ImagenUrl ?? string.Empty;
+                                    eventoExistente.Lugar = eventoExterno.Lugar ?? string.Empty;
+
+                                    await eventoRepository.UpdateAsync(eventoExistente);
+                                }
+                                else
+                                {
+                                    var nuevoEvento = new Evento(
+                                        id: Guid.NewGuid(),
+                                        destinoTuristicoId: destino.Id,
+                                        idExterno: eventoExterno.IdExterno,
+                                        nombre: eventoExterno.Nombre,
+                                        urlTicket: eventoExterno.UrlTicket,
+                                        fechaInicio: eventoExterno.FechaInicio,
+                                        imagenUrl: eventoExterno.ImagenUrl,
+                                        lugar: eventoExterno.Lugar
+                                    );
+                                    await eventoRepository.InsertAsync(nuevoEvento);
+                                }
                             }
                             
                             destino.UltimaActualizacion = DateTime.Now;
