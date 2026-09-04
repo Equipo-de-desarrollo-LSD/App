@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CiudadDto, FiltrarCiudadesRequestDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
+import { CiudadDto, FiltrarCiudadesRequestDto, GuardarDestinos } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 import { CoreModule } from '@abp/ng.core';
 
@@ -190,22 +190,22 @@ export class BuscarCiudades implements OnInit, OnDestroy {
       })
       .catch(() => { /* Si Wikipedia falla, no hacemos nada, quedará la random */ });
   }
-guardarDestino(city: CiudadDto): void {
+  guardarDestino(city: CiudadDto): void {
     // 1. Tomamos la foto real de Wikipedia que ya buscamos, o usamos la generada
     const fotoUrl = this.imagenesReales[city.nombre || ''] || this.getCityImage(city);
 
     // 2. Armamos el paquete EXACTAMENTE con los nombres que exige el backend
-    const destinoAGuardar = {
-      nombre: city.nombre,
-      paisNombre: city.pais,         // 👈 Corregido: antes decía 'pais'
-      poblacion: city.paisPoblacion || 0, 
-      latitud: city.latitud,
-      longitud: city.longitud,
-      foto: fotoUrl                  // 👈 Nuevo: agregamos la foto obligatoria
+    const destinoAGuardar: GuardarDestinos = {
+      nombre: city.nombre || '',
+      paisNombre: city.pais || '',
+      paisPoblacion: city.paisPoblacion || 0, 
+      coordenadasLatitud: city.latitud,
+      coordenadasLongitud: city.longitud,
+      foto: fotoUrl
     };
 
-    // 3. Lo enviamos a la base de datos
-    this.ciudadService.create(destinoAGuardar as any).subscribe({
+    // 3. Lo enviamos a la base de datos usando el método explícito del backend
+    this.ciudadService.crearByInput(destinoAGuardar).subscribe({
       next: () => {
         alert(`¡Éxito! ${city.nombre} se guardó en tu base de datos.`);
       },

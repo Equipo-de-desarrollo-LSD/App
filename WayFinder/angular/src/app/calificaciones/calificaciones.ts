@@ -2,7 +2,7 @@ import { Component, Input, OnChanges, SimpleChanges, inject } from '@angular/cor
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CalificacionService } from 'src/app/proxy/calificacion/calificacion.service';
-import { CalificacionDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
+import { CalificacionDto, GuardarDestinos } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { ConfigStateService, PermissionService } from '@abp/ng.core';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 
@@ -104,16 +104,16 @@ guardarCalificacion() {
       this.procesarGuardadoCalificacion(this.destinoId);
     } else {
       // Si NO es Guid, la ciudad no existe en tu BD. La creamos con los datos reales.
-      const destinoAGuardar = {
+      const destinoAGuardar: GuardarDestinos = {
         nombre: this.ciudad?.nombre || 'Destino Calificado',
+        foto: this.ciudad?.foto || 'https://picsum.photos/400/250',
         paisNombre: this.ciudad?.pais || 'Desconocido',         
-        poblacion: this.ciudad?.poblacion || 0, 
-        latitud: this.ciudad?.latitud || 0,
-        longitud: this.ciudad?.longitud || 0,
-        foto: this.ciudad?.foto || 'https://picsum.photos/400/250'                  
+        paisPoblacion: this.ciudad?.poblacion || this.ciudad?.paisPoblacion || 0, 
+        coordenadasLatitud: this.ciudad?.latitud || 0,
+        coordenadasLongitud: this.ciudad?.longitud || 0
       };
 
-      this.destinoTuristicoService.create(destinoAGuardar as any).subscribe({
+      this.destinoTuristicoService.crearByInput(destinoAGuardar).subscribe({
         next: (nuevoDestino) => {
           // ¡MAGIA! El backend creó la ciudad y nos devuelve el objeto con el NUEVO Guid
           const nuevoGuidReal = nuevoDestino.id;
