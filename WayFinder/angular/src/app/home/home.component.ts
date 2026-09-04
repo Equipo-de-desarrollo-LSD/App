@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import { CiudadDto, FiltrarCiudadesRequestDto } from 'src/app/proxy/destinos-turisticos-dtos/models';
+import { CiudadDto, FiltrarCiudadesRequestDto, GuardarDestinos } from 'src/app/proxy/destinos-turisticos-dtos/models';
 import { DestinoTuristicoService } from 'src/app/proxy/destino-turisticos/destino-turistico.service';
 
 @Component({
@@ -200,16 +200,16 @@ export class HomeComponent {
 
   guardarDestino(city: CiudadDto): void {
     const fotoUrl = this.imagenesReales[city.nombre || ''] || this.getCityImage(city);
-    const destinoAGuardar = {
-      nombre: city.nombre,
-      paisNombre: city.pais,         
-      poblacion: city.paisPoblacion || 0, 
-      latitud: city.latitud,
-      longitud: city.longitud,
-      foto: fotoUrl                  
+    const destinoAGuardar: GuardarDestinos = {
+      nombre: city.nombre || '',
+      foto: fotoUrl,
+      paisNombre: city.pais || '',         
+      paisPoblacion: city.paisPoblacion || 0, 
+      coordenadasLatitud: city.latitud,
+      coordenadasLongitud: city.longitud,
     };
 
-    this.ciudadService.create(destinoAGuardar as any).subscribe({
+    this.ciudadService.crearByInput(destinoAGuardar).subscribe({
       next: () => alert(`¡Éxito! ${city.nombre} se guardó en tu base de datos.`),
       error: (err) => alert(`No se pudo guardar ${city.nombre}. Revisa la consola para más detalles.`)
     });
