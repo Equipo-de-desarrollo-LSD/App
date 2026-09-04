@@ -1,0 +1,135 @@
+<div class="destinos-container shadow-sm bg-light rounded">
+    <!-- 1. HEADER ESTILO LANDING PAGE (Unificado) -->
+    <div class="row m-0 py-5 px-4 align-items-center text-center" style="background-color: #2b0071; color: white; border-radius: 8px 8px 0 0;">
+        <div class="col-12">
+            <h1 class="display-5 fw-bold text-white mb-2">Descubrí tu próximo destino</h1>
+            <p class="fs-4 text-white-50">Explorá y guarda lugares increíbles.</p>
+        </div>
+    </div>
+
+    <!-- 2. SECCIÓN DE BÚSQUEDA (Floating Search Bar) -->
+    <div class="search-wrapper position-relative" style="margin-top: -30px; z-index: 10;">
+        <div class="search-section shadow bg-white rounded-pill d-flex align-items-center mx-auto px-4 py-2" style="max-width: 1000px; gap: 15px;">
+            <div class="flex-grow-1 position-relative">
+                <i class="bi bi-geo-alt position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+                <input type="text" id="searchText" [(ngModel)]="searchText" placeholder="Ej: London, Bariloche..." class="form-control border-0 bg-transparent ps-5" (input)="onBuscadorChange()" (keyup.enter)="buscar()" style="box-shadow: none;">
+            </div>
+            
+            <div style="width: 1px; height: 30px; background-color: #e0e0e0;"></div>
+
+            <div class="flex-grow-1 position-relative">
+                <i class="bi bi-flag position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+                <select id="codigoPais" [(ngModel)]="codigoPais" class="form-select border-0 bg-transparent ps-5" (change)="onBuscadorChange()" style="box-shadow: none;">
+                    <option value="">Todos los países...</option>
+                    <option value="AR">Argentina</option>
+                    <option value="BR">Brasil</option>
+                    <option value="CL">Chile</option>
+                    <option value="CO">Colombia</option>
+                    <option value="ES">España</option>
+                    <option value="US">Estados Unidos</option>
+                    <option value="MX">México</option>
+                    <option value="UY">Uruguay</option>
+                </select>
+            </div>
+
+            <div style="width: 1px; height: 30px; background-color: #e0e0e0;"></div>
+
+            <div class="flex-grow-1 position-relative">
+                <i class="bi bi-people position-absolute" style="left: 15px; top: 50%; transform: translateY(-50%); color: #666;"></i>
+                <input type="number" id="poblacionMinima" [(ngModel)]="poblacionMinima" placeholder="Población Min." class="form-control border-0 bg-transparent ps-5" (input)="onBuscadorChange()" (keyup.enter)="buscar()" style="box-shadow: none;">
+            </div>
+
+            <div class="search-actions">
+                <button class="btn text-white fw-bold px-4 rounded-pill" style="background-color: #e43f25;" (click)="buscar()" [disabled]="loading">
+                    <i class="bi bi-search me-1"></i> Buscar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. MENSAJES Y SPINNER -->
+    <div class="px-4 mt-5">
+        <div *ngIf="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
+        <div class="loading-spinner text-center py-4" *ngIf="loading">
+            <span class="spinner-border" style="color: #2b0071;" role="status"></span>
+            <span class="fs-5 text-secondary ms-2">Buscando destinos...</span>
+        </div>
+    </div>
+
+    <!-- 4. GRILLA DE RESULTADOS -->
+    <div class="destinos-grid p-4"> 
+        <div class="destino-card card h-100 shadow-sm border-0" style="border-radius: 12px; overflow: hidden;" *ngFor="let city of ciudades">
+            <div class="position-relative">
+                <img [src]="imagenesReales[city.nombre!] || getCityImage(city)" class="card-img-top" [alt]="city.nombre" style="height: 220px; object-fit: cover;">
+                <div class="position-absolute bottom-0 start-0 m-2">
+                    <span class="badge text-dark bg-white shadow-sm px-2 py-1" style="border-radius: 6px; font-weight: 500; font-size: 0.8rem; border: 1px solid #d1f1eb; background-color: #e0f8f2 !important;">
+                        Sugerido para ti
+                    </span>
+                </div>
+            </div>
+
+            <div class="card-body d-flex flex-column" style="padding: 16px;"> 
+                <h5 class="card-title fw-bold text-truncate mb-1" [title]="city.nombre">{{ city.nombre }}</h5>
+                <p class="text-muted small mb-2"><i class="bi bi-geo-alt-fill text-danger me-1"></i>{{ city.pais }}</p>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <span class="badge me-2 px-2 py-1" style="background-color: #0b9b71; border-radius: 4px; font-size: 0.9rem;">
+                        8.7
+                    </span>
+                    <span class="text-dark small d-flex align-items-center">
+                        <i class="bi bi-star-fill text-dark" style="font-size: 0.8rem;"></i>
+                        <i class="bi bi-star-fill text-dark" style="font-size: 0.8rem;"></i>
+                        <i class="bi bi-star-fill text-dark" style="font-size: 0.8rem;"></i>
+                        <i class="bi bi-star-fill text-dark" style="font-size: 0.8rem;"></i>
+                        <i class="bi bi-star text-dark" style="font-size: 0.8rem;"></i>
+                    </span>
+                </div>
+
+                <div class="mt-auto d-grid gap-2">
+                    <div class="d-flex justify-content-between align-items-center pt-2 border-top">
+                        <div class="text-start">
+                             <small class="text-muted d-block" style="font-size: 0.75rem;">Población</small>
+                             <span class="fw-bold fs-6">{{ city.paisPoblacion | number }}</span>
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm rounded-pill fw-bold px-3" [routerLink]="['/ciudades', city.nombre]">
+                            Detalles
+                        </button>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-light border btn-sm w-50" (click)="verEnMapa(city)" [disabled]="city.latitud == null || city.longitud == null" title="Ver en Google Maps">
+                            <i class="bi bi-map"></i> Mapa
+                        </button>
+                        <button class="btn text-white btn-sm w-50" style="background-color: #0b9b71;" (click)="guardarDestino(city)" title="Guardar">
+                            <i class="bi bi-bookmark-plus"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. ESTADOS VACÍOS -->
+    <div class="no-results text-center py-5 text-muted" *ngIf="!loading && !errorMsg && ciudades.length === 0 && allCities.length === 0">
+        <i class="bi bi-search display-1 text-light mb-3 d-block"></i>
+        <p class="fs-4">Escribe el nombre de una ciudad o usa los filtros para comenzar</p>
+    </div>
+
+    <div class="no-results text-center py-5 text-muted" *ngIf="!loading && !errorMsg && ciudades.length === 0 && allCities.length > 0">
+        <i class="bi bi-emoji-frown display-1 text-light mb-3 d-block"></i>
+        <p class="fs-4">No se encontraron destinos con esos filtros</p>
+    </div>
+
+    <!-- 6. PAGINACIÓN -->
+    <div class="pagination d-flex justify-content-center pb-4" *ngIf="!loading && !errorMsg && totalPages > 1">
+        <button class="btn btn-outline-secondary mx-1" [disabled]="currentPage === 1" (click)="goToFirstPage()" title="Primera página">«</button>
+        <button class="btn btn-outline-secondary mx-1" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)" title="Página anterior">‹</button>
+        
+        <button *ngFor="let page of getPaginationPages()" class="btn mx-1" [ngClass]="{'btn-primary': page === currentPage, 'btn-outline-secondary': page !== currentPage}" (click)="goToPage(page)">
+            {{ page }}
+        </button>
+        
+        <button class="btn btn-outline-secondary mx-1" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)" title="Página siguiente">›</button>
+        <button class="btn btn-outline-secondary mx-1" [disabled]="currentPage === totalPages" (click)="goToLastPage()" title="Última página">»</button>
+    </div>
+</div>

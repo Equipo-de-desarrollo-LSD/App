@@ -1,0 +1,101 @@
+{
+  "template": "app",
+  "imports": {
+    "Volo.Abp.LeptonXLiteTheme": {
+      "version": "4.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Account": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.OpenIddict": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.Identity": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.TenantManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.SettingManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.PermissionManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    },
+    "Volo.Abp.FeatureManagement": {
+      "version": "9.3.2",
+      "isInstalled": true
+    }
+  },
+  "folders": {
+    "items": {
+      "src": {},
+      "test": {}
+    }
+  },
+  "packages": {
+    "WayFinder.Application": {
+      "path": "src/WayFinder.Application/WayFinder.Application.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.Application.Tests": {
+      "path": "test/WayFinder.Application.Tests/WayFinder.Application.Tests.abppkg",
+      "folder": "test"
+    },
+    "WayFinder.Domain.Shared": {
+      "path": "src/WayFinder.Domain.Shared/WayFinder.Domain.Shared.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.Application.Contracts": {
+      "path": "src/WayFinder.Application.Contracts/WayFinder.Application.Contracts.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.HttpApi": {
+      "path": "src/WayFinder.HttpApi/WayFinder.HttpApi.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.HttpApi.Client": {
+      "path": "src/WayFinder.HttpApi.Client/WayFinder.HttpApi.Client.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.EntityFrameworkCore.Tests": {
+      "path": "test/WayFinder.EntityFrameworkCore.Tests/WayFinder.EntityFrameworkCore.Tests.abppkg",
+      "folder": "test"
+    },
+    "WayFinder.EntityFrameworkCore": {
+      "path": "src/WayFinder.EntityFrameworkCore/WayFinder.EntityFrameworkCore.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.TestBase": {
+      "path": "test/WayFinder.TestBase/WayFinder.TestBase.abppkg",
+      "folder": "test"
+    },
+    "WayFinder.Domain.Tests": {
+      "path": "test/WayFinder.Domain.Tests/WayFinder.Domain.Tests.abppkg",
+      "folder": "test"
+    },
+    "WayFinder.HttpApi.Client.ConsoleTestApp": {
+      "path": "test/WayFinder.HttpApi.Client.ConsoleTestApp/WayFinder.HttpApi.Client.ConsoleTestApp.abppkg",
+      "folder": "test"
+    },
+    "WayFinder.DbMigrator": {
+      "path": "src/WayFinder.DbMigrator/WayFinder.DbMigrator.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.HttpApi.Host": {
+      "path": "src/WayFinder.HttpApi.Host/WayFinder.HttpApi.Host.abppkg",
+      "folder": "src"
+    },
+    "WayFinder.Domain": {
+      "path": "src/WayFinder.Domain/WayFinder.Domain.abppkg",
+      "folder": "src"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+import { authGuard, permissionGuard } from '@abp/ng.core';
+import { Routes } from '@angular/router';
+
+export const APP_ROUTES: Routes = [
+{
+    path: '',
+    pathMatch: 'full',
+    loadComponent: () => import('./home/home.component').then(c => c.HomeComponent),
+  },
+  {
+    path: 'account',
+    loadChildren: () => import('@abp/ng.account').then(c => c.createRoutes()),
+  },
+  {
+    path: 'identity',
+    loadChildren: () => import('@abp/ng.identity').then(c => c.createRoutes()),
+  },
+  {
+    path: 'tenant-management',
+    loadChildren: () => import('@abp/ng.tenant-management').then(c => c.createRoutes()),
+  },
+  {
+    path: 'setting-management',
+    loadChildren: () => import('@abp/ng.setting-management').then(c => c.createRoutes()),
+  },
+  {
+    path: 'ciudades',
+    loadComponent: () => import('./ciudades/buscar-ciudades/buscar-ciudades').then(m => m.BuscarCiudades)
+  },
+  {
+    path: 'mi-perfil',
+    canActivate: [authGuard], // Solo permitimos entrar a usuarios logueados
+    loadComponent: () => import('./perfiles/mi-perfil/mi-perfil').then(m => m.MiPerfil)
+  },
+  { 
+    path: 'perfiles/:id', 
+    loadComponent: () => import('./perfiles/perfil-publico/perfil-publico').then(m => m.PerfilPublicoComponent) 
+  },
+  { 
+    path: 'ciudades/populares', 
+    loadComponent: () => import('./ciudades/destinos-populares/destinos-populares').then(m => m.DestinosPopularesComponent) 
+  },
+
+  { 
+    path: 'ciudades/:id', 
+    loadComponent: () => import('./ciudades/detalle-ciudad/detalle-ciudad').then(m => m.DetalleCiudadComponent) 
+  },
+
+];
