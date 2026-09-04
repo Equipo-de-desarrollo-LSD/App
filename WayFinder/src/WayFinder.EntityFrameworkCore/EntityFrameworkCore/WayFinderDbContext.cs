@@ -22,9 +22,10 @@ using Volo.Abp.TenantManagement.EntityFrameworkCore;
 using Volo.Abp.Users;
 using WayFinder.Calificaciones;
 using WayFinder.DestinosTuristicos;
+using WayFinder.Eventos;
+using WayFinder.Favoritos;
 using WayFinder.Perfiles;
 using static System.Net.WebRequestMethods;
-using WayFinder.Favoritos;
 
 
 
@@ -67,6 +68,7 @@ public class WayFinderDbContext :
     public DbSet<IdentitySession> Sessions { get; set; }
     public DbSet<Notificacion> Notificaciones { get; set; }
     public DbSet<ListaSeguimiento> ListasSeguimiento { get; set; }
+    public DbSet<WayFinder.Eventos.Evento> Eventos { get; set; }
 
     // Agrega esta línea para la nueva entidad
     public DbSet<MetricaApi> Metricas { get; set; }
@@ -169,6 +171,15 @@ public class WayFinderDbContext :
         {
             b.ToTable(WayFinderConsts.DbTablePrefix + "MetricaApis", WayFinderConsts.DbSchema);
             b.ConfigureByConvention();
+        });
+
+        builder.Entity<Evento>(b =>
+        {
+            b.ToTable(WayFinderConsts.DbTablePrefix + "Eventos", WayFinderConsts.DbSchema);
+            b.ConfigureByConvention();
+
+            // Configuración del índice único compuesto para evitar duplicados por DestinoTuristicoId + IdExterno
+            b.HasIndex(e => new { e.DestinoTuristicoId, e.IdExterno }).IsUnique();
         });
 
 

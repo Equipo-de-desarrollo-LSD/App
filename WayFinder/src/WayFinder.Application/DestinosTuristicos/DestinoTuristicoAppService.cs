@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +33,10 @@ public class DestinoTuristicoAppService :
     private readonly IRepository<Calificaciones.Calificacion, Guid> _calificacionRepository;
     private readonly IRepository<DestinoTuristico, Guid> _destinoRepository;
     private readonly IEventosService _eventosService;
+    private readonly IRepository<WayFinder.Eventos.Evento, Guid> _eventoRepository;
 
     public DestinoTuristicoAppService(IRepository<DestinoTuristico, Guid> repository, IBuscarCiudadService buscarCiudadService, IRepository<Calificaciones.Calificacion, Guid> calificacionRepository,
-             IRepository<DestinoTuristico, Guid> destinoRepository, IEventosService eventosService)
+             IRepository<DestinoTuristico, Guid> destinoRepository, IEventosService eventosService, IRepository<WayFinder.Eventos.Evento, Guid> eventoRepository)
         : base(repository)
 
     {
@@ -44,7 +45,7 @@ public class DestinoTuristicoAppService :
         _calificacionRepository = calificacionRepository;
         _destinoRepository = destinoRepository;
         _eventosService = eventosService;
-
+        _eventoRepository = eventoRepository;
     }
 
     // Este es el constructor que usan tus tests. ¡Ahora sí guarda los datos!
@@ -139,16 +140,41 @@ public class DestinoTuristicoAppService :
         // Primero, buscamos los detalles básicos de la ciudad (igual que antes)
         var detalle = await _buscarCiudadService.ObtenerDetalleCiudadAsync(id);
 
-        // Si la ciudad se encontró y tiene coordenadas, disparamos a TicketMaster
         if (detalle != null && detalle.Coordenadas != null)
         {
-            var eventosResult = await _eventosService.ObtenerEventosPorCoordenadasAsync(
-                detalle.Coordenadas.latitud,
-                detalle.Coordenadas.longitud
-            );
+            // Buscamos si la ciudad existe localmente como un Destino Turistico (haciendo match por nombre o coordenadas)
+            // Asumiremos que el nombre es suficientemente único para este prototipo o validamos coordenadas
+            var destinoLocal = await _destinoRepository.FirstOrDefaultAsync(d => 
+                d.nombre == detalle.Nombre);
 
-            // Asignamos la lista de eventos al DTO
-            detalle.Eventos = eventosResult.Eventos;
+            if (destinoLocal != null)
+            {
+                // Si existe localmente, buscamos los eventos en la base de datos
+                var eventosLocales = await _eventoRepository.GetListAsync(e => e.DestinoTuristicoId == destinoLocal.Id);
+                
+                detalle.Eventos = eventosLocales.Select(e => new WayFinder.DestinosTuristicosDTOs.Eventos.EventoDto
+                {
+                    IdExterno = e.IdExterno,
+                    Nombre = e.Nombre,
+                    UrlTicket = e.UrlTicket,
+                    FechaInicio = e.FechaInicio,
+                    ImagenUrl = e.ImagenUrl,
+                    Lugar = e.Lugar
+                }).ToList();
+            }
+            else
+            {
+                // Fallback: Si no existe localmente, buscamos en vivo en TicketMaster
+                var eventosResult = await _eventosService.ObtenerEventosPorCoordenadasAsync(
+                    detalle.Coordenadas.latitud,
+                    detalle.Coordenadas.longitud
+                );
+
+                if (eventosResult != null && eventosResult.Eventos != null)
+                {
+                    detalle.Eventos = eventosResult.Eventos;
+                }
+            }
         }
 
         return detalle;
