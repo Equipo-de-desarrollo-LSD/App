@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Volo.Abp.EntityFrameworkCore;
 using WayFinder.EntityFrameworkCore;
@@ -12,9 +13,11 @@ using WayFinder.EntityFrameworkCore;
 namespace WayFinder.Migrations
 {
     [DbContext(typeof(WayFinderDbContext))]
-    partial class WayFinderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260831233815_Agregar_Tabla_Eventos")]
+    partial class Agregar_Tabla_Eventos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2061,7 +2064,7 @@ namespace WayFinder.Migrations
 
                     b.Property<string>("IdExterno")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImagenUrl")
                         .IsRequired()
@@ -2081,10 +2084,7 @@ namespace WayFinder.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DestinoTuristicoId", "IdExterno")
-                        .IsUnique();
-
-                    b.ToTable("AppEventos", (string)null);
+                    b.ToTable("Eventos");
                 });
 
             modelBuilder.Entity("WayFinder.Favoritos.DestinoFavorito", b =>
