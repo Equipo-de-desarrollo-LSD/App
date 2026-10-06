@@ -1,0 +1,28 @@
+﻿{
+  "applications": {
+    "WayFinder.HttpApi.Host": {
+      "type": "dotnet-project",
+      "launchUrl": "https://localhost:44392",
+      "path": "../../../src/WayFinder.HttpApi.Host/WayFinder.HttpApi.Host.csproj",
+      "kubernetesService": ".*-httpapihost$",
+      "healthCheckEndpoint": "/health-status",
+      "healthUiEndpoint": "/health-ui",
+      "execution": {
+        "order": 4
+      }
+    },
+    "WayFinder.Angular": {
+      "type": "cli",
+      "workingDirectory": "../../../angular",
+      "startCommand": "./start.ps1",
+      "launchUrl": "http://localhost:4200",
+      "kubernetesService": ".*-angular$",
+      "execution": {
+        "order": 2
+      }    
+    }
+  },
+  "containers": {
+    "serviceName": "WayFinder-Containers",
+  }
+}

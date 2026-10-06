@@ -1,0 +1,42 @@
+<div class="container mt-5">
+  <div *ngIf="cargando" class="text-center mt-5">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Cargando...</span>
+    </div>
+  </div>
+
+  <div *ngIf="error && !cargando" class="alert alert-danger text-center shadow-sm">
+    <h4><i class="fas fa-exclamation-circle me-2"></i> Perfil no encontrado</h4>
+    <p>El usuario que buscas no existe o hubo un problema de conexión.</p>
+    <button class="btn btn-outline-danger mt-2" (click)="volver()">Volver</button>
+  </div>
+
+  <div *ngIf="perfil && !cargando" class="card shadow mx-auto" style="max-width: 600px; border-radius: 15px;">
+    <div class="card-header bg-primary text-white text-center py-4" style="border-radius: 15px 15px 0 0;">
+      <img [src]="perfil.foto || 'https://via.placeholder.com/150'" 
+           class="rounded-circle border border-4 border-white shadow" 
+           alt="Foto de perfil" 
+           style="width: 150px; height: 150px; object-fit: cover; margin-bottom: -75px;">
+    </div>
+    
+    <div class="card-body text-center mt-5 pt-4">
+      <h2 class="card-title fw-bold text-dark mt-2">{{ perfil.nombre }} {{ perfil.apellido }}</h2>
+      
+      <hr class="my-4 mx-4">
+      
+      <div class="text-start px-4 mb-3">
+        <h5 class="text-primary fw-bold mb-3"><i class="fas fa-suitcase-rolling me-2"></i> Preferencias de Viaje</h5>
+        <div class="p-3 bg-light rounded border">
+          <p class="fs-6 mb-0 text-dark" *ngIf="perfil.preferencias">{{ perfil.preferencias }}</p>
+          <p class="text-muted fst-italic mb-0" *ngIf="!perfil.preferencias">Este usuario aún no ha escrito sus preferencias.</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="card-footer bg-white border-0 text-center pb-4">
+      <button class="btn btn-outline-secondary px-4" (click)="volver()">
+        <i class="fas fa-arrow-left me-2"></i> Volver
+      </button>
+    </div>
+  </div>
+</div>
